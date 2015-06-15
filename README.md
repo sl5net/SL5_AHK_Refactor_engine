@@ -1,7 +1,7 @@
 # SL5_AHK_Refactor_engine
 SL5_AHK_Refactor_engine is a developer productivity engine for shk developers with scite4ahk
 
-
+<pre>
 
 /* SL5_AHK_Refactor_engine is free for personal and commercial use.
  */
@@ -71,7 +71,7 @@ SL5_AHK_Refactor_engine is a developer productivity engine for shk developers wi
 ;~ strg shift BackSpace
 ;~ jumps to last edit position
 
-;~ strg b 
+;~ strg b
 ;~ jumps to definition
 
 ; second line of keyboard
@@ -121,4 +121,3 @@ SL5_AHK_Refactor_engine is a developer productivity engine for shk developers wi
 
 ;~ enjoy, many thanks so many people for so great tool and help. thanks for help, bug reports and much more :)
 ;~ best regards Se from SL5
-
