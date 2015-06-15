@@ -1,123 +1,27 @@
-# SL5_AHK_Refactor_engine
-SL5_AHK_Refactor_engine is a developer productivity engine for shk developers with scite4ahk
+SL5_AHK_Refactor_engine
+=====
 
-<pre>
-
-/* SL5_AHK_Refactor_engine is free for personal and commercial use.
- */
-
-; features:
-
-; example how to read this short doc:
-
-;~ strg c
-;~ selection > clipboard
-
-;~ strg v
-;~ clipboard > selection
-
-;~ strg minus
-;~ ;~ 
-
-;~ strg d 
-;~ double line
-
-;~ strg shift b 
-;~ /* */
-
-;~ strg alt m
-;~ selection > method
-
-;~ strg alt v (using the line)
-;~ examples:
-;~ 1 > d_1 := 1
-;~ 123 > d_123 := 123
-;~ abc > abc = %abc%
-; %abc% > abc = %abc%
-;~ hi all> hi_all = hi all
-;~ strLen_mouse := StrLen( "mouse") ;
-;~ tim = %tim%
-
-;~ strg + enter
-;~ hi("  > hi(" ") ; 
-;~ hi("jim > hi("jim") ; 
-
-;~ strg + % (its using clipboard content)
-;~ clipboard > %clipboard% = clipboard (line:%A_LineNumber%) `n 
-;~ all behind %clipboard% is selected. so you simly could delete it.
-
-;~ shift j ( changes to carret position)
-;~ carret > %carret% 
-;~ %carret% > %carret% 
-;~ %carret% > "carret" 
-;~ "carret" > carret 
-
-;~ shift alt c (changes to line)
-;~ 123456 > 1, 2, 3, 4, 5, 6, 
-;~ 1, 2, 3, 4, 5, 6, > 1: 2: 3: 4: 5: 6:
-;~ 1: 2: 3: 4: 5: 6: > 1, 2, 3, 4, 5, 6,
-
-;~ str shift up / down
-;~ line up / line down
-
-;~ win left / right
-;~ move to last / next functions navigation
-
-;~ alt c (changes word at your carret. dont need to select or to copy. )
-;~ kjhkjh > %kjhkjh% 
-;~ %kjhkjh% > "kjhkjh"
-;~ "kjhkjh" > kjhkjh 
-
-;~ strg shift BackSpace
-;~ jumps to last edit position
-
-;~ strg b
-;~ jumps to definition
-
-; second line of keyboard
-;~ 1>! 2>" 3>§ 4>$ 5>% .....
-
-;~ tab
-;~ line tab and down
-
-;~ strg shift v
-;~ opens Clipboard history for the last 20 or so (using copyQ portable version)
-;~ https://github.com/hluk/CopyQ/releases/download/v2.4.7/copyq-windows-2.4.7.zip
-; please install CopyQ and add a global hotkey STRG+SHIFT+1 (v is not possible there - or?)
+developer productivity engine for ahk developers with scite4ahk
+SL5_AHK_Refactor_engine is free for personal and commercial use.
 
 
+Usage
+-----
 
-;~ lll
-;~ lll(A_LineNumber, __DIR __ __FILE __,Last_A_This)
-; it writes to logfiles in log directory
-; not inside online versione jet 15-06-14_20-27
+start 
+SL5_AHK_Refactor_engine_v0.5.ahk 
+scite4ahk use shortcuts. read https://github.com/sl5net/SL5_AHK_Refactor_engine/blob/master/README.md
 
-; peprocessor actions:
-;~ __DIR __ replacing with subfolders name
-;~ __FILE __ replacing with fileName 
-; not inside online versione jet 15-06-14_20-27
+License
+-------
 
-;~ BTW preprocessor also looks inside subdir scripts, copes includes inside and corrects includes path... and much more.
-; not inside online versione jet 15-06-14_20-27
+Copyright 2015 Sebastian Lauffer from SL5.net.
 
-;~ AutoUpdate
-;~ script offers autoupdate (not implementeed totally jet. 15-06-14_20-27)
+This file is part of SL5_AHK_Refactor_engine. Source code is available at 
+https://github.com/sl5net/SL5_AHK_Refactor_engine
 
-;~ autoRun if saved
-;~ not in online version now 15-06-14_20-42
+SL5_AHK_Refactor_engine is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-;~ autoSave if iddle
-;~ not in online version now 15-06-14_20-42
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
-;~ automatically creates script icons with significant letters of the script
-;~ not in online version now 15-06-14_20-42
-
-;~ strg shift z
-;~ redo 
-
-;~ F1 obens autohotkey help
-;~ clicking or movoning carret past idle time open autohotkey help
-;~ ö opens gÖögle ;) gooogle help.
-
-;~ enjoy, many thanks so many people for so great tool and help. thanks for help, bug reports and much more :)
-;~ best regards Se from SL5
+You should have received a copy of the GNU Affero General Public License along with this program. If not, see http://www.gnu.org/licenses/.
