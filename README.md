@@ -10,7 +10,7 @@ Usage
 
 start 
 SL5_AHK_Refactor_engine_v0.5.ahk 
-scite4ahk use shortcuts. read https://github.com/sl5net/SL5_AHK_Refactor_engine/blob/master/README.md
+scite4ahk use shortcuts. read https://github.com/sl5net/SL5_AHK_Refactor_engine/blob/master/documentation.md
 
 License
 -------
