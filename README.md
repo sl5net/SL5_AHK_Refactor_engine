@@ -71,7 +71,7 @@ SL5_AHK_Refactor_engine is a developer productivity engine for shk developers wi
 ;~ strg shift BackSpace
 ;~ jumps to last edit position
 
-;~ strg g 
+;~ strg b 
 ;~ jumps to definition
 
 ; second line of keyboard
