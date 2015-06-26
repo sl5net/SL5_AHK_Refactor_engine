@@ -118,13 +118,14 @@ ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
 
 _GetSciTEFile()
 {
-	Last_A_This:=A_ThisFunc . A_ThisLabel
-	if(false)
-ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-	; lll(A_LineNumber, "SL5_AHK_Refactor_engine_v0.5.ahk",Last_A_This)
 
 
 	global oSciTE
+oSciTE_CurrentFile := oSciTE.CurrentFile
+	Last_A_This:= oSciTE_CurrentFile . "`n " . A_ThisFunc . A_ThisLabel
+	if(false)
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+	; lll(A_LineNumber, "SL5_AHK_Refactor_engine_v0.5.ahk",Last_A_This)
 	return oSciTE.CurrentFile
 }
 
