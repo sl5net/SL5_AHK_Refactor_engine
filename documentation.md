@@ -17,7 +17,7 @@ strg v
 clipboard > selection
 
 strg minus
-
+;~ and jums to next line
 
 strg d 
 double line
