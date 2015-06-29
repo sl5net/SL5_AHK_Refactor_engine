@@ -48,8 +48,24 @@ ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
 ;Get the filename
 oSciTE := GetSciTEInstance()
 oSciTE_CurrentFile := oSciTE.CurrentFile
-;~ MsgBox,%oSciTE_CurrentFile% = oSciTE_CurrentFile (line:%A_LineNumber%) `n 
-;~ return
+
+; To fetch only the bare filename from the above:
+SplitPath, oSciTE_CurrentFile , filename
+
+;~ keys_SL5_AHK_Refactor_engine.ahk - SciTE4AutoHotkey [1 von 3] ahk_class SciTEWindow 
+ ; w=1938,
+ ; x=514,y=647,t=0x182f8a
+ 
+SetTitleMatchMode,2 
+doSaveFirst := false ; initialisation
+IfWinNotExist,%filename% - SciTE4AutoHotkey 
+{
+   doSaveFirst := true
+   IfWinNotExist,%filename% * SciTE4AutoHotkey 
+      MsgBox,oops   NotExist %filename% * SciTE4AutoHotkey 
+}
+;~ WinGetTitle, winTitle ,%filename% - SciTE4AutoHotkey 
+;~ MsgBox,%oSciTE_CurrentFile% = oSciTE_CurrentFile (line:%A_LineNumber%) `n %filename% = filename (line:%A_LineNumber%) `n '%winTitle%' = winTitle (line:%A_LineNumber%) `n 
 path= %A_ScriptDir%\phpdesktop-msie-1.14-php-5.4.33
 phpCgiExe = %path%\php\php-cgi.exe
 ; E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php
@@ -60,21 +76,24 @@ target := phpCgiExe . " " . script . " " . argv
 Suspend,on
 Send,{blind}  ; 
 Sleep,10
-Send,^s ; save script first ; 
-FileGetTime, modiTime1, A_ScriptDir ; Retrieves the modification time by default.
-Loop,8
+if(doSaveFirst)
 {
-Sleep,100
-FileGetTime, modiTime2, A_ScriptDir  ; Retrieves the modification time by default.
-if(modiTime1 != modiTime2)
-   break
+   Send,^s ; save script first ; 
+   FileGetTime, modiTime1, A_ScriptDir ; Retrieves the modification time by default.
+   Loop,8
+   {
+   Sleep,100
+   FileGetTime, modiTime2, A_ScriptDir  ; Retrieves the modification time by default.
+   if(modiTime1 != modiTime2)
+      break
+   }
+   Send,{CtrlUp}{AltUp}
+   Sleep,20
 }
-Send,{CtrlUp}{AltUp}
-Sleep,20
 run, % target ,,Hide
-;~ ToolTip,saved :)
+if(!doSaveFirst)
+   Sleep,250
 MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved,1
-;~ ToolTip,
 Suspend,off
 return 
 
