@@ -584,10 +584,12 @@ if(debug65)
 lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This . " " . %codeLine%)
 Suspend,off
 return
+
 Ctrl_v:
-Ctrl & v::
-Ctrl_Alt_v:
 Str_alt_v:
+Ctrl_Alt_V:
+Strg_Alt_V:
+Ctrl & v::
 Last_A_This:=A_ThisFunc . A_ThisLabel . not_implemented_jet
 ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
 ;~ ju_hu = ju hu lkjllkjllkjlstrg alt v strg alt v strg alt v strg alt v strg alt v 
@@ -601,6 +603,7 @@ If (GetKeyState("Alt", "p"))
 
 
 Ctrl_Shift_v:
+Strg_Shift_V:
 If (GetKeyState("Shift", "p")) {
 
    runCopyQ_Ctrl_Shift_v()
@@ -870,6 +873,7 @@ c:=copySelection2clipBoard()
 return c 
 }   
 ; lk luuu:u:u0
+
 ctrl_alt_v(){
 
    WinGetActiveTitle,activeTitle
@@ -888,7 +892,7 @@ send,{Left}
 ;~ e_temp____ := E:\te"mp\2015-06-10 09_31_37-Aufnahme läuft....p
 ;~ clipboard clipboard
 varFIRST=%Clipboard%
-varName:=SubStr(varFIRST,1,20)
+varName:=SubStr(Trim(varFIRST),1,20)
 ;,uuu,3076
 ;  lkolk()
 ;~ MsgBox,1
@@ -898,6 +902,10 @@ varName:=SubStr(varFIRST,1,20)
 varName:=RegExReplace(varName,"[^\w\d_]+","_")
 varName := Trim(varName,"_")
 varName := RegExReplace(varName,"^.*?(\w+[\w_\d]*).*?","$1")
+
+varName := RegExReplace(varName,"^\w*?Get(\w+)","$1")
+; WinGetActiveTitle ==> activeTitle := WinGetActiveTitle
+
 varName1 := SubStr(varName,1,1)
 ;~ varFIRST1 := SubStr(varFIRST,1,1)
 StringLower,varName1,varName1
