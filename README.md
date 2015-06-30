@@ -9,7 +9,7 @@ Tested with Autohotkey Version 1.1.19.03(http://www.autohotkey.com/)
 , SciTE4AutoHotkey Version 3.0.06.01 - Based on SciTE 3.5.1 (http://fincs.ahk4.net/scite4ahk/)
 , Thanks to TheGood for TillaGoto (thread: http://www.autohotkey.com/forum/viewtopic.php?t=41575
 , Thanks to Autohotkey community (http://www.autohotkey.com/board/)
-, Thanks to Czarek Tomczak for PHP Desktop (https://code.google.com/p/phpdesktop/)
+, Thanks to Czarek Tomczak for PHP Desktop (https://code.google.com/p/phpdesktop/, http://i.imgur.com/4uVvU8n.gif?1)
 </pre>
 
 
