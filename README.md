@@ -21,8 +21,8 @@ start
    SL5_AHK_Refactor_engine_v0.5.ahk 
 start
    SciTE4AutoHotkey
-eventually close (if you don't like permanent help window)
-   TillaGoto, eventually close liveHelpFileView.v1.x.ahk
+eventually close 
+   TillaGoto, eventually close liveHelpFileView.v1.x.ahk (if you don't like permanent help window)
    
 read manual for shortcuts 
    SL5_AHK_Refactor_engine shortcuts (in this document)
