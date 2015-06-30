@@ -21,8 +21,10 @@ start
    SL5_AHK_Refactor_engine_v0.5.ahk 
 start
    SciTE4AutoHotkey
-eventually close 
-   TillaGoto, eventually close liveHelpFileView.v1.x.ahk (if you don't like permanent help window)
+eventually close or add return before first line in
+   TillaGoto (...\SciTE_beta4\tools\TillaGoto.ahk),
+eventually add close
+   liveHelpFileView.v1.x.ahk (if you don't like permanent help window)
    
 read manual for shortcuts 
    SL5_AHK_Refactor_engine keyboard shortcuts (in this document https://github.com/sl5net/SL5_AHK_Refactor_engine/blob/master/documentation.md)
