@@ -25,8 +25,8 @@ eventually close
    TillaGoto, eventually close liveHelpFileView.v1.x.ahk (if you don't like permanent help window)
    
 read manual for shortcuts 
-   SL5_AHK_Refactor_engine shortcuts (in this document)
-   SciTE4AutoHotkey shortcuts here: https://github.com/sl5net/SL5_AHK_Refactor_engine/blob/master/documentation.md
+   SL5_AHK_Refactor_engine keyboard shortcuts (in this document https://github.com/sl5net/SL5_AHK_Refactor_engine/blob/master/documentation.md)
+   SciTE4AutoHotkey keyboard shortcuts here: https://www.google.de/#q=SciTE4AutoHotkey+keyboard+shortcuts
 </pre>
 
 License
