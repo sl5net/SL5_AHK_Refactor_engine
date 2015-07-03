@@ -13,7 +13,7 @@ GetSciTEInstance()
 
    Last_A_This:=A_ThisFunc . A_ThisLabel
    if(false)
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+      ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
    ; lll(A_LineNumber, "SL5_AHK_Refactor_engine_v0.5.ahk",Last_A_This)
    olderr := ComObjError()
    ComObjError(false)
@@ -22,17 +22,13 @@ GetSciTEInstance()
    oSciTE := IsObject(scite) ? scite : ""
    if !oSciTE
    {
-
+   
       MsgBox, 16, % Last_A_This, Cannot find SciTE!
       ExitApp
    }
-
-   
    ; 
    return oSciTE
 }
-
-
 Ctrl_Alt_L:
 Strg_Alt_L:
 Ctrl & l::
@@ -40,29 +36,25 @@ if( !GetKeyState("alt", "P") ){
 
    return
 }
-
-
 Last_A_This:=A_ThisFunc . A_ThisLabel
 ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
 ; hello world gibt ne datei im gleichen pfad wies script aus.
 ;Get the filename
 oSciTE := GetSciTEInstance()
 oSciTE_CurrentFile := oSciTE.CurrentFile
-
 ; To fetch only the bare filename from the above:
 SplitPath, oSciTE_CurrentFile , filename
-
 ;~ keys_SL5_AHK_Refactor_engine.ahk - SciTE4AutoHotkey [1 von 3] ahk_class SciTEWindow 
- ; w=1938,
- ; x=514,y=647,t=0x182f8a
- 
+; w=1938,
+; x=514,y=647,t=0x182f8a
 SetTitleMatchMode,2 
 doSaveFirst := false ; initialisation
 IfWinNotExist,%filename% - SciTE4AutoHotkey 
 {
+
    doSaveFirst := true
    IfWinNotExist,%filename% * SciTE4AutoHotkey 
-      MsgBox,oops   NotExist %filename% * SciTE4AutoHotkey 
+      MsgBox,oops   NotExist %filename% * SciTE4AutoHotkey
 }
 ;~ WinGetTitle, winTitle ,%filename% - SciTE4AutoHotkey 
 ;~ MsgBox,%oSciTE_CurrentFile% = oSciTE_CurrentFile (line:%A_LineNumber%) `n %filename% = filename (line:%A_LineNumber%) `n '%winTitle%' = winTitle (line:%A_LineNumber%) `n 
@@ -78,14 +70,16 @@ Send,{blind}  ;
 Sleep,10
 if(doSaveFirst)
 {
+
    Send,^s ; save script first ; 
    FileGetTime, modiTime1, A_ScriptDir ; Retrieves the modification time by default.
    Loop,8
    {
-   Sleep,100
-   FileGetTime, modiTime2, A_ScriptDir  ; Retrieves the modification time by default.
-   if(modiTime1 != modiTime2)
-      break
+   
+      Sleep,100
+      FileGetTime, modiTime2, A_ScriptDir  ; Retrieves the modification time by default.
+      if(modiTime1 != modiTime2)
+         break
    }
    Send,{CtrlUp}{AltUp}
    Sleep,20
@@ -96,8 +90,6 @@ if(!doSaveFirst)
 MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved,1
 Suspend,off
 return 
-
-
 ExtractMethod:
 Ctrl_Alt_M:
 Strg_Alt_M:
@@ -111,8 +103,6 @@ if( !GetKeyState("alt", "P") ){
    Suspend,off
    return
 }
-
-
 ;~ jkj
 ;~ MsgBox,15-06-12_22-08
 ClipboardBackup := Clipboard
@@ -129,15 +119,13 @@ Loop , Parse , c, `n
 
    line := A_LoopField
    if(!defaultInput)
-   defaultInput:=RTrim(RegExReplace(line,"i).*?(\w+).*?","m$1") , "`s`n`t`r")
+      defaultInput:=RTrim(RegExReplace(line,"i).*?(\w+).*?","m$1") , "`s`n`t`r")
    ;~ MsgBox, %A_LoopField% 
    line := RegExReplace(line,"^[\s\n\t\r]+","")
    if(StrLen(line))
-   lineNotEmpty := line
+      lineNotEmpty := line
    cMethodBody .= "   "  .  line . "`n"
 }
-
-
 ; 
 returnValue :=RegExReplace( lineNotEmpty ,"i)^[`a.]*?([a-z]+)[^w]*$","$1")
 ;~ MsgBox,'%returnValue%' = returnValue `n 
@@ -209,8 +197,6 @@ if( GetKeyState("Ctrl", "P") )
    ; lets better make an normal copy then? 
    Suspend,on
 send,^c{Blind}
-
-
 Suspend,off
 return
 }
@@ -220,8 +206,6 @@ if( GetKeyState("shift", "P") )
    doSelectLine:=true
    c := copyLineOrWord2clipBoard(doSelectLine)
 }
-
-
 else 
 {
 
@@ -231,17 +215,13 @@ else
    c := copySelection2clipBoard()
    if(!c)
    {
-
+   
       Suspend,off
       return
    }
-
-   
    ; 1,  2:5:5: 5
    ;~ Send,^c
 }
-
-
 Suspend,On
 c := trim(c)
 ClipboardBackup:= Clipboard
@@ -260,16 +240,15 @@ if(!doSelectLine)
    ;~ Send,`n
    msg= choose delimiter you like for your selection`n or Esc for cancel this refactoring
    if(RegExMatch(c, "," )){
-
+   
       defaultInput := ":"
       }else if(RegExMatch(c, ":" )){
-
+      
          defaultInput := " "   
-         }else{ 
+         }else{
+         
             defaultInput := ","
          }
-
-         
          InputBox,delimiter,%msg%,%msg% , , 400 , %inputH%  , 330 , %inputH% , , %timeoutSec%  , %defaultInput%
          WinSet, AlwaysOnTop, On, %msg%
          if ErrorLevel = 1  
@@ -280,25 +259,23 @@ if(!doSelectLine)
          Clipboard := RegExReplace(c , "i)(\s*?[a-z0-9]+?)" . delimiterOld , "$1" . delimiter . "")   
          ; 1, 2, 3
       }
-
-      
       if(doSelectLine)
-      { 
+      {
+      
          ; RegExMatch() returns the position
          if(RegExMatch(c, "," )){
-
+         
             Clipboard := RegExReplace(c , "," , ":")   
             }else if(RegExMatch(c, ":" )){
-
+            
                Clipboard := RegExReplace(c , "`:" , ",")   ; this the beep ? [:]
                ToolTip3sec(A_LineNumber)
-               }else{ 
+               }else{
+               
                   ;~ if(RegExMatch(c, RegExMatch(c, "\s" ) )){
                   Clipboard := RegExReplace(c , "([^,])\s(\s*)" , "$1,$2")
                }
             }
-
-            
             ; i: i: i:
             ;, :,  , :, :,  ,  , :,  , 4, :,  , 4, :,  , 4, :,  , 4, :, 
             ;: i: i:
@@ -307,7 +284,7 @@ if(!doSelectLine)
             ;~ 1, 2, 3, 5, 6, 
             if(Clipboard == ClipboardBackup)
             {
-
+            
                ;~ ToolTip,-----------
                ;~ Sleep,2000
                c2:=""
@@ -316,8 +293,6 @@ if(!doSelectLine)
                c2 .= SubStr(c,A_Index,1) . ", "
                Clipboard := c2
             }
-
-            
             ; i:   i:   i:
             ;, :,  , :, :,  ,  , :,  , 4, :,  , 4, :,  , 4, :,  , 4, :, 
             ;: i: i:
@@ -330,8 +305,6 @@ if(!doSelectLine)
             ;~ Send,{CtrlDown}v{CtrlUp}{home}{Space}{Shift Down}{home}{Shift up}{BackSpace} ; jumps into new line and waits for backspace
             Suspend,off
          Send,{Blind}
-
-         
          ;~ Now when you are coding you can quickly wrap commay with a quick cmd+shift+c for totals line or selection and the selection will be wrapped with quotes.  if you type it additional with shift line is wraped. try it :)
          return
          ;~ bugs if you us the follwoing with shift alt c
@@ -345,12 +318,10 @@ if(!doSelectLine)
          doSelectLine := false
          if( GetKeyState("shift", "P") ) 
          {
-
+         
             doSelectLine := true
             ;~ ToolTip,'%doSelectLine%' = doSelectLine `n
          }
-
-         
          ;   uuu 
          c := copyLineOrWord2clipBoard(doSelectLine)
          Suspend,On
@@ -358,74 +329,60 @@ if(!doSelectLine)
          ; it toggles beetwn ( " and empty  and much more. try ;) . if you press shift it sorrounds the lline. default is the actually word
          if(doSelectLine)
          {
-
+         
             c := trim(c)
             az_wd := ".*"
          }
-
-         
          else
          az_wd := "[\w\d_öäü]+"
          az_wd1 = "%az_wd%"
          az_wd2 = `%%az_wd%`%
          az_wd3 = \(%az_wd%\)
       az_wd4 = \{%az_wd%\}
-
-      
       ;~ oiuoi lkjl oi o 
       if(RegExMatch(c,az_wd1)){
-
+      
          ; " c " => c
          Clipboard := RegExReplace(c,"""","")   . " " 
          }else if(RegExMatch(c,az_wd2)){
-
+         
             ;~ Clipboard := RegExReplace(c,"%","""")   . " "  
             ; % => "
             Clipboard := RegExReplace(c,"%","""")   . " "
          }
-
-         
          else{
-
+         
             if(doSelectLine){
-
-               if(RegExMatch(c,az_wd4)){ 
+            
+               if(RegExMatch(c,az_wd4)){
+               
                   ; { c } => c
                   Clipboard := RegExReplace(c,"\{(.*)\}","""$1""")   . " "
                }
-
+               else if(RegExMatch(c,az_wd3)){
                
-               else if(RegExMatch(c,az_wd3)){ 
                   Clipboard := RegExReplace(c,"\((.*)\)","{$1}")   . " "  
                   ; ( c ) => { c }
                }
-
-               
                else{
-
+               
                   ; c => ( c )
                   Clipboard := "(" . c . ")" . " " 
                   ;~ Clipboard := RegExReplace(c,"""(.*)""","($1)")   . " "  lkjlkj
                }
-
-               
                }else{
-
+               
                   ; c => % c %
                   Clipboard := RegExReplace(c,"([^\s]+)$","%$1%") . " "
                }
             }
-
-            
             if(doSelectLine)
-            Send,{CtrlDown}v{CtrlUp}{home}{Space}{Shift Down}{home}{Shift up}{BackSpace} ; jumps into new line and waits for backspace
+               Send,{CtrlDown}v{CtrlUp}{home}{Space}{Shift Down}{home}{Shift up}{BackSpace} ; jumps into new line and waits for backspace
             else
             Send,{CtrlDown}v{CtrlUp}  
             Suspend,off
             ;~ Now when you are coding you can quickly wrap text in quotes with a quick cmd+j and the selection will be wrapped with quotes.  if you type it additional with shift line is wraped. try it :)
          send,{Blind}
-
-         
          return
          ^ & enter::
          Last_A_This:=A_ThisFunc . A_ThisLabel
@@ -456,8 +413,6 @@ if(!doSelectLine)
          Last_A_This:=A_ThisFunc . A_ThisLabel
          ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
       send,{Home}
-
-      
       Suspend,on
       ;~ send,{Space4}{Space}{Space}
       send,{Tab}{down}
@@ -474,8 +429,6 @@ if(!doSelectLine)
       Suspend,on
       SendRaw,^
    Send,{Space}
-
-   
    Suspend,off
    return
    ; ^ ui ^^^ ^{Space}^^^^press
@@ -496,9 +449,7 @@ if(!doSelectLine)
    ^b::
    Last_A_This:=A_ThisFunc . A_ThisLabel 
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-
- showUsageInfoBox()
- 
+   showUsageInfoBox()
    ; this worked: open it with notepad, save it to desktop, copy it back, and click yes to do it as administrator.
    ;~ http://www.autohotkey.com/board/topic/38186-tillagoto-go-to-functions-labels-hks-in-your-script/page-10#entry704036
    ;~ MsgBox,15-06-10_12-51
@@ -512,7 +463,6 @@ if(!doSelectLine)
    ;~ ctr alt i
    Suspend,on
 Send,{Blind} 
-
 Send,{CtrlDown}{AltDown}i{AltUp}{CtrlUp}
 Send,{Blind}
 Last_A_This:=A_ThisFunc . A_ThisLabel . " p"
@@ -521,6 +471,12 @@ lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This)
 Suspend,Off
 send,{Blind}
 return
+
+
+
+
+
+
 Ctrl & Enter::
 Last_A_This:=A_ThisFunc . A_ThisLabel . " p"
 ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
@@ -533,11 +489,9 @@ Loop,15
    Send,^c
    Sleep,10
    if(ClipboardB != Clipboard)
-   break
+      break
    Sleep,10
 }
-
-
 codeLine=%Clipboard% ; 
 ;~ codeLine := RegExReplace(codeLine, "\s*(:?=)\s*", " $1 ", 1)  ;  
 deli1 := StrSplit(codeLine, "(") 
@@ -555,16 +509,16 @@ deli3diff := deli3open.MaxIndex() - 1
 ;~ du = (["ja"])
 add:=""
 if(deli3diff > 0 && Mod(deli3diff, 2) != 0 )
-Loop,%deli3diff% 
+   Loop,%deli3diff% 
 add .= """"
 if(deli2diff > 0)
-Loop,%deli2diff% 
+   Loop,%deli2diff% 
 add .= "]"
 if(deli1diff > 0)
-Loop,%deli1diff% 
+   Loop,%deli1diff% 
 add .= ")"
 if(deli4diff > 0)
-Loop,%deli4diff% 
+   Loop,%deli4diff% 
 add .= "{return}{tab}{}}"
 add .= "{Space}`;{Space}"
 ;~ MsgBox, %count_deli% := count_deli `n
@@ -579,15 +533,14 @@ send,{Right}
 ;~ varName:=RegExReplace(varName,"[^\w_]+","_")
 strLen_add := StrLen(RegExReplace(add,"{[^}]+}","_" )) ; 
 if(debug65)
-lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This . " " . %codeLine%)
+   lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This . " " . %codeLine%)
 if(deli4diff > 0)
-strLen_add += 1
+   strLen_add += 1
 Send,%add%{left %strLen_add%}  
 if(debug65)
-lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This . " " . %codeLine%)
+   lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This . " " . %codeLine%)
 Suspend,off
 return
-
 Ctrl_v:
 Str_alt_v:
 Ctrl_Alt_V:
@@ -603,16 +556,12 @@ If (GetKeyState("Alt", "p"))
    ctrl_alt_v()
    return
 }
-
-
 Ctrl_Shift_v:
 Strg_Shift_V:
 If (GetKeyState("Shift", "p")) {
 
    runCopyQ_Ctrl_Shift_v()
 }
-
-
 Send,^v
 Suspend,off
 lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This)
@@ -624,8 +573,6 @@ getInputBoxOnTop( title, prompt, timeout, default){
    ;~ InputBox, value , %title% , %prompt% , , width, height, x, y, font, %timeout% , %default% 
    return value
 }
-
-
 ;
 ; CCCCClipboard ClipboardClipboard Clipboard
 ; Clipboard Clipboard Clipboard Clipboard
@@ -687,13 +634,12 @@ Loop,15
 
    If ( !GetKeyState("Ctrl", "P") ) 
    {
-
+   
       ;~ Suspend,off
       ;~ return
       break
    }
 Send,{CtrlUp} 
-
 ; {Blind}
 Sleep,100
 }
@@ -704,8 +650,6 @@ If ( GetKeyState("Ctrl", "P") )
    return
    ;~ break
 }
-
-
 ; do it only it
 ;~ ControlSend,,{Home}{Shift}{End}{ShiftUp},ahk_class SciTEWindow 
 ControlSend,,{Home}{ShiftDown}{End}{ShiftUp},ahk_class SciTEWindow 
@@ -734,8 +678,6 @@ If (GetKeyState("Shift", "p")) {
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
    setCaret2lastEditPosition()
 }
-
-
 return
 setCaret2lastEditPosition()
 {
@@ -744,8 +686,6 @@ setCaret2lastEditPosition()
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
    Suspend,on
 Send,{Blind}
-
-
 ;~ Sleep,10
 ;~ Send,{Blind}
 If (!GetKeyState("z", "P") && !GetKeyState("y", "P")) {
@@ -758,13 +698,53 @@ If (!GetKeyState("z", "P") && !GetKeyState("y", "P")) {
    ControlSend,,{up 6}{Down 12}{up 6},ahk_class SciTEWindow 
    Suspend,off
 }
-
-
 ;~ MsgBox,lh
 Suspend,Off
 send,{Blind}
 return
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+#IfWinActive,
+;~ Allgemeine Programmierhilfe
+;~ weil man ja sonst eh den Zahlenblock verwendet.
+7::tp41fn(A_ComputerName, "7", "{")
+0::tp41fn(A_ComputerName, "0", "}")
+8::tp41fn(A_ComputerName, "8", "[")
+9::tp41fn(A_ComputerName, "9", "]")
+;~ !§$%6{[]}
+1::tp41fn(A_ComputerName, "1", "!")
+2::
+doubleQuote="
+tp41fn(A_ComputerName, "2", doubleQuote) ;"1
+return
+3::tp41fn(A_ComputerName, "3", "§")
+4::tp41fn(A_ComputerName, "4", "$")
+5::tp41fn(A_ComputerName, "5", "%")
+6::tp41fn(A_ComputerName, "6", "&")
+
+
+
+
+
+
+
+
+
+
+
+
 ; thats the standard editor for autohotkey. i want shortcats like i use it in phpstorm
 ;~ StrgY:78987877
 ;~ asdkf
@@ -821,8 +801,6 @@ if(StrLen(clipboard) < 100 )
    ; CCcCCcCCc
    ; asldf lkj lk lkj  '%asldf%' = asldf `n  , '%lkj%' = lkj `n  , '%lk%' = lk `n  , '%lkj%' = lkj `n %leftSteps% = leftSteps `n  %uuu%
 }
-
-
 ;      kkk%lenc% = lenc `n %iiiiiiii% = iiiiiiii `n 
 return
 copySelection2clipBoard(){
@@ -832,51 +810,42 @@ copySelection2clipBoard(){
    a_TimeIdleStart := A_TimeIdle
    loopCounter:=0
    while(!clipboard && loopCounter < 100){
-
+   
       ;~ IfWinNotActive,%at% 
       ;~ return
       ; be sure that cursor not aut of the carret this shortime
       if(a_TimeIdleStart > A_TimeIdle) 
-      return
+         return
       Send,^c
       ;:1:2: 3
       loopCounter += 1
       Sleep,1
    }
-
-   
    c=%Clipboard%
    Suspend,Off
    if(!c)
    {
-
+   
       return false
    } 
-   
    return c
 } 
-
 copyLineOrWord2clipBoard(doSelectLine){
 
    Suspend,on
    if(doSelectLine){
-
+   
       Send,{Home}{ShiftDown}
       Send,{ShiftDown}{End}
    } else {
-
-   
    Send,^{Left 3}{ShiftDown}  
    Send,{ShiftDown}^{Right 3}
 }
-
-
 Send,{ShiftUp}
 c:=copySelection2clipBoard()
 return c 
 }   
 ; lk luuu:u:u0
-
 ctrl_alt_v(){
 
    WinGetActiveTitle,activeTitle
@@ -887,8 +856,6 @@ ctrl_alt_v(){
    doSelectLine:=true
    copyLineOrWord2clipBoard(doSelectLine)
 Send,{Blind}
-
-
 send,{Left}
 ; bug
 ;~ E:\temp\2015-06-10 09_31_37-Aufnahme läuft....png
@@ -905,10 +872,8 @@ varName:=SubStr(Trim(varFIRST),1,20)
 varName:=RegExReplace(varName,"[^\w\d_]+","_")
 varName := Trim(varName,"_")
 varName := RegExReplace(varName,"^.*?(\w+[\w_\d]*).*?","$1")
-
 varName := RegExReplace(varName,"^\w*?Get(\w+)","$1")
 ; WinGetActiveTitle ==> activeTitle := WinGetActiveTitle
-
 varName1 := SubStr(varName,1,1)
 ;~ varFIRST1 := SubStr(varFIRST,1,1)
 StringLower,varName1,varName1
@@ -938,50 +903,42 @@ if( isDigitFirst ||  InStr(varFIRST," .")   ||  InStr(varFIRST," +")  ||  InStr(
    ;~ isProbablyFuntionCallInside := RegExMatch(varFIRST,"i)[a-z_]+\([^)]*\)")
    if(isValueProbablyNotString)
    {
-
+   
       varFIRST1 := RegExReplace(varFIRST,"^`a*(.).*?$","$1")
       if(varFIRST1 == "%")
-      isValueProbablyNotString := false
+         isValueProbablyNotString := false
       ;~ MsgBox,%varFIRST1% = varFIRST1 (line:%A_LineNumber%) `n 
       ;~ return
    }
-
-   
    if(isValueProbablyNotString)
-   defaultInput := ":="
+      defaultInput := ":="
    ;~ MsgBox,%varName% := varName `n 15-06-12_16-20
    ;~ %_% := _]%
    ;~ %5_6% := 5_6
    else
    {
-
+   
       defaultInput := "="
    }
-
-   
    msg= Delimiter ? `n`nPress Shift+Enter for use intelligent defaults.
    InputBox,delimiter,%msg%,%msg% , , 200 , %inputH%  , 330 , %inputH% , , %timeoutSec%  , %defaultInput%
    WinSet, AlwaysOnTop, On, %msg%
    if ErrorLevel = 1  
    noDel:=true
    If ( GetKeyState("shift", "P") ) {
-
+   
       m=pressed shift+enter lets use defaults
       ;~ MsgBox, ,% m,% m,1
       noInputs:=true
    }
-
-   
    ; Qoutes of Key
    if(delimiter == ":=")
    {
-
+   
       ;~ if(isValueProbablyNotString)
       defaultInput := ""
       ;~ MsgBox,%defaultInput%  15-06-12_16-36
    }
-
-   
    else if(delimiter == ":")
    defaultInput := ""
    else if(delimiter == "=")
@@ -998,34 +955,30 @@ if( isDigitFirst ||  InStr(varFIRST," .")   ||  InStr(varFIRST," +")  ||  InStr(
    ;~ Qoutes of Key?
    if(noInputs)
    {
-
+   
       ToolTip1sec("noInputs 15-06-12_17-20")
       firstQoute:=defaultInput
       ;~ MsgBox,15-06-12_17-20
    }
-
-   
    else
    {
-
+   
       msg= Qoutes of Key?
       InputBox,firstQoute,%msg%,%msg% , , 200 , %inputH%  , 330 , 200, , %timeoutSec%  , %defaultInput%
       WinSet, AlwaysOnTop, On, %msg%
       if ErrorLevel = 1  
       noKey:=true
    }
-
-   
    ; value qoutes
    if(firstQoute == "%")
-   defaultInput := ""
+      defaultInput := ""
    else if(firstQoute == """")
    defaultInput := """"
    else{
-
+   
       if(delimiter == ":=")
       {
-
+      
          ;~ calculation ? not a sting?
          ;~ isValueProbablyNotString
          ;~ A_TimeIdle kkk 
@@ -1034,70 +987,60 @@ if( isDigitFirst ||  InStr(varFIRST," .")   ||  InStr(varFIRST," +")  ||  InStr(
          ;~ MsgBox,%subStr_varName_1_3% = subStr_varName_1_3 `n 
          ;~ return
          if(!isValueProbablyNotString && varName_1_3lo == "a_")
-         isValueProbablyNotString:=true
+            isValueProbablyNotString:=true
          if(isValueProbablyNotString)
-         defaultInput := ""
+            defaultInput := ""
          else
          defaultInput := """"
       }
-
-      
       else if(delimiter == ":")
       defaultInput := """"
       else if(delimiter == "=")
       {
-
+      
          ;~ isDigitFirst
          ;~ isValueProbablyNotString := true
          isCorrectForVarName := RegExMatch(trim(varFIRST),"^\w+[\w_\d]+$")
          if(isDigitFirst || !isCorrectForVarName )
-         defaultInput := ""
+            defaultInput := ""
          else
          defaultInput := "%"
          ;~ ein_bischen = ein bischen
       }
-
-      
       else if(delimiter == ",")  
       defaultInput := """"
       else
       defaultInput := ""
    }
-
-   
    ;~ 1_2_3 1+2+3
    if(noInputs)
-   secQoute:=defaultInput
+      secQoute:=defaultInput
    else
    {
-
+   
       msg= Qoutes of Value?
       InputBox,secQoute,%msg%,%msg% , , 200 , 100 , 330 , %inputH% , , %timeoutSec%  , %defaultInput%
       WinSet, AlwaysOnTop, On, %msg%
       if ErrorLevel = 1
       noVal:=true
    }
-
-   
    if(noKey &&  noDel &&  noVal )
    {
-
+   
       ToolTip3sec(A_LineNumber . ": InputDialogs canceld (15-06-12_14-36)" ) 
       return
    }
 Send,{Blind}
-
-
 WinActivate,%activeTitle%
 WinWaitActive,%activeTitle%,,1
 IfWinNotActive,%activeTitle%
    return
 Send,{home}{ShiftDown}{End}
 if(isDigitFirst && firstQoute == "")
-varName :=  "d_" . varName
+   varName :=  "d_" . varName
 part1=%firstQoute%%varName%%firstQoute%
 if(delimiter==":=")
-value:=varFIRST
+   value:=varFIRST
 else
 value:=varFIRST
 valueOriginal := value
@@ -1134,9 +1077,6 @@ return
 ;~ huhu := huhu
 return ;~ huhu := huhu
 }
-
-
-
 return  ; probably redundant. its more secure if we do that.
 ;~ #Include functions.inc.ahk
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1145,8 +1085,32 @@ return  ; probably redundant. its more secure if we do that.
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #Include UPDATEDSCRIPT_global.inc.ahk
 showUsageInfoBox(){
-   if(true)
-msgBox_Something_wro = Something wrong :( `n  please do the following: `n open tillagoto.properties and set `n `n tillagoto.enable=0  `n`n then Reload keys_SL5_AHK_Refactor_engine.ahk `n `n BTW its recomandet to use SciTE4AHK300601_Portable (easyier to change properties files)
+if(true)
+   msgBox_Something_wro = Something wrong :( `n  please do the following: `n open tillagoto.properties and set `n `n tillagoto.enable=0  `n`n then Reload keys_SL5_AHK_Refactor_engine.ahk `n `n BTW its recomandet to use SciTE4AHK300601_Portable (easyier to change properties files)
 MsgBox,%msgBox_Something_wro% 
+}
 
+tp41fn(ComputerName, key1, key2)
+{
+  ; test retest
+   ; Computer mit SN Taste haben keinen zahlen Block.
+   ; daher wäre es unsinnig den Anwender dazu zu nötigen den zahlen Block zu verwenden.
+  Last_A_This:=A_ThisFunc . A_ThisLabel
+  ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+
+  if( ComputerName = "IBM-DE212688" )
+    s:=key1
+  else
+    s:=key2 
+  ;~ SendPlay,%s% ; dont work anymore n15-05-08_15-12
+  Suspend,on
+  global a_doublequote
+  doubleQuote="
+  if(Trim(s) == doubleQuote)
+  SendRaw,"
+  else
+  SendRaw,%s%
+  ;~  !"§$%6{66%6
+  Suspend,off
+  return
 }
