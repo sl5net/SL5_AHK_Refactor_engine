@@ -1,34 +1,33 @@
 SL5_AHK_Refactor_engine
 =====
 
-developer productivity engine for ahk developers with scite4ahk
+developer productivity engine for ahk developers with scite4ahk \
 SL5_AHK_Refactor_engine is free for personal and commercial use.
 
-<pre>
-Tested with Autohotkey Version 1.1.19.03(http://www.autohotkey.com/)
-, SciTE4AutoHotkey 3.0.06.01 (portable Version recommended for easier TillaGoto configuration) (http://fincs.ahk4.net/scite4ahk/)
-, Thanks to TheGood for TillaGoto (thread: http://www.autohotkey.com/forum/viewtopic.php?t=41575
-, Thanks to Autohotkey community (http://www.autohotkey.com/board/)
+ \
+Tested with Autohotkey Version 1.1.19.03(http://www.autohotkey.com/)  \
+, SciTE4AutoHotkey 3.0.06.01 (portable Version recommended for easier TillaGoto configuration) (http://fincs.ahk4.net/scite4ahk/) \
+, Thanks to TheGood for TillaGoto (thread:  http://www.autohotkey.com/forum/viewtopic.php?t=41575 \
+, Thanks to Autohotkey community (http://www.autohotkey.com/board/) \
 , Thanks to Czarek Tomczak for PHP Desktop (https://code.google.com/p/phpdesktop/, http://i.imgur.com/4uVvU8n.gif?1)
-</pre>
+ \
 
 
 Usage
 -----
 
-<pre>
-start 
-   SL5_AHK_Refactor_engine_v0.5.ahk 
-start
-   SciTE4AutoHotkey
-eventually disable or add return before first line in
-   TillaGoto (...\SciTE_beta4\tools\TillaGoto.ahk),
-   or set tillagoto.enable=0 (...\SciTE_beta4\tillagoto.properties)
-   
-read manual for shortcuts 
-   SL5_AHK_Refactor_engine keyboard shortcuts (in this document https://github.com/sl5net/SL5_AHK_Refactor_engine/blob/master/documentation.md)
-   SciTE4AutoHotkey keyboard shortcuts here: https://www.google.de/#q=SciTE4AutoHotkey+keyboard+shortcuts
-</pre>
+start \
+   SL5_AHK_Refactor_engine_v0.5.ahk \
+start \
+   SciTE4AutoHotkey \
+eventually disable or add return before first line in \
+   TillaGoto (...\SciTE_beta4\tools\TillaGoto.ahk), \
+   or set tillagoto.enable=0 (...\SciTE_beta4\tillagoto.properties) \
+    \
+read manual for shortcuts  \
+   SL5_AHK_Refactor_engine keyboard shortcuts (in this document: [documentation]:  https://github.com/sl5net/SL5_AHK_Refactor_engine/blob/master/documentation.md )
+   SciTE4AutoHotkey keyboard shortcuts here: https://www.google.de/#q=SciTE4AutoHotkey+keyboard+shortcuts  \
+
 
 License
 -------
