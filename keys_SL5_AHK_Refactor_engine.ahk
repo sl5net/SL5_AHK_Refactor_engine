@@ -744,6 +744,8 @@ return
 
 
 
+SetTitleMatchMode,2
+#IfWinActive, ahk_class SciTEWindow 
 
 ; thats the standard editor for autohotkey. i want shortcats like i use it in phpstorm
 ;~ StrgY:78987877
