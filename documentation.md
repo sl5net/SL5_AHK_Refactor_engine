@@ -48,10 +48,9 @@ all behind %clipboard% is selected. so you simly could delete it.
 
 shift j ( changes to carret position)
 carret > %carret% 
-%carret% > %carret% 
 %carret% > "carret" 
 "carret" > carret 
-
+ 
 shift alt c (changes to line)
 123456 > 1, 2, 3, 4, 5, 6, 
 1, 2, 3, 4, 5, 6, > 1: 2: 3: 4: 5: 6:
