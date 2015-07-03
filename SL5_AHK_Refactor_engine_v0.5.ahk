@@ -24,8 +24,14 @@ SetTitleMatchMode,2
 DetectHiddenWindows,on
 IfWinNotExist,liveHelpFileView.v1.2.ahk
 {
-	MsgBox, 262436, Permanently liveHelpFileView?, Would you open permanently `nchanging liveHelpFileView?`n `n You could close it later from taskbar, 4
+	MsgBox, 262436, Permanently liveHelpFileView?, Would you open permanently `nchanging liveHelpFileView?`n `n You could close it later from taskbar, 3
 	IfMsgBox No
+	{
+		MsgBox,you pressed no
+		
+    return
+}
+IfMsgBox Timeout
     return
 
 	Run,liveHelpFileView.v1.2.ahk
