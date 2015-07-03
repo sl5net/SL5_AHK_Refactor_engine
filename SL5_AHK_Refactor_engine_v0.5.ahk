@@ -21,9 +21,13 @@ GLOBAL_lllog_only_this_scriptName := "SL5_AHK_Refactor_engine_v0.5.ahk"
 Last_A_This=cheeers :)
 lll(A_LineNumber, "SL5_AHK_Refactor_engine_v0.5.ahk",Last_A_This)
 
+SetTitleMatchMode,2
 DetectHiddenWindows,on
 IfWinNotExist,liveHelpFileView
+{
+	MsgBox, 262180, Permanently liveHelpFileView?, Would you open permanently `nchanging liveHelpFileView?`n `n You could close it later from taskbar, 4
 	Run,liveHelpFileView.v1.2.ahk
+}
 IfWinNotExist,keys_SL5_AHK_Refactor_engine
 	run,keys_SL5_AHK_Refactor_engine.ahk
 
