@@ -16,16 +16,16 @@ Tested with Autohotkey Version 1.1.19.03(http://www.autohotkey.com/) <br>
 Usage
 -----
 
-start<br>
-   SL5_AHK_Refactor_engine_v0.5.ahk<br>
-start<br>
-   SciTE4AutoHotkey<br>
-eventually disable or add return before first line in<br>
-   TillaGoto (...\SciTE_beta4\tools\TillaGoto.ahk),<br>
-   or set tillagoto.enable=0 (...\SciTE_beta4\tillagoto.properties)<br>
+*start<br>
+**   SL5_AHK_Refactor_engine_v0.5.ahk<br>
+*start<br>
+**   SciTE4AutoHotkey<br>
+* eventually disable or add return before first line in<br>
+**   TillaGoto (...\SciTE_beta4\tools\TillaGoto.ahk),<br>
+**   or set tillagoto.enable=0 (...\SciTE_beta4\tillagoto.properties)<br>
    <br>
-read manual for shortcuts <br>
-   SL5_AHK_Refactor_engine keyboard shortcuts (in this document: [documentation]:  https://github.com/sl5net/SL5_AHK_Refactor_engine/blob/master/documentation.md )
+* read manual for shortcuts <br>
+**   SL5_AHK_Refactor_engine keyboard shortcuts (in this document: [documentation]:  https://github.com/sl5net/SL5_AHK_Refactor_engine/blob/master/documentation.md )
    SciTE4AutoHotkey keyboard shortcuts here: https://www.google.de/#q=SciTE4AutoHotkey+keyboard+shortcuts <br>
 
 
