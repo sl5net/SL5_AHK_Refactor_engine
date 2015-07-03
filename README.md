@@ -32,8 +32,8 @@ read manual for shortcuts
 
 License
 -------
-
-Copyright 2015 Sebastian Lauffer from SL5.net.
+ 
+Copyright 2015 Sebastian Lauffer from SL5net.
 
 This file is part of SL5_AHK_Refactor_engine. Source code is available at 
 https://github.com/sl5net/SL5_AHK_Refactor_engine
