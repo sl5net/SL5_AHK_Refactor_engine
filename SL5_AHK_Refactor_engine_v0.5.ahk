@@ -15,7 +15,6 @@ isDevellopperMode=true ; enthällt auch update script.
 
 
 ;~ Refactoring Engines
-
 GLOBAL_lllog_only_this_scriptName := "SL5_AHK_Refactor_engine_v0.5.ahk"
 
 Last_A_This=cheeers :)
@@ -26,6 +25,9 @@ DetectHiddenWindows,on
 IfWinNotExist,liveHelpFileView.v1.2.ahk
 {
 	MsgBox, 262436, Permanently liveHelpFileView?, Would you open permanently `nchanging liveHelpFileView?`n `n You could close it later from taskbar, 4
+	IfMsgBox No
+    return
+
 	Run,liveHelpFileView.v1.2.ahk
 }
 IfWinNotExist,keys_SL5_AHK_Refactor_engine
