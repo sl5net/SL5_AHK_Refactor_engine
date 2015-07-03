@@ -5,8 +5,9 @@ isDevellopperMode=true ; enthällt auch update script.
 #Include init_global.init.inc.ahk
 
 #Persistent
+#SingleInstance,force
 
-SetTimer,reloadLabel,120000
+;~ SetTimer,reloadLabel,120000
 
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 ; if you press  letter or curser move script will open help file and get cursor back
@@ -54,6 +55,7 @@ Loop,
     }
     SetKeyDelay,0,30
     Send,{f1}
+    ;~ ToolTip,f1 58
     Sleep,10
     ; fight focus back
   ;~ rightNum:=3
@@ -97,6 +99,7 @@ letterPressed(l,typedGlobal){
   SciTEWin := "ahk_class SciTEWindow"
 
 ~LButton::
+return
       WinGetActiveTitle,at
   WinGetClass,ac,%at% 
   atc := at . " ahk_class " . ac 
@@ -109,6 +112,8 @@ letterPressed(l,typedGlobal){
     Suspend,on
     IfWinActive,%SciTEWin%
       Send,{f1}
+        ToolTip,f1 114
+
     ;~ SendInput,{f1}
     Suspend,off
     ;~ SendPlay,{f1}
@@ -196,6 +201,7 @@ if(true){
 ~*Right::typedGlobal := letterPressed("Right",typedGlobal) 
 ~*Up::typedGlobal := letterPressed("Up",typedGlobal) 
 ~*Down::typedGlobal := letterPressed("Down",typedGlobal) 
+;~ ~*Click::typedGlobal := letterPressed("Click",typedGlobal) 
 }
 
  
