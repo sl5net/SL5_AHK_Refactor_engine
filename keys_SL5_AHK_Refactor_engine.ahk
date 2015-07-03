@@ -496,6 +496,9 @@ if(!doSelectLine)
    ^b::
    Last_A_This:=A_ThisFunc . A_ThisLabel 
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+
+ showUsageInfoBox()
+ 
    ; this worked: open it with notepad, save it to desktop, copy it back, and click yes to do it as administrator.
    ;~ http://www.autohotkey.com/board/topic/38186-tillagoto-go-to-functions-labels-hks-in-your-script/page-10#entry704036
    ;~ MsgBox,15-06-10_12-51
@@ -1141,3 +1144,9 @@ return  ; probably redundant. its more secure if we do that.
 #Include functions_dateiende.inc.ahk
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #Include UPDATEDSCRIPT_global.inc.ahk
+showUsageInfoBox(){
+   if(true)
+msgBox_Something_wro = Something wrong :( `n  please do the following: `n open tillagoto.properties and set `n `n tillagoto.enable=0  `n`n then Reload keys_SL5_AHK_Refactor_engine.ahk `n `n BTW its recomandet to use SciTE4AHK300601_Portable (easyier to change properties files)
+MsgBox,%msgBox_Something_wro% 
+
+}

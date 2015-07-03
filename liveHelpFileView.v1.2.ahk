@@ -99,7 +99,7 @@ letterPressed(l,typedGlobal){
   SciTEWin := "ahk_class SciTEWindow"
 
 ~LButton::
-return
+return ; todo : problem: its closing submenues :( so its disturbing often.
       WinGetActiveTitle,at
   WinGetClass,ac,%at% 
   atc := at . " ahk_class " . ac 
