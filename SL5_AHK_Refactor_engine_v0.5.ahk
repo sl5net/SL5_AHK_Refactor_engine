@@ -27,9 +27,9 @@ IfWinNotExist,liveHelpFileView.v1.2.ahk
       noliveHelpFileView:=true
    }
    IfMsgBox Timeout
-   noliveHelpFileView:=true
-   if(!noliveHelpFileView)
-   Run,liveHelpFileView.v1.2.ahk
+      noliveHelpFileView:=true
+   if( noliveHelpFileView == false)
+      Run,liveHelpFileView.v1.2.ahk
 }
 IfWinNotExist,keys_SL5_AHK_Refactor_engine
    run,keys_SL5_AHK_Refactor_engine.ahk
