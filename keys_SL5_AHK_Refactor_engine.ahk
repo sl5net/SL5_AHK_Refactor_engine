@@ -29,6 +29,24 @@ GetSciTEInstance()
    ; 
    return oSciTE
 }
+;~ Rename, Shift+F6, Rename the selected file, class, field, method, etc.
+#IfWinActive ahk_class SciTEWindow 
++f6::
+Last_A_This:=A_ThisFunc . A_ThisLabel
+a_LineInfo := A_LineNumber . " - " . A_ScriptName . " - " . Last_A_This
+ToolTip1sec(a_LineInfo)
+rename_Shift_F6 := "not fully implemented jet. 04.07.2015 11:57`n "
+rename_Shift_F6 .= "Rename, Shift+F6, Rename field, method, file, class,  etc."
+doSelectLine:=false
+c := copyLineOrWord2clipBoard(doSelectLine)
+Send,{Blind}
+markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
+Send,{End} `; %markerXXXXstring% %a_LineInfo%
+;~ MsgBox,%c% = c (line:%A_LineNumber%) `n %rename_Shift_F6% = rename_Shift_F6 (line:%A_LineNumber%) `n 
+argv = --renameSymbol=%c%
+runPHP_link := getRunPHP_link(phpFile , argv)
+MsgBox,%runPHP_link% = runPHP_link (line:%A_LineNumber%) `n 
+return
 Ctrl_Alt_L:
 Strg_Alt_L:
 Ctrl & l::
@@ -58,13 +76,14 @@ IfWinNotExist,%filename% - SciTE4AutoHotkey
 }
 ;~ WinGetTitle, winTitle ,%filename% - SciTE4AutoHotkey 
 ;~ MsgBox,%oSciTE_CurrentFile% = oSciTE_CurrentFile (line:%A_LineNumber%) `n %filename% = filename (line:%A_LineNumber%) `n '%winTitle%' = winTitle (line:%A_LineNumber%) `n 
-path= %A_ScriptDir%\phpdesktop-msie-1.14-php-5.4.33
-phpCgiExe = %path%\php\php-cgi.exe
-; E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php
-script = %path%\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php
+phpFile = Reformatting_Autohotkey_Source.php
 argv = --source1="%oSciTE_CurrentFile%"
-; 
-target := phpCgiExe . " " . script . " " . argv
+target := getRunPHP_link(phpFile , argv)
+;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
+;~ return
+;~ works ??
+
+
 Suspend,on
 Send,{blind}  ; 
 Sleep,10
@@ -1079,24 +1098,37 @@ showUsageInfoBox(){
 }
 tp41fn(isNumPadAvailable,ComputerName, key1, key2)
 {
-; test retest
-; Computer mit SN Taste haben keinen zahlen Block.
-; daher wäre es unsinnig den Anwender dazu zu nötigen den zahlen Block zu verwenden.
-Last_A_This:=A_ThisFunc . A_ThisLabel
-ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-if(!isNumPadAvailable || ComputerName = "IBM-DE212688" )
-   s:=key1
-else
-s:=key2 
-;~ SendPlay,%s% ; dont work anymore n15-05-08_15-12
-Suspend,on
-global a_doublequote
-doubleQuote="
-if(Trim(s) == doubleQuote)
-   SendRaw,"
-else
-SendRaw,%s%
-;~  !"§$%6{66%6
-Suspend,off
-return
+
+   ; test retest
+   ; Computer mit SN Taste haben keinen zahlen Block.
+   ; daher wäre es unsinnig den Anwender dazu zu nötigen den zahlen Block zu verwenden.
+   Last_A_This:=A_ThisFunc . A_ThisLabel
+   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+   if(!isNumPadAvailable || ComputerName = "IBM-DE212688" )
+      s:=key1
+   else
+   s:=key2 
+   ;~ SendPlay,%s% ; dont work anymore n15-05-08_15-12
+   Suspend,on
+   global a_doublequote
+   doubleQuote="
+   if(Trim(s) == doubleQuote)
+      SendRaw,"
+   else
+   SendRaw,%s%
+   ;~  !"§$%6{66%6
+   Suspend,off
+   return
+}
+getRunPHP_link(phpFile , argv){
+;~ argv = --source1="%oSciTE_CurrentFile%"
+path= %A_ScriptDir%\phpdesktop-msie-1.14-php-5.4.33
+phpCgiExe = %path%\php\php-cgi.exe
+; E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php
+script = %path%\www\SL5_preg_contentFinder\examples\AutoHotKey\%phpFile% 
+oSciTE := GetSciTEInstance()
+oSciTE_CurrentFile := oSciTE.CurrentFile
+; 
+target := phpCgiExe . " " . script . " " . argv
+return target 
 }
