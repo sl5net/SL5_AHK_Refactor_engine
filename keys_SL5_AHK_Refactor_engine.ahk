@@ -471,12 +471,6 @@ lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This)
 Suspend,Off
 send,{Blind}
 return
-
-
-
-
-
-
 Ctrl & Enter::
 Last_A_This:=A_ThisFunc . A_ThisLabel . " p"
 ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
@@ -703,50 +697,41 @@ Suspend,Off
 send,{Blind}
 return
 }
+;~ keyState_Numpad := GetKeyState("NumpadAddOOOOO","P")
+keyState_Numpad := GetKeyState("NumpadAdd","P")
+MsgBox,%keyState_Numpad% = keyState_Numpad (line:%A_LineNumber%) `n 
+if (keyState_Numpad <> "")
+{
 
+   isNumPadAvailable := true
+   ;	The variable will be empty (blank) if the state of the key could not be determined.
+   ;~ MsgBox,%isNumPadAvailable% = isNumPadAvailable (line:%A_LineNumber%) `n
+} else
+{
 
-
-
-
-
-
-
-
-
-
-
-
+   isNumPadAvailable := false
+   ;	The variable will be empty (blank) if the state of the key could not be determined.
+   MsgBox,,,%isNumPadAvailable% = isNumPadAvailable (line:%A_LineNumber%) `n,3
+}
 #IfWinActive,
 ;~ Allgemeine Programmierhilfe
 ;~ weil man ja sonst eh den Zahlenblock verwendet.
-7::tp41fn(A_ComputerName, "7", "{")
-0::tp41fn(A_ComputerName, "0", "}")
-8::tp41fn(A_ComputerName, "8", "[")
-9::tp41fn(A_ComputerName, "9", "]")
+7::tp41fn(isNumPadAvailable,A_ComputerName, "7", "{")
+0::tp41fn(isNumPadAvailable,A_ComputerName, "0", "}")
+8::tp41fn(isNumPadAvailable,A_ComputerName, "8", "[")
+9::tp41fn(isNumPadAvailable,A_ComputerName, "9", "]")
 ;~ !§$%6{[]}
-1::tp41fn(A_ComputerName, "1", "!")
+1::tp41fn(isNumPadAvailable,A_ComputerName, "1", "!")
 2::
 doubleQuote="
-tp41fn(A_ComputerName, "2", doubleQuote) ;"1
+tp41fn(isNumPadAvailable,A_ComputerName, "2", doubleQuote) ;"1
 return
-3::tp41fn(A_ComputerName, "3", "§")
-4::tp41fn(A_ComputerName, "4", "$")
-5::tp41fn(A_ComputerName, "5", "%")
-6::tp41fn(A_ComputerName, "6", "&")
-
-
-
-
-
-
-
-
-
-
-
+3::tp41fn(isNumPadAvailable,A_ComputerName, "3", "§")
+4::tp41fn(isNumPadAvailable,A_ComputerName, "4", "$")
+5::tp41fn(isNumPadAvailable,A_ComputerName, "5", "%")
+6::tp41fn(isNumPadAvailable,A_ComputerName, "6", "&")
 SetTitleMatchMode,2
 #IfWinActive, ahk_class SciTEWindow 
-
 ; thats the standard editor for autohotkey. i want shortcats like i use it in phpstorm
 ;~ StrgY:78987877
 ;~ asdkf
@@ -1087,32 +1072,31 @@ return  ; probably redundant. its more secure if we do that.
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #Include UPDATEDSCRIPT_global.inc.ahk
 showUsageInfoBox(){
-if(true)
-   msgBox_Something_wro = Something wrong :( `n  please do the following: `n open tillagoto.properties and set `n `n tillagoto.enable=0  `n`n then Reload keys_SL5_AHK_Refactor_engine.ahk `n `n BTW its recomandet to use SciTE4AHK300601_Portable (easyier to change properties files)
-MsgBox,%msgBox_Something_wro% 
+
+   if(true)
+      msgBox_Something_wro = Something wrong :( `n  please do the following: `n open tillagoto.properties and set `n `n tillagoto.enable=0  `n`n then Reload keys_SL5_AHK_Refactor_engine.ahk `n `n BTW its recomandet to use SciTE4AHK300601_Portable (easyier to change properties files)
+   MsgBox,%msgBox_Something_wro%
 }
-
-tp41fn(ComputerName, key1, key2)
+tp41fn(isNumPadAvailable,ComputerName, key1, key2)
 {
-  ; test retest
-   ; Computer mit SN Taste haben keinen zahlen Block.
-   ; daher wäre es unsinnig den Anwender dazu zu nötigen den zahlen Block zu verwenden.
-  Last_A_This:=A_ThisFunc . A_ThisLabel
-  ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-
-  if( ComputerName = "IBM-DE212688" )
-    s:=key1
-  else
-    s:=key2 
-  ;~ SendPlay,%s% ; dont work anymore n15-05-08_15-12
-  Suspend,on
-  global a_doublequote
-  doubleQuote="
-  if(Trim(s) == doubleQuote)
-  SendRaw,"
-  else
-  SendRaw,%s%
-  ;~  !"§$%6{66%6
-  Suspend,off
-  return
+; test retest
+; Computer mit SN Taste haben keinen zahlen Block.
+; daher wäre es unsinnig den Anwender dazu zu nötigen den zahlen Block zu verwenden.
+Last_A_This:=A_ThisFunc . A_ThisLabel
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+if(!isNumPadAvailable || ComputerName = "IBM-DE212688" )
+   s:=key1
+else
+s:=key2 
+;~ SendPlay,%s% ; dont work anymore n15-05-08_15-12
+Suspend,on
+global a_doublequote
+doubleQuote="
+if(Trim(s) == doubleQuote)
+   SendRaw,"
+else
+SendRaw,%s%
+;~  !"§$%6{66%6
+Suspend,off
+return
 }
