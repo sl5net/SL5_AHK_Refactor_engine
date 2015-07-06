@@ -73,7 +73,7 @@ jumps to last edit position
 strg b
 jumps to definition
 
-second line of keyboard
+changes keys of second line of your Keyboard  (not useful if you dont have a Numpad)
 1>! 2>" 3>§ 4>$ 5>% .....
 
 tab
