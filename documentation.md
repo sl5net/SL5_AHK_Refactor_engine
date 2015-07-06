@@ -1,5 +1,5 @@
 # SL5_AHK_Refactor_engine
-SL5_AHK_Refactor_engine is a developer productivity engine for shk developers with scite4ahk
+SL5_AHK_Refactor_engine is a developer productivity engine for AHK developers using scite4ahk
 
 <pre>
 
@@ -8,7 +8,11 @@ SL5_AHK_Refactor_engine is a developer productivity engine for shk developers wi
 
 features:
 
-example how to read this short doc:
+SHIFT + F6
+it replaces names in namespace and sub namespaces.
+it depends if your cursor is inside { } or outside { }.
+means it's different if you replace variable names inside function body or inside function signature. that gives you the ability to replace calling names also if you want.
+
 
 strg c
 selection > clipboard
