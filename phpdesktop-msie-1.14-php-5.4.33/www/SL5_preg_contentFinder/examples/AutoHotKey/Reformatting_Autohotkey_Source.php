@@ -49,7 +49,8 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
     $newline = "\r\n";
     $indentSize = 3;
 
-    $file_content = trim(preg_replace('/^[ ]+/smi', '', $file_content));
+    $dirtyBugFix = ' a{b}c';
+    $file_content = trim(preg_replace('/^[ ]+/smi', '', $file_content)) . $dirtyBugFix;
 
     $getIndentStr = function ($indent, $char, $indentSize) {
         $multiplier = $indentSize * $indent;
@@ -89,10 +90,11 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
           $end = '' . substr($source1, $posList0['end_begin'], $posList0['end_end'] - $posList0['end_begin']) . '';
 
           if(!@empty($arguments['renameSymbol']) && !empty($arguments['renameSymbol_To'])) {
-              $markerXXXXstring = "xxxxxxxx" . "xxxxxxxx";
+              $markerXXXXstring = "xxxxxxxx" . "xxxxxxxx ";
               if(strpos($cut['middle'], $markerXXXXstring) > 0) {
 
-                  $cut['middle'] = preg_replace('/;\s*' . $markerXXXXstring . '[^\n]*/', '', $cut['middle']);
+                  # cut out markerString
+                  $cut['middle'] = preg_replace('/;\s*' . $markerXXXXstring . '/', '', $cut['middle']);
 
                   $start = preg_replace('/\b(' . $arguments['renameSymbol'] . ')\b/', $arguments['renameSymbol_To'], $start);
                   $cut['middle'] = preg_replace('/\b(' . $arguments['renameSymbol'] . ')\b/', $arguments['renameSymbol_To'], $cut['middle']);
@@ -111,6 +113,7 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
           return $cut;
       });
 
+    $actual = substr($actual, 0, -strlen($dirtyBugFix));
     return $actual;
 }
 

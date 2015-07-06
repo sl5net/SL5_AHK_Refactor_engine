@@ -35,6 +35,17 @@ GetSciTEInstance()
 ;~ Rename, Shift+F6, Rename the selected file, class, field, method, etc.
 #IfWinActive ahk_class SciTEWindow 
 +f6::
+
+/*
+it replaces names in namespace and subnamespaces.
+it depends if your cursor inside { } or outsied.
+therfore its diffent if you replace v1 from funZ(v1) or from inside.
+  v1
+   funZ(v1){
+      v1
+   }
+*/
+
 Last_A_This:=A_ThisFunc . A_ThisLabel
 a_LineInfo := A_LineNumber . " - " . A_ScriptName . " - " . Last_A_This
 ToolTip1sec(a_LineInfo)
@@ -45,7 +56,7 @@ symbolName := copyLineOrWord2clipBoard(doSelectLine)
 symbolName := RegExReplace(symbolName,"\W+","")
 Send,{Blind}
 markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
-Send,{End} `; %markerXXXXstring% %a_LineInfo%
+Send,{Right} `; %markerXXXXstring%{space}
 ;~ MsgBox,%c% = c (line:%A_LineNumber%) `n %rename_Shift_F6% = rename_Shift_F6 (line:%A_LineNumber%) `n 
 
 inputH := 200
