@@ -29,6 +29,9 @@ GetSciTEInstance()
    ; 
    return oSciTE
 }
+
+
+
 ;~ Rename, Shift+F6, Rename the selected file, class, field, method, etc.
 #IfWinActive ahk_class SciTEWindow 
 +f6::
@@ -38,15 +41,54 @@ ToolTip1sec(a_LineInfo)
 rename_Shift_F6 := "not fully implemented jet. 04.07.2015 11:57`n "
 rename_Shift_F6 .= "Rename, Shift+F6, Rename field, method, file, class,  etc."
 doSelectLine:=false
-c := copyLineOrWord2clipBoard(doSelectLine)
+symbolName := copyLineOrWord2clipBoard(doSelectLine)
+symbolName := RegExReplace(symbolName,"\W+","")
 Send,{Blind}
 markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
 Send,{End} `; %markerXXXXstring% %a_LineInfo%
 ;~ MsgBox,%c% = c (line:%A_LineNumber%) `n %rename_Shift_F6% = rename_Shift_F6 (line:%A_LineNumber%) `n 
-argv = --renameSymbol=%c%
+
+inputH := 200
+timeoutSec := ""
+SetTitleMatchMode,3
+;~ msg= Extract Clipboard as Method? 
+msg=New Name for %symbolName% ?
+InputBox, symbolNameNew , %msg%,%msg% , , 200 , %inputH%  , 330 , %inputH% , , %timeoutSec%  , %symbolName%
+WinSet, AlwaysOnTop, On, %msg%
+if ErrorLevel = 1  
+return
+
+
+;Get the filename
+oSciTE := GetSciTEInstance()
+oSciTE_CurrentFile := oSciTE.CurrentFile
+; To fetch only the bare filename from the above:
+SplitPath, oSciTE_CurrentFile , filename
+doSaveFirst := isFileOpendInSciteUnsaved(filename)
+phpFile = Reformatting_Autohotkey_Source.php
+argv = --source1="%oSciTE_CurrentFile%"
+
+
+argv = %argv% --renameSymbol="%symbolName%" --renameSymbol_To="%symbolNameNew%"
+;~ Clipboard=%argv%
 runPHP_link := getRunPHP_link(phpFile , argv)
+
+
+if(doSaveFirst)
+ saveWait(A_ScriptDir)
+run, % runPHP_link ,,Hide
+if(!doSaveFirst)
+   Sleep,250
+secWait:=1
+;~ secWait:=""
+MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved`n `n %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n ,%secWait%
+Suspend,off
+return 
+
+
 MsgBox,%runPHP_link% = runPHP_link (line:%A_LineNumber%) `n 
 return
+
 Ctrl_Alt_L:
 Strg_Alt_L:
 Ctrl & l::
@@ -56,26 +98,12 @@ if( !GetKeyState("alt", "P") ){
 }
 Last_A_This:=A_ThisFunc . A_ThisLabel
 ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-; hello world gibt ne datei im gleichen pfad wies script aus.
 ;Get the filename
 oSciTE := GetSciTEInstance()
 oSciTE_CurrentFile := oSciTE.CurrentFile
 ; To fetch only the bare filename from the above:
 SplitPath, oSciTE_CurrentFile , filename
-;~ keys_SL5_AHK_Refactor_engine.ahk - SciTE4AutoHotkey [1 von 3] ahk_class SciTEWindow 
-; w=1938,
-; x=514,y=647,t=0x182f8a
-SetTitleMatchMode,2 
-doSaveFirst := false ; initialisation
-IfWinNotExist,%filename% - SciTE4AutoHotkey 
-{
-
-   doSaveFirst := true
-   IfWinNotExist,%filename% * SciTE4AutoHotkey 
-      MsgBox,oops   NotExist %filename% * SciTE4AutoHotkey
-}
-;~ WinGetTitle, winTitle ,%filename% - SciTE4AutoHotkey 
-;~ MsgBox,%oSciTE_CurrentFile% = oSciTE_CurrentFile (line:%A_LineNumber%) `n %filename% = filename (line:%A_LineNumber%) `n '%winTitle%' = winTitle (line:%A_LineNumber%) `n 
+doSaveFirst := isFileOpendInSciteUnsaved(filename)
 phpFile = Reformatting_Autohotkey_Source.php
 argv = --source1="%oSciTE_CurrentFile%"
 target := getRunPHP_link(phpFile , argv)
@@ -84,29 +112,13 @@ target := getRunPHP_link(phpFile , argv)
 ;~ works ??
 
 
-Suspend,on
-Send,{blind}  ; 
-Sleep,10
 if(doSaveFirst)
-{
-
-   Send,^s ; save script first ; 
-   FileGetTime, modiTime1, A_ScriptDir ; Retrieves the modification time by default.
-   Loop,8
-   {
-   
-      Sleep,100
-      FileGetTime, modiTime2, A_ScriptDir  ; Retrieves the modification time by default.
-      if(modiTime1 != modiTime2)
-         break
-   }
-   Send,{CtrlUp}{AltUp}
-   Sleep,20
-}
+ saveWait(A_ScriptDir)
 run, % target ,,Hide
 if(!doSaveFirst)
    Sleep,250
 MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved,1
+;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
 Suspend,off
 return 
 ExtractMethod:
@@ -1131,4 +1143,36 @@ oSciTE_CurrentFile := oSciTE.CurrentFile
 ; 
 target := phpCgiExe . " " . script . " " . argv
 return target 
+}
+saveWait(fileAdress){
+   Suspend,on
+Send,{blind}  ; 
+Sleep,10
+
+   Send,^s ; save script first ; 
+   FileGetTime, modiTime1, fileAdress ; Retrieves the modification time by default.
+   Loop,8
+   {
+   
+   Sleep,100
+   FileGetTime, modiTime2, fileAdress  ; Retrieves the modification time by default.
+   if(modiTime1 != modiTime2)
+   break
+   }
+   Send,{CtrlUp}{AltUp}
+   Suspend,off
+   Sleep,20
+   return true 
+}
+isFileOpendInSciteUnsaved(filename){
+   SetTitleMatchMode,2 
+   doSaveFirst := false ; initialisation
+   IfWinNotExist,%filename% - SciTE4AutoHotkey 
+   {
+   
+   doSaveFirst := true
+   IfWinNotExist,%filename% * SciTE4AutoHotkey 
+   MsgBox,oops   NotExist %filename% * SciTE4AutoHotkey
+   }
+   return doSaveFirst 
 }

@@ -112,7 +112,7 @@ return ; todo : problem: its closing submenues :( so its disturbing often.
     Suspend,on
     IfWinActive,%SciTEWin%
       Send,{f1}
-        ToolTip,f1 114
+        ;~ ToolTip,f1 114
 
     ;~ SendInput,{f1}
     Suspend,off
