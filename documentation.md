@@ -63,6 +63,11 @@ shift alt c (changes to line)
 str shift up / down
 line up / line down
 
+added 
+Alt + Up/Down
+==>
+Go to previous/next method (curly braces oriented)
+
 win left / right
 move to last / next functions navigation
 
