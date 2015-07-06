@@ -7,6 +7,7 @@ require("../../SL5_preg_contentFinder.php");
 if(!isset($argv[1])) {
     $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\test.ahk" --renameSymbol="Mod" --renameSymbol_To="zzzzzzz"';
     $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\test.ahk" renameSymbol="zzzzzzz" renameSymbol_To="rrrrrrrrr"';
+    $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\test.ahk" --A_ThisLabel="Alt & Down"';
 }
 if(isset($argv)) {
     $arguments = arguments($argv);
@@ -34,7 +35,7 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
     if(!isset($file_content)) die('15-06-25_15-07 $f_input');
     if(!@empty($arguments['renameSymbol'])) {
         $fArgs = '\([^)]*\)';
-        $old_open = '('.$fArgs.'\s*[^{;\n]*)\{[\s\n]';
+        $old_open = '(' . $fArgs . '\s*[^{;\n]*)\{[\s\n]';
     }
     else {
         $old_open = '^([^{;\n]*)\{[\s\n]';
@@ -89,15 +90,58 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
           $start = '' . substr($source1, $posList0['begin_begin'], $posList0['begin_end'] - $posList0['begin_begin']) . '';
           $end = '' . substr($source1, $posList0['end_begin'], $posList0['end_end'] - $posList0['end_begin']) . '';
 
-          if(!@empty($arguments['renameSymbol']) && !empty($arguments['renameSymbol_To'])) {
+          if(@$arguments['A_ThisLabel'] == "Alt & Up" || @$arguments['A_ThisLabel'] == "Alt & Down"
+            || !@empty($arguments['renameSymbol']) && !empty($arguments['renameSymbol_To'])
+          ) {
               $markerXXXXstring = "xxxxxxxx" . "xxxxxxxx ";
-              if(strpos($cut['middle'], $markerXXXXstring) > 0) {
+              $strposMarker = strpos($cut['middle'], $markerXXXXstring);
+              if($strposMarker > 0) {
+
+                  if(@$arguments['A_ThisLabel'] == "Alt & Up" || @$arguments['A_ThisLabel'] == "Alt & Down") {
+                      if(@$arguments['A_ThisLabel'] == "Alt & Down"){
+
+                          preg_match_all('/\n/', substr($cut['middle'], $strposMarker + strlen($markerXXXXstring) ), $matches);
+                          $command = 'Down';
+                      }
+                      else {
+                          preg_match_all('/\n/', substr($cut['middle'], 0, $strposMarker), $matches);
+                          $command = 'Up';
+                      }
+                      $linesAboveMarker = count($matches[0]) + 1;
+
+//                      $fileAddress = realpath('../../SL5_phpGeneratedRunOnChanged.ahk');
+//                      $fileAddress = realpath('p.txt');
+                      $fileAddress = 'SL5_phpGeneratedRunOnChanged.ahk';
+                      $pathinfo = pathinfo($fileAddress);
+                      if(!file_exists($fileAddress)) {
+                          die("!file_exists($fileAddress) 15-07-06_14-26");
+                      }
+                      $contents = file_get_contents($fileAddress);
+                      if(!$contents)
+                          die('!$contents 15-07-06_14-18 \n $contents=' . $contents. '$fileAddress=' . $fileAddress);
+                      $ahkContent =
+'
+Suspend,on
+; Send,^z
+; Sleep,50
+Send,{'.$command.' '.$linesAboveMarker.'}
+Suspend,off
+';
+                      $contents = preg_replace('/<body>.*<\/body>/ism', "<body>\n" . $ahkContent . "\n;</body>", $contents);
+//                      $fileAddressSaved = realpath('../../../../../' . $fileAddress . '.ahk');
+                      $fileAddressSaved = '../../../../../' . $fileAddress . '.ahk';
+                      echo $fileAddressSaved ;
+                      file_put_contents($fileAddressSaved, $contents);
+
+                  }
 
                   # cut out markerString
                   $cut['middle'] = preg_replace('/;\s*' . $markerXXXXstring . '/', '', $cut['middle']);
 
-                  $start = preg_replace('/\b(' . $arguments['renameSymbol'] . ')\b/', $arguments['renameSymbol_To'], $start);
-                  $cut['middle'] = preg_replace('/\b(' . $arguments['renameSymbol'] . ')\b/', $arguments['renameSymbol_To'], $cut['middle']);
+                  if(!@empty($arguments['renameSymbol'])) {
+                      $start = preg_replace('/\b(' . $arguments['renameSymbol'] . ')\b/', $arguments['renameSymbol_To'], $start);
+                      $cut['middle'] = preg_replace('/\b(' . $arguments['renameSymbol'] . ')\b/', $arguments['renameSymbol_To'], $cut['middle']);
+                  }
               }
 
           }
@@ -114,6 +158,7 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
       });
 
     $actual = substr($actual, 0, -strlen($dirtyBugFix));
+
     return $actual;
 }
 

@@ -30,6 +30,73 @@ GetSciTEInstance()
    return oSciTE
 }
 
+#IfWinActive ahk_class SciTEWindow 
+Alt_UP:
+Alt & Up::
+Last_A_This:=A_ThisFunc . A_ThisLabel . "`n actually not implemented `n "
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) ;
+DetectHiddenWindows,on
+IfWinNotExist,SL5_phpGeneratedRunOnChanged.ahk.ahk
+   run,SL5_phpGeneratedRunOnChanged.ahk.ahk
+Send,{Blind}
+markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
+Send,{Right} `; %markerXXXXstring%{space} 
+if ErrorLevel = 1  
+return
+;Get the filename
+oSciTE := GetSciTEInstance()
+oSciTE_CurrentFile := oSciTE.CurrentFile
+; To fetch only the bare filename from the above:
+SplitPath, oSciTE_CurrentFile , filename
+doSaveFirst := isFileOpendInSciteUnsaved(filename)
+phpFile = Reformatting_Autohotkey_Source.php
+argv = --source1="%oSciTE_CurrentFile%" --A_ThisLabel="%A_ThisLabel%"
+runPHP_link := getRunPHP_link(phpFile , argv)
+if(doSaveFirst)
+ saveWait(A_ScriptDir)
+ Suspend,on
+ Send,^z ; delte marker
+run, % runPHP_link ,,Hide
+if(!doSaveFirst)
+   Sleep,250
+runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
+Suspend,off
+return 
+
+
+#IfWinActive ahk_class SciTEWindow 
+Alt_Down:
+Alt & Down::
+Last_A_This:=A_ThisFunc . A_ThisLabel . "`n actually not implemented `n "
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) ;
+DetectHiddenWindows,on
+IfWinNotExist,SL5_phpGeneratedRunOnChanged.ahk.ahk
+   run,SL5_phpGeneratedRunOnChanged.ahk.ahk
+Send,{Blind}
+markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
+Send,{Right} `; %markerXXXXstring%{space} 
+if ErrorLevel = 1  
+return
+;Get the filename
+oSciTE := GetSciTEInstance()
+oSciTE_CurrentFile := oSciTE.CurrentFile
+; To fetch only the bare filename from the above:
+SplitPath, oSciTE_CurrentFile , filename
+doSaveFirst := isFileOpendInSciteUnsaved(filename)
+phpFile = Reformatting_Autohotkey_Source.php
+argv = --source1="%oSciTE_CurrentFile%" --A_ThisLabel="%A_ThisLabel%"
+runPHP_link := getRunPHP_link(phpFile , argv)
+if(doSaveFirst)
+ saveWait(A_ScriptDir) ;
+ Suspend,on
+Send,^z ; delte marker
+run, % runPHP_link ,,Hide
+if(!doSaveFirst)
+   Sleep,250
+runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
+Suspend,off
+return 
+
 
 
 ;~ Rename, Shift+F6, Rename the selected file, class, field, method, etc.
@@ -37,10 +104,10 @@ GetSciTEInstance()
 +f6::
 
 /*
-it replaces names in namespace and subnamespaces.
-it depends if your cursor inside { } or outsied.
-therfore its diffent if you replace v1 from funZ(v1) or from inside.
-  v1
+it replaces names in namespace and sub namespaces.
+it depends if your cursor is inside { } or outside { }.
+means it's different if you replace variable names inside function body or inside function signature. that gives you the ability to replace calling names also if you want. 
+v1
    funZ(v1){
       v1
    }
@@ -133,6 +200,7 @@ MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finis
 ;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
 Suspend,off
 return 
+
 ExtractMethod:
 Ctrl_Alt_M:
 Strg_Alt_M:
@@ -1117,8 +1185,10 @@ return  ; probably redundant. its more secure if we do that.
 showUsageInfoBox(){
 
    if(true)
-      msgBox_Something_wro = Something wrong :( `n  please do the following: `n open tillagoto.properties and set `n `n tillagoto.enable=0  `n`n then Reload keys_SL5_AHK_Refactor_engine.ahk `n `n BTW its recomandet to use SciTE4AHK300601_Portable (easyier to change properties files)
+      msgBox_Something_wro = Something wrong :( `n  please do the following: `n open tillagoto.properties and set `n `n tillagoto.enable=0  `n`n then Reload SL5_AHK_Refactor_engine_v0.5.ahk `n `n BTW its recomandet to use SciTE4AHK300601_Portable (easyier to change properties files) `n  (line:%A_LineNumber%) `n 
    MsgBox,%msgBox_Something_wro%
+   run,SL5_AHK_Refactor_engine_v0.5.ahk
+   ;~ Reload
 }
 tp41fn(isNumPadAvailable,ComputerName, key1, key2)
 {
