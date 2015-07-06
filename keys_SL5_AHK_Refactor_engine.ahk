@@ -51,7 +51,8 @@ Send,{End} `; %markerXXXXstring% %a_LineInfo%
 inputH := 200
 timeoutSec := ""
 SetTitleMatchMode,3
-;~ msg= Extract Clipboard as Method? 
+msg=Rename %symbolName% ?
+InputBox, symbolName , %msg%,%msg% , , 200 , %inputH%  , 330 , %inputH% , , %timeoutSec%  , %symbolName%
 msg=New Name for %symbolName% ?
 InputBox, symbolNameNew , %msg%,%msg% , , 200 , %inputH%  , 330 , %inputH% , , %timeoutSec%  , %symbolName%
 WinSet, AlwaysOnTop, On, %msg%
