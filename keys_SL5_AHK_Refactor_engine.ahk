@@ -61,6 +61,7 @@ if(!doSaveFirst)
    Sleep,250
 runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
 Suspend,off
+Send,{Blind}
 return 
 
 
@@ -95,6 +96,7 @@ if(!doSaveFirst)
    Sleep,250
 runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
 Suspend,off
+Send,{Blind}
 return 
 
 
