@@ -1,0 +1,14 @@
+ ;      Alt         UP: jump to last method
+ ;      Alt       Down: jump to next method
+ ;      Ctrl  Alt    L: reformat source indent
+ ;      Ctrl  Alt    M: Extract method
+ ;      Ctrl         J: Surrounding  with  Quotes
+ ;      Ctrl         B: jump to definition
+ ;      Ctrl         F: find
+ ;      Ctrl  Alt    V: Generate Variable
+ ;      Ctrl  Shift  V: runCopyQ
+ ;      Ctrl  Shift  Z: redo
+ ;      Ctrl  Shift up:  move line
+ ;      Ctrl  Shift down: move line
+ ;      Ctrl  Shif   5: pretty loging autoput
+ ;      Shift        5: pretty loging autoput

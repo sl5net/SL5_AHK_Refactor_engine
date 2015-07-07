@@ -48,6 +48,9 @@ StartTime := A_TickCount
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 
+;~ SendLevel 0
+;~ #InputLevel 0
+
 msg:=A_LineNumber . ", " . A_ScriptName
 ToolTip,%msg%
 lll%blank%(msg)

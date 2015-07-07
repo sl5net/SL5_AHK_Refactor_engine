@@ -40,7 +40,11 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
     else {
         $old_open = '^([^{;\n]*)\{[\s\n]';
     }
-    $old_close = '^([^};\n\r]*)\}[\s\n\r]';
+    $old_close = '^([^{};\n\r]*)\}[\s\n\r]';
+//Send,{CtrlUp} {Blind}
+
+
+
 
     $new_open_default = '[ ';
     $new_close_default = ']';

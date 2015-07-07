@@ -33,27 +33,23 @@ IfWinNotExist,liveHelpFileView.v1.2.ahk
 }
 IfWinNotExist,keys_SL5_AHK_Refactor_engine
    run,keys_SL5_AHK_Refactor_engine.ahk
-GetSciTEInstance()
-{
-
-   Last_A_This:=A_ThisFunc . A_ThisLabel
-   if(false)
-      ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-   ; lll(A_LineNumber, "SL5_AHK_Refactor_engine_v0.5.ahk",Last_A_This)
-   olderr := ComObjError()
-   ComObjError(false)
-   scite := ComObjActive("{D7334085-22FB-416E-B398-B5038A5A0784}")
-   ComObjError(olderr)
-   return IsObject(scite) ? scite : ""
-}
 ; Get SciTE object
 oSciTE := GetSciTEInstance()
 if !oSciTE
 {
 
-   MsgBox, 16, SL5_AHK_Refactor_engine, Cannot find SciTE!
-   ExitApp
+   ;~ MsgBox, 16, SL5_AHK_Refactor_engine, Cannot find SciTE! `n (line:%A_LineNumber%) `n,3  
+   ToolTip, SL5_AHK_Refactor_engine Cannot find SciTE! `n (line:%A_LineNumber%) `n,3  
+   ;~ MsgBox,\n
+   ;~ return
 }
+
+
+
+
+
+
+
 ; Get SciTE window handle
 oSciTE_hwnd := oSciTE.SciTEHandle
 ; Read TillaGoto settings using SciTE's property system
@@ -2370,6 +2366,21 @@ GetFileCRC32(path = False) {
       Return DllCall(&CRC32, "Ptr", &Buffer, "UInt", Bytes, "Int", -1, "Ptr", &CRC32LookupTable, "CDecl UInt")
    }
 }
+
+GetSciTEInstance()
+{
+
+   Last_A_This:=A_ThisFunc . A_ThisLabel
+   if(false)
+      ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+   ; lll(A_LineNumber, "SL5_AHK_Refactor_engine_v0.5.ahk",Last_A_This)
+   olderr := ComObjError()
+   ComObjError(false)
+   scite := ComObjActive("{D7334085-22FB-416E-B398-B5038A5A0784}")
+   ComObjError(olderr)
+   return IsObject(scite) ? scite : ""
+}
+
 ;  
 #Include functions.inc.ahk
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
