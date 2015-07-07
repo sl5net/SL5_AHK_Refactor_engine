@@ -282,7 +282,6 @@ ButtonsOffLabel:
 SetTimer,ButtonsOffLabel,Off
 ;~ SplashImage, Off
 Progress, Off
-
 return
 
 ; 15-07-07_16-22 
