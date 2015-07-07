@@ -182,6 +182,7 @@ convert123To_NumPad123(t)
 }  
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 drawButtons(str , fontSize){
+   return
    ; maximal button size, recomandet:  drawButtons("1234567980" , 260)
    
    strLen := StrLen(str) + 1 ; some extra letters becouse some buttons are larger strg or so
