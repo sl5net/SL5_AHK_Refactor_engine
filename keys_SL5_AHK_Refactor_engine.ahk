@@ -373,14 +373,17 @@ if( GetKeyState("Ctrl", "P") )
    Suspend,off
    return
 }
-drawButtons("aC" , 150)  ; b = ctrsl a = alt j = shift q=f6
 if( GetKeyState("shift", "P") ) 
 {
+Shift_Alt_C:
+   drawButtons("jaC" , 150)  ; b = ctrsl a = alt j = shift q=f6
    doSelectLine:=true
    c := copyLineOrWord2clipBoard(doSelectLine)
 }
 else 
 {
+Alt_C:
+   drawButtons("aC" , 150)  ; b = ctrsl a = alt j = shift q=f6
    doSelectLine:=false
    ;~ ; normal copy. dont change it
    Suspend,on
@@ -496,15 +499,18 @@ Ctrl & q::
 Ctrl & j::
 Last_A_This:=A_ThisFunc . A_ThisLabel
 ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-drawButtons("bJ" , 150)  ; b = ctrsl a = alt j = shift q=f6
 
 doSelectLine := false  
 if( GetKeyState("shift", "P") ) 
 {
+   drawButtons("bjJ" , 150)  ; b = ctrsl a = alt j = shift q=f6
    doSelectLine := true
    ;~ ToolTip,'%doSelectLine%' = doSelectLine `n
 }
-;   uuu 
+else
+   drawButtons("bJ" , 150)  ; b = ctrsl a = alt j = shift q=f6
+
+   ;   uuu 
 c := copyLineOrWord2clipBoard(doSelectLine)
 Suspend,On
 ;~ lk 
@@ -878,7 +884,7 @@ if(RegExMatch(c,az_wd1)){
       ;~ !	Alt
       ;~ ^	Control
       ;~ +	Shift
-      
+
 Ctrl_Shift_BackSpace:
       +^BackSpace::
       If (GetKeyState("Shift", "p")) {
