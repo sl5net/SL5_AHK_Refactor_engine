@@ -124,43 +124,43 @@ runCopyQ_Ctrl_Shift_v(){
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
    ; 
    SetKeyDelay,80,80
-		send,{Blind}
-		Sleep,500
-		 ;~ if(GetKeyState("ctrl", "P") )
-		;~ {
-			;~ ToolTip,:( oops 15-06-14_23-49
-			;~ return
-		;~ }CopyQ ahk_class QWidgetCopyQ ahk_class QWidget
-		SetTitleMatchMode,2
-		; {ShiftDown}^1{ShiftUp}
-	DetectHiddenWindows,on
-	Send,{CtrlDown}{ShiftDown}
-	Loop,10
-	{
-   ;~ ControlSend, , - CopyQ{ShiftDown}^1{ShiftUp},ahk_class QWidget- CopyQ
-   		;~ Sen- CopyQd,{S- CopyQhiftDown}^1{ShiftUp} 1runCopyQ_Ctrl_Shift_v1runCopyQ_Ctrl_Shift_v
-   		Suspend,on
-   		send,{Numpad1}1
-   		WinActivate,- CopyQ
-   		Sleep,100
-   		IfWinActive,- CopyQ
-   			break
-	}
-		Send,{ShiftUp}{CtrlUp} 
-		Suspend,Off
-		;~ MsgBox, :) great CopyQ is active 
-	; CopyQCopyQ CopyQCopyQCopyQCopyQCopyQ{CtrlDown}{ShiftDown}1{ShiftUp}{CtrlUp}{CtrlDown}{- CopyQShiftDown}1{ShiftUp}{CtrlUp}
-	WinSet, AlwaysOnTop,On,- CopyQ ; Toggle the always-on-top status of Calculator.
-WinWaitActive, - CopyQ ,,2
-if !WinExist("- CopyQ")
-MsgBox, please install CopyQ and add a global hotkey STRG+SHIFT+1 (v is not possible there - or?)
-
-WinWaitNotActive, - CopyQ
-	; - CopyQ- CopyQ
-	; cl- CopyQeanUp 
-	Clipboard = %Clipboard% 
-	
-return
+   		send,{Blind}
+   		Sleep,500
+   		 ;~ if(GetKeyState("ctrl", "P") )
+   		;~ {
+   			;~ ToolTip,:( oops 15-06-14_23-49
+   			;~ return
+   		;~ }CopyQ ahk_class QWidgetCopyQ ahk_class QWidget
+   		SetTitleMatchMode,2
+   		; {ShiftDown}^1{ShiftUp}
+   	DetectHiddenWindows,on
+   	Send,{CtrlDown}{ShiftDown}
+   	Loop,10
+   	{
+      ;~ ControlSend, , - CopyQ{ShiftDown}^1{ShiftUp},ahk_class QWidget- CopyQ
+      		;~ Sen- CopyQd,{S- CopyQhiftDown}^1{ShiftUp} 1runCopyQ_Ctrl_Shift_v1runCopyQ_Ctrl_Shift_v
+      		Suspend,on
+      		send,{Numpad1}1
+      		WinActivate,- CopyQ
+      		Sleep,100
+      		IfWinActive,- CopyQ
+      			break
+   	}
+   		Send,{ShiftUp}{CtrlUp} 
+   		Suspend,Off
+   		;~ MsgBox, :) great CopyQ is active 
+   	; CopyQCopyQ CopyQCopyQCopyQCopyQCopyQ{CtrlDown}{ShiftDown}1{ShiftUp}{CtrlUp}{CtrlDown}{- CopyQShiftDown}1{ShiftUp}{CtrlUp}
+   	WinSet, AlwaysOnTop,On,- CopyQ ; Toggle the always-on-top status of Calculator.
+   WinWaitActive, - CopyQ ,,2
+   if !WinExist("- CopyQ")
+   MsgBox, please install CopyQ and add a global hotkey STRG+SHIFT+1 (v is not possible there - or?)
+   
+   WinWaitNotActive, - CopyQ
+   	; - CopyQ- CopyQ
+   	; cl- CopyQeanUp 
+   	Clipboard = %Clipboard% 
+   	
+   return
 }
 
 
@@ -182,7 +182,10 @@ convert123To_NumPad123(t)
 }  
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 drawButtons(str , fontSize){
-   return
+   ;~ Clipboard := A_ComputerName ; T540P-SL5NET
+   ;~ MsgBox,%A_ComputerName% = A_ComputerName (line:%A_LineNumber%) `n 
+   if("T540P-SL5NET" != A_ComputerName) ; 
+      return
    ; maximal button size, recomandet:  drawButtons("1234567980" , 260)
    
    strLen := StrLen(str) + 1 ; some extra letters becouse some buttons are larger strg or so
@@ -250,7 +253,7 @@ drawButtons(str , fontSize){
    ;~ Progress, fs%fontSize% CTFFFFFF CW000000, %str% ,, Shortcut , Keycaps Regular
    ;~ temp=%bx36%-%by36% W%W36% H%H36% R%R36%-%R36%
    temp= %bxFS%-%byFS% W%WFS% H%HFS% R%RFS%-%RFS%
-
+   
    ;~ Clipboard = `; %temp% 
    ;~ WinMove
    ;~ Sleep,2500
@@ -272,9 +275,7 @@ drawButtons(str , fontSize){
    
    
    ;~ Progress, ZW-1 ZX0 ZH600 m2 b fs36 zh0 CTFF0000 CW0000FF,   L=l M=m N=n  O=o P=p Q=q R=r S=s T=t U=u V=v W=w  X=x Y=y Z=z   , , , Keycaps Regular
-;~ Progress, ZW-1 ZX0 ZH600 m2 b fs24 zh0 CTFF0000 CW0000FF, \u232B x <  ÄÖÜ äöü <= x /  = ~ `` ´ ³ ° _ - : . `; `, ' " $ & ( ) { } µ   ß ? \  ( ] [ ² @  | `%  * + ü ö ä # * ~  a b c d e f g h  i j k  Q  < > , , , Keycaps Regular
-
-   
+   ;~ Progress, ZW-1 ZX0 ZH600 m2 b fs24 zh0 CTFF0000 CW0000FF, \u232B x <  ÄÖÜ äöü <= x /  = ~ `` ´ ³ ° _ - : . `; `, ' " $ & ( ) { } µ   ß ? \  ( ] [ ² @  | `%  * + ü ö ä # * ~  a b c d e f g h  i j k  Q  < > , , , Keycaps Regular
 }
 
 ButtonsOffLabel:
