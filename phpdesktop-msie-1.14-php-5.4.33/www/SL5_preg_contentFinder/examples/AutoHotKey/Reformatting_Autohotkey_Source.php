@@ -74,7 +74,7 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
 
     $indentStr = $getIndentStr(1, $charSpace, $indentSize);
 
-    $file_content = preg_replace( '/^\s*\}\s*else(\s+if\s*\([^)]+\)\s*)?\s*\{+/smi', "} \nelse $1 {", $file_content); // dirty BugFix
+    $file_content = preg_replace( '/^\s*\}\s*else(\s+if\s*\([^\n\r]+\)\s*)?\s*\{+/smi', "} \nelse $1 {", $file_content); // dirty BugFix .. need temporary newline that script later works correct
 
     $file_content = preg_replace(
       '/(\s*\bif\s*\([^\n\r)]+\)\s*)[\n\r]+([^{\s])/smi', "$1\n".$indentStr."$2", $file_content); // dirty BugFix
@@ -183,8 +183,8 @@ Suspend,off
       });
 
 //    $actual = substr($actual, 0, -strlen($dirtyBugFix));
-    $actual = preg_replace('/([\n\r\s]*else(\s+if\s*\([^)]+\)\s*)?\s*\{+)/smi', "$1", $actual); // dirty BugFix
-
+    $actual = preg_replace('/(\})[\s\n\r]*(else(\s+if\s*\([^\n\r]+\)\s*)?\s*\{+)/smi', "$1$2", $actual); // dirty BugFix
+# ([^\n\r]+\)
     return $actual;
 }
 
