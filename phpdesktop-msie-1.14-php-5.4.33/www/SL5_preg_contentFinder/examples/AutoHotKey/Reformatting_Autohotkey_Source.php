@@ -74,13 +74,13 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
 
     $indentStr = $getIndentStr(1, $charSpace, $indentSize);
 
-    $file_content = preg_replace( '/^\s*\}\s*else(\s+if\s*\([^\n\r]+\)\s*)?\s*\{+/smi', "} \nelse $1 {", $file_content); // dirty BugFix .. need temporary newline that script later works correct
+    $file_content = preg_replace('/^\s*\}\s*else(\s+if\s*\([^\n\r]+\)\s*)?\s*\{+/smi', "} \nelse $1 {", $file_content); // dirty BugFix .. need temporary newline that script later works correct
 
     $file_content = preg_replace(
-      '/(\s*\bif\s*\([^\n\r)]+\)\s*)[\n\r]+([^{\s])/smi', "$1\n".$indentStr."$2", $file_content); // dirty BugFix
+      '/(\s*\bif\s*\([^\n\r)]+\)\s*)[\n\r]+([^{\s])/smi', "$1\n" . $indentStr . "$2", $file_content); // dirty BugFix
 
     $file_content = preg_replace(
-      '/(\s*\belse\s*)[\n\r]+([^{\s])/smi', "$1\n".$indentStr."$2", $file_content); // dirty BugFix
+      '/(\s*\belse\s*)[\n\r]+([^{\s])/smi', "$1\n" . $indentStr . "$2", $file_content); // dirty BugFix
 
 
 //    $pattern = '([\r\n](If|#if)[a-z]+[ ]*[ ]*[^\n\r{]+)[ ]*[\r\n]+[ ]*(\w)';
@@ -185,9 +185,63 @@ Suspend,off
 //    $actual = substr($actual, 0, -strlen($dirtyBugFix));
     $actual = preg_replace('/(\})[\s\n\r]*(else(\s+if\s*\([^\n\r]+\)\s*)?\s*\{+)/smi', "$1$2", $actual); // dirty BugFix
 # ([^\n\r]+\)
+
+# indent labels
+    $i = 0;
+    $strlen = 0;
+    if(false) {
+        do {
+            $str = '^(\w[\w\d_]*:\s*((?!return).)*\n)([^\s][^n]*)(((?!return).)*return)';
+            $str = '^(\w[\w\d_]*:\s*\n((?!\nreturn).)*)(\n[^\s][^n]*\n)((((?!\nreturn).)*)\nreturn)';
+            $actual = preg_replace('/^' . $str . '/smi', "$1" . $indentStr . "$2$3", $actual);
+# ([^\n\r]+\)
+            $strlenOld = $strlen;
+            $strlen = strlen($actual);
+        }
+        while($strlen != $strlenOld);
+    }
+    else {
+//        $C = new SL5_preg_contentFinder($actual, '\n(\w[\w\d_]*:\s*\n', '\nreturn');
+//        $C->setSearchMode('dontTouchThis');
+//        $cut = [
+//          'before' => $C->getContent_Before(),
+//          'middle' => $C->getContent()
+//,'behind' => $C->getContent_Behind()
+//        ];
+//         var_export($cut);
+//        exit;
+
+    }
+    if(false) {
+        # todo: indent label content.
+        $strlen = 0;
+        $i = 0;
+        $actualStart = $actual;
+        $actual = '';
+        do {
+            $C = new SL5_preg_contentFinder($actualStart, '\n(\w[\w\d_]*:\s*\n', '\nreturn\b');
+            $C->setSearchMode('dontTouchThis');
+            $actualNew = $C->getContent();
+            if(is_null($actualNew)) {
+                break;
+            }
+
+            $actual .= $C->getContent_Before() . preg_replace('/\n/ism', "\n" . $indentStr, $actualNew) . "\nreturn";
+            $actualStart = $C->getContent_Behind();
+            $strlenOld = $strlen;
+            $strlen = strlen($actualStart);
+
+        }
+        while($strlen != $strlenOld || $i++ < 10);
+        $actual .= $C->getContent_Behind();
+    }
+
     return $actual;
 }
 
+//test::
+//sdfsdf
+//return
 function arguments($argv) {
     $_ARG = array();
     foreach($argv as $arg) {

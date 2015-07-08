@@ -25,8 +25,7 @@ if (keyState_Numpad <> "")
    isNumPadAvailable := true
    ;	The variable will be empty (blank) if the state of the key could not be determined.
    ;~ MsgBox,%isNumPadAvailable% = isNumPadAvailable (line:%A_LineNumber%) `n
-} 
-else  {
+}else  {
    isNumPadAvailable := false
    ;	The variable will be empty (blank) if the state of the key could not be determined.
    MsgBox,,,%isNumPadAvailable% = isNumPadAvailable (line:%A_LineNumber%) `n,3
@@ -177,7 +176,7 @@ WinGetPos,x,y,w,h,SciTE4AutoHotkey
 
 InputBox, symbolNameNew , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName%
 WinSet, AlwaysOnTop, On, %msg%
-if ErrorLevel = 1  
+if ErrorLevel = 1 
 {
    Send,^z
    return
@@ -378,14 +377,12 @@ if( GetKeyState("Ctrl", "P") )
    Suspend,off
    return
 }
-if( GetKeyState("shift", "P") ) 
-{
+if( GetKeyState("shift", "P") ) {
    Shift_Alt_C:
    drawButtons("jaC" , 150)  ; b = ctrsl a = alt j = shift q=f6
    doSelectLine:=true
    c := copyLineOrWord2clipBoard(doSelectLine)
-} 
-else  {
+}else  {
    Alt_C:
    drawButtons("aC" , 150)  ; b = ctrsl a = alt j = shift q=f6
    doSelectLine:=false
@@ -422,11 +419,9 @@ if(!doSelectLine)
    msg= choose delimiter you like for your selection`n or Esc for cancel this refactoring
    if(RegExMatch(c, "," )){
       defaultInput := ":"
-   }
-   else if(RegExMatch(c, ":" )){
+   }else     if(RegExMatch(c, ":" ))    {
       defaultInput := " "
-   } 
-   else  {
+   }else  {
       defaultInput := ","
    }
    
@@ -443,17 +438,14 @@ if(!doSelectLine)
    Clipboard := RegExReplace(c , "i)(\s*?[a-z0-9]+?)" . delimiterOld , "$1" . delimiter . "")   
    ; 1, 2, 3
 }
-if(doSelectLine)
-{
+if(doSelectLine){
    ; RegExMatch() returns the position
    if(RegExMatch(c, "," )){
       Clipboard := RegExReplace(c , "," , ":")
-   }
-   else if(RegExMatch(c, ":" )){
+   }else     if(RegExMatch(c, ":" ))    {
       Clipboard := RegExReplace(c , "`:" , ",")   ; this the beep ? [:]
       ToolTip3sec(A_LineNumber)
-   } 
-   else  {
+   }else  {
       ;~ if(RegExMatch(c, RegExMatch(c, "\s" ) )){
       Clipboard := RegExReplace(c , "([^,])\s(\s*)" , "$1,$2")
    }
@@ -534,29 +526,24 @@ az_wd4 = \{%az_wd%\}
 if(RegExMatch(c,az_wd1)){
    ; " c " => c
    Clipboard := RegExReplace(c,"""","")   . " "
-}
-else if(RegExMatch(c,az_wd2)){
+}else     if(RegExMatch(c,az_wd2))    {
    ;~ Clipboard := RegExReplace(c,"%","""")   . " "  
    ; % => "
    Clipboard := RegExReplace(c,"%","""")   . " "
-} 
-else  {
+}else  {
    if(doSelectLine){
       if(RegExMatch(c,az_wd4)){
          ; { c } => c
          Clipboard := RegExReplace(c,"\{(.*)\}","""$1""")   . " "
-      }
-      else if(RegExMatch(c,az_wd3)){
+      }else     if(RegExMatch(c,az_wd3))    {
          Clipboard := RegExReplace(c,"\((.*)\)","{$1}")   . " "  
          ; ( c ) => { c }
-      } 
-      else  {
+      }else  {
          ; c => ( c )
          Clipboard := "(" . c . ")" . " " 
          ;~ Clipboard := RegExReplace(c,"""(.*)""","($1)")   . " "  lkjlkj
       }
-   } 
-   else  {
+   }else  {
       ; c => % c %
       Clipboard := RegExReplace(c,"([^\s]+)$","%$1%") . " "
    }
@@ -977,8 +964,7 @@ Last_A_This:=A_ThisFunc . A_ThisLabel
 ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
 drawButtons("j%" , 150)  ; x b = ctrsl a = alt j = shift q=f6 w = up y =down `` = reset, didnt found a backspace fontKey
 ;~ MsgBox,StrLen(clipboard)
-if(StrLen(clipboard) < 100 )    
-{
+if(StrLen(clipboard) < 100 )    {
    ; !!!!!! warning \w in autohotkey also includes numbers !!!
    c = %clipboard% 
    cAdd :=  "(line:%A_LineNumber%)" ; 
@@ -1025,8 +1011,7 @@ copySelection2clipBoard(){
    }
    c=%Clipboard%
    Suspend,Off
-   if(!c)
-   {
+   if(!c){
       return false
    } 
    return c
@@ -1036,8 +1021,7 @@ copyLineOrWord2clipBoard(doSelectLine){
    if(doSelectLine){
       Send,{Home}{ShiftDown}
       Send,{ShiftDown}{End}
-   } 
-   else  {
+   }else  {
       Send,^{Left 3}{ShiftDown}  
       Send,{ShiftDown}^{Right 3}
    }
@@ -1092,8 +1076,7 @@ ctrl_alt_v(){
    ;~ 1+2+3*4
    ;~ isProbablyFuntionCallInside := RegExMatch(varFIRST,"i)[a-z_]+\([^)]*\)")
    isDigitFirst := RegExMatch(varFIRST,"^\d+") 
-   if( isDigitFirst ||  InStr(varFIRST," .")   ||  InStr(varFIRST," +")  ||  InStr(varFIRST,":=") || StrLen(varFIRST) > Round(StrLen(varName) * 1.2) )
-   {
+   if( isDigitFirst ||  InStr(varFIRST," .")   ||  InStr(varFIRST," +")  ||  InStr(varFIRST,":=") || StrLen(varFIRST) > Round(StrLen(varName) * 1.2) ){
       isValueProbablyNotString := true
       ;~ %A_LineNumber% = A_LineNumber `n
    }else if (RegExMatch(varFIRST , "i)[a-z_]+\([^)]*\)"))
@@ -1113,8 +1096,7 @@ ctrl_alt_v(){
    ;~ MsgBox,%varName% := varName `n 15-06-12_16-20
    ;~ %_% := _]%
    ;~ %5_6% := 5_6
-   else
-   {
+   else{
       defaultInput := "="
    }
    msg= Delimiter ? `n`nPress Shift+Enter for use intelligent defaults.
@@ -1138,8 +1120,7 @@ ctrl_alt_v(){
       ;~ if(isValueProbablyNotString)
          defaultInput := ""
       ;~ MsgBox,%defaultInput%  15-06-12_16-36
-   }
-   else if(delimiter == ":")
+   } else if(delimiter == ":")
       defaultInput := ""
    else if(delimiter == "=")
       defaultInput := ""
@@ -1158,8 +1139,7 @@ ctrl_alt_v(){
       ToolTip1sec("noInputs 15-06-12_17-20")
       firstQoute:=defaultInput
       ;~ MsgBox,15-06-12_17-20
-   } 
-   else  {
+   }else  {
       msg= Qoutes of Key?
       InputBox,firstQoute,%msg%,%msg% , , 200 , %inputH%  , 330 , 200, , %timeoutSec%  , %defaultInput%
       WinSet, AlwaysOnTop, On, %msg%
@@ -1187,11 +1167,9 @@ ctrl_alt_v(){
             defaultInput := ""
          else
             defaultInput := """"
-      }
-      else if(delimiter == ":")
+      } else if(delimiter == ":")
          defaultInput := """"
-      else if(delimiter == "=")
-      {
+      else if(delimiter == "=") {
          ;~ isDigitFirst
          ;~ isValueProbablyNotString := true
          isCorrectForVarName := RegExMatch(trim(varFIRST),"^\w+[\w_\d]+$")
@@ -1209,8 +1187,7 @@ ctrl_alt_v(){
    ;~ 1_2_3 1+2+3
    if(noInputs)
       secQoute:=defaultInput
-   else
-   {
+   else {
       msg= Qoutes of Value? 
       
       SetTitleMatchMode,2
@@ -1356,8 +1333,7 @@ isFileOpendInSciteUnsaved(filename){
 }
 
 
-setCaret2lastEditPosition()
-{
+setCaret2lastEditPosition(){
    Last_A_This:=A_ThisFunc . A_ThisLabel
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
    Suspend,on
