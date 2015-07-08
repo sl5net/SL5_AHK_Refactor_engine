@@ -25,8 +25,8 @@ if (keyState_Numpad <> "")
    isNumPadAvailable := true
    ;	The variable will be empty (blank) if the state of the key could not be determined.
    ;~ MsgBox,%isNumPadAvailable% = isNumPadAvailable (line:%A_LineNumber%) `n
-} else
-{
+} 
+else  {
    isNumPadAvailable := false
    ;	The variable will be empty (blank) if the state of the key could not be determined.
    MsgBox,,,%isNumPadAvailable% = isNumPadAvailable (line:%A_LineNumber%) `n,3
@@ -97,246 +97,247 @@ if(!oSciTE)
 {
    Send,^z{AltUp}
    return
-   }
-   ; oSciTE_CurrentFile := oSciTE.CurrentFile
-   ; To fetch only the bare filename from the above:
-   SplitPath, oSciTE_CurrentFile , filename
-   doSaveFirst := isFileOpendInSciteUnsaved(filename)
-   phpFile = Reformatting_Autohotkey_Source.php
-   argv = --source1="%oSciTE_CurrentFile%" --A_ThisLabel="%A_ThisLabel%"
-   runPHP_link := getRunPHP_link(phpFile , argv)
-   if(doSaveFirst)
-      saveWait(A_ScriptDir) ;
-   Suspend,on
-   Send,^z ; delte marker
-   run, % runPHP_link ,,Hide
-   if(!doSaveFirst)
-      Sleep,250
-   runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
-   Suspend,off
-   Send,{Blind}
-   return 
+}
+; oSciTE_CurrentFile := oSciTE.CurrentFile
+; To fetch only the bare filename from the above:
+SplitPath, oSciTE_CurrentFile , filename
+doSaveFirst := isFileOpendInSciteUnsaved(filename)
+phpFile = Reformatting_Autohotkey_Source.php
+argv = --source1="%oSciTE_CurrentFile%" --A_ThisLabel="%A_ThisLabel%"
+runPHP_link := getRunPHP_link(phpFile , argv)
+if(doSaveFirst)
+   saveWait(A_ScriptDir) ;
+Suspend,on
+Send,^z ; delte marker
+run, % runPHP_link ,,Hide
+if(!doSaveFirst)
+   Sleep,250
+runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
+Suspend,off
+Send,{Blind}
+return 
+
+
+
+;~ Rename, Shift+F6, Rename the selected file, class, field, method, etc.
+#IfWinActive SciTE4AutoHotkey 
++f6::
+
+/*
+it replaces names in namespace and sub namespaces.
+it depends if your cursor is inside {
    
+} or outside {
    
-   
-   ;~ Rename, Shift+F6, Rename the selected file, class, field, method, etc.
-   #IfWinActive SciTE4AutoHotkey 
-   +f6::
-   
-   /*
-   it replaces names in namespace and sub namespaces.
-   it depends if your cursor is inside {
-      
-   } or outside {
-   }.
-   means it's different if you replace variable names inside function body or inside function signature. that gives you the ability to replace calling names also if you want. 
+}.
+means it's different if you replace variable names inside function body or inside function signature. that gives you the ability to replace calling names also if you want. 
+v1
+funZ(v1){
    v1
-   funZ(v1){
-      v1
-   }
-   */
-   
-   Last_A_This:=A_ThisFunc . A_ThisLabel
-   a_LineInfo := A_LineNumber . " - " . A_ScriptName . " - " . Last_A_This
-   ToolTip1sec(a_LineInfo)
-   drawButtons("jq" , 150)  ; j = shift q=f6
-   
-   rename_Shift_F6 := "not fully implemented jet. 04.07.2015 11:57`n "
-   rename_Shift_F6 .= "Rename, Shift+F6, Rename field, method, file, class,  etc."
-   doSelectLine:=false
-   symbolName := copyLineOrWord2clipBoard(doSelectLine)
-   symbolName := RegExReplace(symbolName,"\W+","")
-   Send,{Blind}
-   markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
-   Send,{Right} `; %markerXXXXstring%{space}
-   ;~ MsgBox,%c% = c (line:%A_LineNumber%) `n %rename_Shift_F6% = rename_Shift_F6 (line:%A_LineNumber%) `n 
-   
-   inputH := 200
-   timeoutSec := ""
-   SetTitleMatchMode,3
-   msg=Rename %symbolName% ?
-   
-   SetTitleMatchMode,2
-   WinGetPos,x,y,w,h,SciTE4AutoHotkey
-   InputBox, symbolName , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName% 
-   if ErrorLevel = 1  
-   {
-      Send,^z
-      return
-   }
-   msg=New Name for %symbolName% ?
-   ; InputBox, OutputVar [, Title, Prompt, HIDE, Width, Height, X, Y, Font, Timeout, Default]
-   ;~ SetTitleMatchMode,2
-   ;~ WinGetPos,x,y,w,h,SciTE4AutoHotkey
-   ;~ InputBox, symbolName , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName% 
-   
-   SetTitleMatchMode,2
-   WinGetPos,x,y,w,h,SciTE4AutoHotkey
-   
-   
-   InputBox, symbolNameNew , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName%
-   WinSet, AlwaysOnTop, On, %msg%
-   if ErrorLevel = 1  
-   {
-      Send,^z
-      return
-   }
-   
-   
-   ;Get the filename
-   oSciTE := GetSciTEInstance()
-   oSciTE_CurrentFile := oSciTE.CurrentFile
-   ; To fetch only the bare filename from the above:
-   SplitPath, oSciTE_CurrentFile , filename
-   doSaveFirst := isFileOpendInSciteUnsaved(filename)
-   phpFile = Reformatting_Autohotkey_Source.php
-   argv = --source1="%oSciTE_CurrentFile%"
-   
-   
-   argv = %argv% --renameSymbol="%symbolName%" --renameSymbol_To="%symbolNameNew%"
-   ;~ Clipboard=%argv%
-   runPHP_link := getRunPHP_link(phpFile , argv)
-   
-   
-   if(doSaveFirst)
-      saveWait(A_ScriptDir)
-   run, % runPHP_link ,,Hide
-   if(!doSaveFirst)
-      Sleep,250
-   secWait:=1
-   ;~ secWait:=""
-   MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved`n `n %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n ,%secWait%
-   Suspend,off
-   return 
-   
-   
-   MsgBox,%runPHP_link% = runPHP_link (line:%A_LineNumber%) `n 
-   return 
-   
-   Ctrl_Alt_L:
-   Strg_Alt_L:
-   Ctrl & l::
-   if( !GetKeyState("alt", "P") ){
-      return
-   }
-   Last_A_This:=A_ThisFunc . A_ThisLabel
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-   drawButtons("baL" , 150)  ; b = ctrsl a = alt j = shift q=f6
-   
-   ;Get the filename
-   oSciTE := GetSciTEInstance()
-   oSciTE_CurrentFile := oSciTE.CurrentFile
-   ; To fetch only the bare filename from the above:
-   SplitPath, oSciTE_CurrentFile , filename
-   doSaveFirst := isFileOpendInSciteUnsaved(filename)
-   phpFile = Reformatting_Autohotkey_Source.php
-   argv = --source1="%oSciTE_CurrentFile%"
-   target := getRunPHP_link(phpFile , argv)
-   ;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
-   ;~ return
-   ;~ works ??
-   
-   
-   if(doSaveFirst)
-      saveWait(A_ScriptDir)
-   run, % target ,,Hide
-   if(!doSaveFirst)
-      Sleep,250
-   MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved,1
-   ;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
-   Suspend,off
-   return 
-   
-   
-   
-   
-   ExtractMethod:
-   Ctrl_Alt_M:
-   Strg_Alt_M:
-   Ctrl & m::
-   Last_A_This:=A_ThisFunc . A_ThisLabel
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-   if( !GetKeyState("alt", "P") ){
-      Suspend,on
-      send,^
-      Suspend,off
-      return
-   }
-   ;~ jkj
-   ;~ MsgBox,15-06-12_22-08
-   drawButtons("baM" , 150)  ; b = ctrsl a = alt j = shift q=f6
-   
-   ClipboardBackup := Clipboard
-   Clipboard:=""
-   loopCounter:=0
-   c:=copySelection2clipBoard()
-   ;~ c=%Clipboard%
-   defaultInput:=""
-   cMethodBody := ""
-   line:=""
-   lineNotEmpty:=""
-   Loop , Parse , c, `n
-   {
-      line := A_LoopField
-      if(!defaultInput)
-         defaultInput:=RTrim(RegExReplace(line,"i).*?(\w+).*?","m$1") , "`s`n`t`r")
-      ;~ MsgBox, %A_LoopField% 
-      line := RegExReplace(line,"^[\s\n\t\r]+","")
-      if(StrLen(line))
-         lineNotEmpty := line
-      cMethodBody .= "   "  .  line . "`n"
-   }
-   ; 
-   returnValue :=RegExReplace( lineNotEmpty ,"i)^[`a.]*?([a-z]+)[^w]*$","$1")
-   ;~ MsgBox,'%returnValue%' = returnValue `n 
-   ;~ Reload
-   cMethodBody := RegExReplace(cMethodBody,"i)[\s\n\t\r]+$","")
-   inputH := 200
-   
-   SetTitleMatchMode,2
-   WinGetPos,x,y,w,h,SciTE4AutoHotkey
-   
-   
-   timeoutSec := ""
-   
-   SetTitleMatchMode,3
-   ;~ msg= Extract Clipboard as Method? 
-   msg:="Extract as Method: Method Name?"
-   
-   ; InputBox, OutputVar [, Title, Prompt, HIDE, Width, Height, X, Y, Font, Timeout, Default]
-   
-   InputBox, methodName , %msg% , %msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %defaultInput%
-   WinSet, AlwaysOnTop, On, %msg%
-   if ErrorLevel = 1  
+}
+*/
+
+Last_A_This:=A_ThisFunc . A_ThisLabel
+a_LineInfo := A_LineNumber . " - " . A_ScriptName . " - " . Last_A_This
+ToolTip1sec(a_LineInfo)
+drawButtons("jq" , 150)  ; j = shift q=f6
+
+rename_Shift_F6 := "not fully implemented jet. 04.07.2015 11:57`n "
+rename_Shift_F6 .= "Rename, Shift+F6, Rename field, method, file, class,  etc."
+doSelectLine:=false
+symbolName := copyLineOrWord2clipBoard(doSelectLine)
+symbolName := RegExReplace(symbolName,"\W+","")
+Send,{Blind}
+markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
+Send,{Right} `; %markerXXXXstring%{space}
+;~ MsgBox,%c% = c (line:%A_LineNumber%) `n %rename_Shift_F6% = rename_Shift_F6 (line:%A_LineNumber%) `n 
+
+inputH := 200
+timeoutSec := ""
+SetTitleMatchMode,3
+msg=Rename %symbolName% ?
+
+SetTitleMatchMode,2
+WinGetPos,x,y,w,h,SciTE4AutoHotkey
+InputBox, symbolName , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName% 
+if ErrorLevel = 1  
+{
+   Send,^z
    return
-   if( methodName == "")
-      return
-   WinWaitNotActive, %msg% 
-   send,{esc} ; go out of search text box or so
-   Sleep,10
-   markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
-   Send,{BackSpace} `; %markerXXXXstring%
-   ;~ mName=%defaultInput%
-   ;~ i Case-insensitive matching, which treats the letters A through Z as identical to their lowercase counterparts. 
-   ;~ `a In v1.0.46.06+, `a recognizes any type of newline, namely `r, `n, `r`n, `v/VT/vertical tab/chr(0xB), `f/FF/formfeed/chr(0xC), and NEL/next-line/chr(0x85). In v1.0.47.05+, newlines can be restricted to only CR, LF, and CRLF by instead specifying (*ANYCRLF) in uppercase at the beginning of the pattern (after the options); e.g. im)(*ANYCRLF)^abc$. 
-   defaultInput := LTrim( RegExReplace( RegExReplace( cMethodBody , "i)[^w]*?([a-z_0.9]+)[^w]*?" , ", $1" ) ,"im)[\s\n\t\r]+" , " "),"`n,`s")  ; ugly buti dont have tim :-D ;)
-   ;~ MsgBox,%defaultInput% 
-   ;~ Reload
-   msg=Method Parameters of '%methodName%' ?
-   
-   InputBox, methodParameters , %msg%,%msg% , , 555 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %defaultInput%
-   WinSet, AlwaysOnTop, On, %msg%
-   if ErrorLevel = 1  
+}
+msg=New Name for %symbolName% ?
+; InputBox, OutputVar [, Title, Prompt, HIDE, Width, Height, X, Y, Font, Timeout, Default]
+;~ SetTitleMatchMode,2
+;~ WinGetPos,x,y,w,h,SciTE4AutoHotkey
+;~ InputBox, symbolName , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName% 
+
+SetTitleMatchMode,2
+WinGetPos,x,y,w,h,SciTE4AutoHotkey
+
+
+InputBox, symbolNameNew , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName%
+WinSet, AlwaysOnTop, On, %msg%
+if ErrorLevel = 1  
+{
+   Send,^z
    return
-   WinWaitNotActive, %msg% 
-   Send,{Blind}
-   ;~ Send,{Home}{enter}{up}%mName% 
-   ; 
-   methodSignature := methodName . "(" . methodParameters . ")"
+}
+
+
+;Get the filename
+oSciTE := GetSciTEInstance()
+oSciTE_CurrentFile := oSciTE.CurrentFile
+; To fetch only the bare filename from the above:
+SplitPath, oSciTE_CurrentFile , filename
+doSaveFirst := isFileOpendInSciteUnsaved(filename)
+phpFile = Reformatting_Autohotkey_Source.php
+argv = --source1="%oSciTE_CurrentFile%"
+
+
+argv = %argv% --renameSymbol="%symbolName%" --renameSymbol_To="%symbolNameNew%"
+;~ Clipboard=%argv%
+runPHP_link := getRunPHP_link(phpFile , argv)
+
+
+if(doSaveFirst)
+   saveWait(A_ScriptDir)
+run, % runPHP_link ,,Hide
+if(!doSaveFirst)
+   Sleep,250
+secWait:=1
+;~ secWait:=""
+MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved`n `n %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n ,%secWait%
+Suspend,off
+return 
+
+
+MsgBox,%runPHP_link% = runPHP_link (line:%A_LineNumber%) `n 
+return 
+
+Ctrl_Alt_L:
+Strg_Alt_L:
+Ctrl & l::
+if( !GetKeyState("alt", "P") ){
+   return
+}
+Last_A_This:=A_ThisFunc . A_ThisLabel
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+drawButtons("baL" , 150)  ; b = ctrsl a = alt j = shift q=f6
+
+;Get the filename
+oSciTE := GetSciTEInstance()
+oSciTE_CurrentFile := oSciTE.CurrentFile
+; To fetch only the bare filename from the above:
+SplitPath, oSciTE_CurrentFile , filename
+doSaveFirst := isFileOpendInSciteUnsaved(filename)
+phpFile = Reformatting_Autohotkey_Source.php
+argv = --source1="%oSciTE_CurrentFile%"
+target := getRunPHP_link(phpFile , argv)
+;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
+;~ return
+;~ works ??
+
+
+if(doSaveFirst)
+   saveWait(A_ScriptDir)
+run, % target ,,Hide
+if(!doSaveFirst)
+   Sleep,250
+MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved,1
+;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
+Suspend,off
+return 
+
+
+
+
+ExtractMethod:
+Ctrl_Alt_M:
+Strg_Alt_M:
+Ctrl & m::
+Last_A_This:=A_ThisFunc . A_ThisLabel
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+if( !GetKeyState("alt", "P") ){
    Suspend,on
-   Send,`n%methodSignature%`n 
-   Sleep,100
-   c1=`n%methodSignature%{`n
+   send,^
+   Suspend,off
+   return
+}
+;~ jkj
+;~ MsgBox,15-06-12_22-08
+drawButtons("baM" , 150)  ; b = ctrsl a = alt j = shift q=f6
+
+ClipboardBackup := Clipboard
+Clipboard:=""
+loopCounter:=0
+c:=copySelection2clipBoard()
+;~ c=%Clipboard%
+defaultInput:=""
+cMethodBody := ""
+line:=""
+lineNotEmpty:=""
+Loop , Parse , c, `n
+{
+   line := A_LoopField
+   if(!defaultInput)
+      defaultInput:=RTrim(RegExReplace(line,"i).*?(\w+).*?","m$1") , "`s`n`t`r")
+   ;~ MsgBox, %A_LoopField% 
+   line := RegExReplace(line,"^[\s\n\t\r]+","")
+   if(StrLen(line))
+      lineNotEmpty := line
+   cMethodBody .= "   "  .  line . "`n"
+}
+; 
+returnValue :=RegExReplace( lineNotEmpty ,"i)^[`a.]*?([a-z]+)[^w]*$","$1")
+;~ MsgBox,'%returnValue%' = returnValue `n 
+;~ Reload
+cMethodBody := RegExReplace(cMethodBody,"i)[\s\n\t\r]+$","")
+inputH := 200
+
+SetTitleMatchMode,2
+WinGetPos,x,y,w,h,SciTE4AutoHotkey
+
+
+timeoutSec := ""
+
+SetTitleMatchMode,3
+;~ msg= Extract Clipboard as Method? 
+msg:="Extract as Method: Method Name?"
+
+; InputBox, OutputVar [, Title, Prompt, HIDE, Width, Height, X, Y, Font, Timeout, Default]
+
+InputBox, methodName , %msg% , %msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %defaultInput%
+WinSet, AlwaysOnTop, On, %msg%
+if ErrorLevel = 1  
+return
+if( methodName == "")
+   return
+WinWaitNotActive, %msg% 
+send,{esc} ; go out of search text box or so
+Sleep,10
+markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
+Send,{BackSpace} `; %markerXXXXstring%
+;~ mName=%defaultInput%
+;~ i Case-insensitive matching, which treats the letters A through Z as identical to their lowercase counterparts. 
+;~ `a In v1.0.46.06+, `a recognizes any type of newline, namely `r, `n, `r`n, `v/VT/vertical tab/chr(0xB), `f/FF/formfeed/chr(0xC), and NEL/next-line/chr(0x85). In v1.0.47.05+, newlines can be restricted to only CR, LF, and CRLF by instead specifying (*ANYCRLF) in uppercase at the beginning of the pattern (after the options); e.g. im)(*ANYCRLF)^abc$. 
+defaultInput := LTrim( RegExReplace( RegExReplace( cMethodBody , "i)[^w]*?([a-z_0.9]+)[^w]*?" , ", $1" ) ,"im)[\s\n\t\r]+" , " "),"`n,`s")  ; ugly buti dont have tim :-D ;)
+;~ MsgBox,%defaultInput% 
+;~ Reload
+msg=Method Parameters of '%methodName%' ?
+
+InputBox, methodParameters , %msg%,%msg% , , 555 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %defaultInput%
+WinSet, AlwaysOnTop, On, %msg%
+if ErrorLevel = 1  
+return
+WinWaitNotActive, %msg% 
+Send,{Blind}
+;~ Send,{Home}{enter}{up}%mName% 
+; 
+methodSignature := methodName . "(" . methodParameters . ")"
+Suspend,on
+Send,`n%methodSignature%`n 
+Sleep,100
+c1=`n%methodSignature%{`n
 c3= `n   return %returnValue% `n}
 c := c1 . cMethodBody . c3
 ;~ StringReplace,c,c,`n`n,`n
@@ -383,9 +384,8 @@ if( GetKeyState("shift", "P") )
    drawButtons("jaC" , 150)  ; b = ctrsl a = alt j = shift q=f6
    doSelectLine:=true
    c := copyLineOrWord2clipBoard(doSelectLine)
-}
-else 
-{
+} 
+else  {
    Alt_C:
    drawButtons("aC" , 150)  ; b = ctrsl a = alt j = shift q=f6
    doSelectLine:=false
@@ -425,8 +425,8 @@ if(!doSelectLine)
    }
    else if(RegExMatch(c, ":" )){
       defaultInput := " "
-   }
-   else{
+   } 
+   else  {
       defaultInput := ","
    }
    
@@ -452,8 +452,8 @@ if(doSelectLine)
    else if(RegExMatch(c, ":" )){
       Clipboard := RegExReplace(c , "`:" , ",")   ; this the beep ? [:]
       ToolTip3sec(A_LineNumber)
-   }
-   else{
+   } 
+   else  {
       ;~ if(RegExMatch(c, RegExMatch(c, "\s" ) )){
       Clipboard := RegExReplace(c , "([^,])\s(\s*)" , "$1,$2")
    }
@@ -512,7 +512,7 @@ if( GetKeyState("shift", "P") )
    ;~ ToolTip,'%doSelectLine%' = doSelectLine `n
 }
 else
-drawButtons("bJ" , 150)  ; b = ctrsl a = alt j = shift q=f6
+   drawButtons("bJ" , 150)  ; b = ctrsl a = alt j = shift q=f6
 
 ;   uuu 
 c := copyLineOrWord2clipBoard(doSelectLine)
@@ -525,7 +525,7 @@ if(doSelectLine)
    az_wd := ".*"
 }
 else
-az_wd := "[\w\d_öäü]+"
+   az_wd := "[\w\d_öäü]+"
 az_wd1 = "%az_wd%"
 az_wd2 = `%%az_wd%`%
 az_wd3 = \(%az_wd%\)
@@ -539,8 +539,8 @@ else if(RegExMatch(c,az_wd2)){
    ;~ Clipboard := RegExReplace(c,"%","""")   . " "  
    ; % => "
    Clipboard := RegExReplace(c,"%","""")   . " "
-}
-else {
+} 
+else  {
    if(doSelectLine){
       if(RegExMatch(c,az_wd4)){
          ; { c } => c
@@ -550,13 +550,13 @@ else {
          Clipboard := RegExReplace(c,"\((.*)\)","{$1}")   . " "  
          ; ( c ) => { c }
       } 
-      else{
+      else  {
          ; c => ( c )
          Clipboard := "(" . c . ")" . " " 
          ;~ Clipboard := RegExReplace(c,"""(.*)""","($1)")   . " "  lkjlkj
       }
-   }
-   else{
+   } 
+   else  {
       ; c => % c %
       Clipboard := RegExReplace(c,"([^\s]+)$","%$1%") . " "
    }
@@ -564,7 +564,7 @@ else {
 if(doSelectLine)
    Send,{CtrlDown}v{CtrlUp}{home}{Space}{Shift Down}{home}{Shift up}{BackSpace} ; jumps into new line and waits for backspace
 else
-Send,{CtrlDown}v{CtrlUp}  
+   Send,{CtrlDown}v{CtrlUp}  
 Suspend,off
 ;~ Now when you are coding you can quickly wrap text in quotes with a quick cmd+j and the selection will be wrapped with quotes.  if you type it additional with shift line is wraped. try it :)
 send,{CtrlUp}  {Blind}
@@ -1036,13 +1036,14 @@ copyLineOrWord2clipBoard(doSelectLine){
    if(doSelectLine){
       Send,{Home}{ShiftDown}
       Send,{ShiftDown}{End}
-   } else {
-   Send,^{Left 3}{ShiftDown}  
-   Send,{ShiftDown}^{Right 3}
-}
-Send,{ShiftUp}
-c:=copySelection2clipBoard()
-return c
+   } 
+   else  {
+      Send,^{Left 3}{ShiftDown}  
+      Send,{ShiftDown}^{Right 3}
+   }
+   Send,{ShiftUp}
+   c:=copySelection2clipBoard()
+   return c
 }   
 ; lk luuu:u:u0
 ctrl_alt_v(){
@@ -1065,7 +1066,7 @@ ctrl_alt_v(){
    ;  lkolk()
    ;~ MsgBox,1
    ;~ }else
-   ;~ MsgBox,2
+      ;~ MsgBox,2
    ;~ return
    varName:=RegExReplace(varName,"[^\w\d_]+","_")
    varName := Trim(varName,"_")
@@ -1094,304 +1095,303 @@ ctrl_alt_v(){
    if( isDigitFirst ||  InStr(varFIRST," .")   ||  InStr(varFIRST," +")  ||  InStr(varFIRST,":=") || StrLen(varFIRST) > Round(StrLen(varName) * 1.2) )
    {
       isValueProbablyNotString := true
-      ;~ %A_LineNumber% = A_LineNumber `n 
-      }else if (RegExMatch(varFIRST , "i)[a-z_]+\([^)]*\)"))
-      isValueProbablyNotString := true
-      ;  ; 
-      ;~ isProbablyFuntionCallInside := RegExMatch(varFIRST,"i)[a-z_]+\([^)]*\)")
-      if(isValueProbablyNotString)
+      ;~ %A_LineNumber% = A_LineNumber `n
+   }else if (RegExMatch(varFIRST , "i)[a-z_]+\([^)]*\)"))
+   isValueProbablyNotString := true
+   ;  ; 
+   ;~ isProbablyFuntionCallInside := RegExMatch(varFIRST,"i)[a-z_]+\([^)]*\)")
+   if(isValueProbablyNotString)
+   {
+      varFIRST1 := RegExReplace(varFIRST,"^`a*(.).*?$","$1")
+      if(varFIRST1 == "%")
+         isValueProbablyNotString := false
+      ;~ MsgBox,%varFIRST1% = varFIRST1 (line:%A_LineNumber%) `n 
+      ;~ return
+   }
+   if(isValueProbablyNotString)
+      defaultInput := ":="
+   ;~ MsgBox,%varName% := varName `n 15-06-12_16-20
+   ;~ %_% := _]%
+   ;~ %5_6% := 5_6
+   else
+   {
+      defaultInput := "="
+   }
+   msg= Delimiter ? `n`nPress Shift+Enter for use intelligent defaults.
+   
+   SetTitleMatchMode,2
+   WinGetPos,x,y,w,h,SciTE4AutoHotkey
+   
+   
+   InputBox,delimiter,%msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %defaultInput%
+   WinSet, AlwaysOnTop, On, %msg%
+   if ErrorLevel = 1  
+   noDel:=true
+   If ( GetKeyState("shift", "P") ) {
+      m=pressed shift+enter lets use defaults
+      ;~ MsgBox, ,% m,% m,1
+      noInputs:=true
+   }
+   ; Qoutes of Key
+   if(delimiter == ":=")
+   {
+      ;~ if(isValueProbablyNotString)
+         defaultInput := ""
+      ;~ MsgBox,%defaultInput%  15-06-12_16-36
+   }
+   else if(delimiter == ":")
+      defaultInput := ""
+   else if(delimiter == "=")
+      defaultInput := ""
+   else if(delimiter == ",")  
+      defaultInput := """"
+   else
+      defaultInput := ""
+   ;~ ein_bisschen_text := ein bisschen text
+   ;~ test = %test%
+   ;~ d_1_2_1_2222 := d_1_2 := 1+2222
+   ;~ MsgBox,%delimiter% := delimiter `n %delimiter% := delimiter `n %noInputs% := noInputs `n
+   ;~ Reload
+   ;~ Qoutes of Key?
+   if(noInputs)
+   {
+      ToolTip1sec("noInputs 15-06-12_17-20")
+      firstQoute:=defaultInput
+      ;~ MsgBox,15-06-12_17-20
+   } 
+   else  {
+      msg= Qoutes of Key?
+      InputBox,firstQoute,%msg%,%msg% , , 200 , %inputH%  , 330 , 200, , %timeoutSec%  , %defaultInput%
+      WinSet, AlwaysOnTop, On, %msg%
+      if ErrorLevel = 1  
+      noKey:=true
+   }
+   ; value qoutes
+   if(firstQoute == "%")
+      defaultInput := ""
+   else if(firstQoute == """")
+      defaultInput := """"
+   else{
+      if(delimiter == ":=")
       {
-         varFIRST1 := RegExReplace(varFIRST,"^`a*(.).*?$","$1")
-         if(varFIRST1 == "%")
-            isValueProbablyNotString := false
-         ;~ MsgBox,%varFIRST1% = varFIRST1 (line:%A_LineNumber%) `n 
+         ;~ calculation ? not a sting?
+         ;~ isValueProbablyNotString
+         ;~ A_TimeIdle kkk 
+         varName_1_3 := SubStr(varName,1,2)
+         StringLower, varName_1_3lo ,varName_1_3
+         ;~ MsgBox,%subStr_varName_1_3% = subStr_varName_1_3 `n 
          ;~ return
+         if(!isValueProbablyNotString && varName_1_3lo == "a_")
+            isValueProbablyNotString:=true
+         if(isValueProbablyNotString)
+            defaultInput := ""
+         else
+            defaultInput := """"
       }
-      if(isValueProbablyNotString)
-         defaultInput := ":="
-      ;~ MsgBox,%varName% := varName `n 15-06-12_16-20
-      ;~ %_% := _]%
-      ;~ %5_6% := 5_6
-      else
+      else if(delimiter == ":")
+         defaultInput := """"
+      else if(delimiter == "=")
       {
-         defaultInput := "="
+         ;~ isDigitFirst
+         ;~ isValueProbablyNotString := true
+         isCorrectForVarName := RegExMatch(trim(varFIRST),"^\w+[\w_\d]+$")
+         if(isDigitFirst || !isCorrectForVarName )
+            defaultInput := ""
+         else
+            defaultInput := "%"
+         ;~ ein_bischen = ein bischen
       }
-      msg= Delimiter ? `n`nPress Shift+Enter for use intelligent defaults.
+      else if(delimiter == ",")  
+         defaultInput := """"
+      else
+         defaultInput := ""
+   }
+   ;~ 1_2_3 1+2+3
+   if(noInputs)
+      secQoute:=defaultInput
+   else
+   {
+      msg= Qoutes of Value? 
       
       SetTitleMatchMode,2
       WinGetPos,x,y,w,h,SciTE4AutoHotkey
       
-      
-      InputBox,delimiter,%msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %defaultInput%
+      ;~ InputBox,secQoute,%msg%,%msg% , , 200 , 100 , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %defaultInput%
       WinSet, AlwaysOnTop, On, %msg%
-      if ErrorLevel = 1  
-      noDel:=true
-      If ( GetKeyState("shift", "P") ) {
-         m=pressed shift+enter lets use defaults
-         ;~ MsgBox, ,% m,% m,1
-         noInputs:=true
-      }
-      ; Qoutes of Key
-      if(delimiter == ":=")
-      {
-         ;~ if(isValueProbablyNotString)
-         defaultInput := ""
-         ;~ MsgBox,%defaultInput%  15-06-12_16-36
-      }
-      else if(delimiter == ":")
-      defaultInput := ""
-      else if(delimiter == "=")
-      defaultInput := ""
-      else if(delimiter == ",")  
-      defaultInput := """"
-      else
-      defaultInput := ""
-      ;~ ein_bisschen_text := ein bisschen text
-      ;~ test = %test%
-      ;~ d_1_2_1_2222 := d_1_2 := 1+2222
-      ;~ MsgBox,%delimiter% := delimiter `n %delimiter% := delimiter `n %noInputs% := noInputs `n
-      ;~ Reload
-      ;~ Qoutes of Key?
-      if(noInputs)
-      {
-         ToolTip1sec("noInputs 15-06-12_17-20")
-         firstQoute:=defaultInput
-         ;~ MsgBox,15-06-12_17-20
-      }
-      else
-      {
-         msg= Qoutes of Key?
-         InputBox,firstQoute,%msg%,%msg% , , 200 , %inputH%  , 330 , 200, , %timeoutSec%  , %defaultInput%
-         WinSet, AlwaysOnTop, On, %msg%
-         if ErrorLevel = 1  
-         noKey:=true
-      }
-      ; value qoutes
-      if(firstQoute == "%")
-         defaultInput := ""
-      else if(firstQoute == """")
-      defaultInput := """"
-      else{
-         if(delimiter == ":=")
-         {
-            ;~ calculation ? not a sting?
-            ;~ isValueProbablyNotString
-            ;~ A_TimeIdle kkk 
-            varName_1_3 := SubStr(varName,1,2)
-            StringLower, varName_1_3lo ,varName_1_3
-            ;~ MsgBox,%subStr_varName_1_3% = subStr_varName_1_3 `n 
-            ;~ return
-            if(!isValueProbablyNotString && varName_1_3lo == "a_")
-               isValueProbablyNotString:=true
-            if(isValueProbablyNotString)
-               defaultInput := ""
-            else
-            defaultInput := """"
-         }
-         else if(delimiter == ":")
-         defaultInput := """"
-         else if(delimiter == "=")
-         {
-            ;~ isDigitFirst
-            ;~ isValueProbablyNotString := true
-            isCorrectForVarName := RegExMatch(trim(varFIRST),"^\w+[\w_\d]+$")
-            if(isDigitFirst || !isCorrectForVarName )
-               defaultInput := ""
-            else
-            defaultInput := "%"
-            ;~ ein_bischen = ein bischen
-         }
-         else if(delimiter == ",")  
-         defaultInput := """"
-         else
-         defaultInput := ""
-      }
-      ;~ 1_2_3 1+2+3
-      if(noInputs)
-         secQoute:=defaultInput
-      else
-      {
-         msg= Qoutes of Value? 
-         
-         SetTitleMatchMode,2
-         WinGetPos,x,y,w,h,SciTE4AutoHotkey
-         
-         ;~ InputBox,secQoute,%msg%,%msg% , , 200 , 100 , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %defaultInput%
-         WinSet, AlwaysOnTop, On, %msg%
-         if ErrorLevel = 1
-         noVal:=true
-      }
-      if(noKey &&  noDel &&  noVal )
-      {
-         ToolTip3sec(A_LineNumber . ": InputDialogs canceld (15-06-12_14-36)" ) 
-         return
-      }
-      Send,{Blind}
-      WinActivate,%activeTitle%
-      WinWaitActive,%activeTitle%,,1
-      IfWinNotActive,%activeTitle%
-         return
-      Send,{home}{ShiftDown}{End}
-      if(isDigitFirst && firstQoute == "")
-         varName :=  "d_" . varName
-      part1=%firstQoute%%varName%%firstQoute%
-      if(delimiter==":=")
-         value:=varFIRST
-      else
+      if ErrorLevel = 1
+      noVal:=true
+   }
+   if(noKey &&  noDel &&  noVal )
+   {
+      ToolTip3sec(A_LineNumber . ": InputDialogs canceld (15-06-12_14-36)" ) 
+      return
+   }
+   Send,{Blind}
+   WinActivate,%activeTitle%
+   WinWaitActive,%activeTitle%,,1
+   IfWinNotActive,%activeTitle%
+      return
+   Send,{home}{ShiftDown}{End}
+   if(isDigitFirst && firstQoute == "")
+      varName :=  "d_" . varName
+   part1=%firstQoute%%varName%%firstQoute%
+   if(delimiter==":=")
       value:=varFIRST
-      valueOriginal := value
-      valueEncode := RegExReplace(value, "([!+^#{}]+)", "{$1}")
-      valueDiffLen := StrLen(valueEncode) - StrLen(valueOriginal)
-      part2=%delimiter% %secQoute%%valueEncode%%secQoute%
-      strLen_walk_left := StrLen(part2) - valueDiffLen ; 
-      part1:=convert123To_NumPad123(part1)
-      part2:=convert123To_NumPad123(part2)
-      ;1+2lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This)Ll@ewqerwqe@@
-      WinActivate,%activeTitle%
-      WinWaitActive,%activeTitle%,,1
-      IfWinNotActive,%activeTitle%
-         return
-      Send, %part1% %part2%
-      ;~ %_% := +%
-      ;~ %{numpad}_{numpad}% := {numpad}+{numpad}%
-      Send,{Blind}
-      Sleep,10  
-      WinActivate,%activeTitle%
-      WinWaitActive,%activeTitle%,,1
-      IfWinNotActive,%activeTitle%
-         return
-      Send,{end}{ShiftDown}{Left %strLen_walk_left%}{ShiftUp}
-      Send,{Blind}
-      ;~ Send,{home}{Right %strLen_varName%}
-      ;~ Sleep,20
-      ;~ asdfs
-      Suspend,off
-      Sleep,1000
+   else
+      value:=varFIRST
+   valueOriginal := value
+   valueEncode := RegExReplace(value, "([!+^#{}]+)", "{$1}")
+   valueDiffLen := StrLen(valueEncode) - StrLen(valueOriginal)
+   part2=%delimiter% %secQoute%%valueEncode%%secQoute%
+   strLen_walk_left := StrLen(part2) - valueDiffLen ; 
+   part1:=convert123To_NumPad123(part1)
+   part2:=convert123To_NumPad123(part2)
+   ;1+2lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This)Ll@ewqerwqe@@
+   WinActivate,%activeTitle%
+   WinWaitActive,%activeTitle%,,1
+   IfWinNotActive,%activeTitle%
       return
-      ;~ so_ein_tag := so ein tagzy
-      ;~ aaaa := aaaa
-      ;~ huhu := huhu
-      return ;~ huhu := huhu
-   }
-   return  ; probably redundant. its more secure if we do that.
-   ;~ #Include functions.inc.ahk
-   ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-   ;~ subroutinen beispielsweise müsen ans Dateiende
-   #Include functions_dateiende.inc.ahk
-   ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-   #Include UPDATEDSCRIPT_global.inc.ahk
-   showUsageInfoBox(){
-      if(true)
-         msgBox_Something_wro = Something wrong :( `n  please do the following: `n open tillagoto.properties and set `n `n tillagoto.enable=0  `n`n then Reload SL5_AHK_Refactor_engine_v0.5.ahk `n `n BTW its recomandet to use SciTE4AHK300601_Portable (easyier to change properties files) `n  (line:%A_LineNumber%) `n 
-      ;~ MsgBox,%msgBox_Something_wro%
-      MsgBox , , % msgBox_Something_wro , % msgBox_Something_wro , 3
-      
-      run,SL5_AHK_Refactor_engine_v0.5.ahk
-      ;~ Reload
-   }
-   tp41fn(isNumPadAvailable,ComputerName, key1, key2)
-   {
-      ; test retest5
-      ; Computer mit SN Taste haben keinen zahlen Block.
-      ; daher wäre es unsinnig den Anwender dazu zu nötigen den zahlen Block zu verwenden.
-      Last_A_This:=A_ThisFunc . A_ThisLabel . "`n" . " isNumPadAvailable = '" . isNumPadAvailable . "'"
-      ToolTip3sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-      if(!isNumPadAvailable || ComputerName = "IBM-DE212688" )
-         s:=key1
-      else
+   Send, %part1% %part2%
+   ;~ %_% := +%
+   ;~ %{numpad}_{numpad}% := {numpad}+{numpad}%
+   Send,{Blind}
+   Sleep,10  
+   WinActivate,%activeTitle%
+   WinWaitActive,%activeTitle%,,1
+   IfWinNotActive,%activeTitle%
+      return
+   Send,{end}{ShiftDown}{Left %strLen_walk_left%}{ShiftUp}
+   Send,{Blind}
+   ;~ Send,{home}{Right %strLen_varName%}
+   ;~ Sleep,20
+   ;~ asdfs
+   Suspend,off
+   Sleep,1000
+   return
+   ;~ so_ein_tag := so ein tagzy
+   ;~ aaaa := aaaa
+   ;~ huhu := huhu
+   return ;~ huhu := huhu
+}
+return  ; probably redundant. its more secure if we do that.
+;~ #Include functions.inc.ahk
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+;~ subroutinen beispielsweise müsen ans Dateiende
+#Include functions_dateiende.inc.ahk
+;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#Include UPDATEDSCRIPT_global.inc.ahk
+showUsageInfoBox(){
+   if(true)
+      msgBox_Something_wro = Something wrong :( `n  please do the following: `n open tillagoto.properties and set `n `n tillagoto.enable=0  `n`n then Reload SL5_AHK_Refactor_engine_v0.5.ahk `n `n BTW its recomandet to use SciTE4AHK300601_Portable (easyier to change properties files) `n  (line:%A_LineNumber%) `n 
+   ;~ MsgBox,%msgBox_Something_wro%
+   MsgBox , , % msgBox_Something_wro , % msgBox_Something_wro , 3
+   
+   run,SL5_AHK_Refactor_engine_v0.5.ahk
+   ;~ Reload
+}
+tp41fn(isNumPadAvailable,ComputerName, key1, key2)
+{
+   ; test retest5
+   ; Computer mit SN Taste haben keinen zahlen Block.
+   ; daher wäre es unsinnig den Anwender dazu zu nötigen den zahlen Block zu verwenden.
+   Last_A_This:=A_ThisFunc . A_ThisLabel . "`n" . " isNumPadAvailable = '" . isNumPadAvailable . "'"
+   ToolTip3sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+   if(!isNumPadAvailable || ComputerName = "IBM-DE212688" )
+      s:=key1
+   else
       s:=key2 
-      ;~ SendPlay,%s% ; dont work anymore n15-05-08_15-12
-      Suspend,on
-      global a_doublequote
-      doubleQuote="
-      if(Trim(s) == doubleQuote)
-         SendRaw,"
-      else
+   ;~ SendPlay,%s% ; dont work anymore n15-05-08_15-12
+   Suspend,on
+   global a_doublequote
+   doubleQuote="
+   if(Trim(s) == doubleQuote)
+      SendRaw,"
+   else
       SendRaw,%s%
-      ;~  !"§$%6{66%6
-      Suspend,off
-      return
-   }
-   getRunPHP_link(phpFile , argv){
-      ;~ argv = --source1="%oSciTE_CurrentFile%"
-      path= %A_ScriptDir%\phpdesktop-msie-1.14-php-5.4.33
-      phpCgiExe = %path%\php\php-cgi.exe
-      ; E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php
-      script = %path%\www\SL5_preg_contentFinder\examples\AutoHotKey\%phpFile% 
-      oSciTE := GetSciTEInstance()
-      oSciTE_CurrentFile := oSciTE.CurrentFile
-      ; 
-      target := phpCgiExe . " " . script . " " . argv
-      return target
-   }
-   saveWait(fileAdress){
-      Suspend,on
-      Send,{blind}  ; 
-      Sleep,10
-      
-      Send,^s ; save script first ; 
-      FileGetTime, modiTime1, fileAdress ; Retrieves the modification time by default.
-      Loop,8
-      {
-         Sleep,100
-         FileGetTime, modiTime2, fileAdress  ; Retrieves the modification time by default.
-         if(modiTime1 != modiTime2)
-            break
-      }
-      Send,{CtrlUp}{AltUp}
-      Suspend,off
-      Sleep,20
-      return true
-   }
-   isFileOpendInSciteUnsaved(filename){
-      SetTitleMatchMode,2 
-      doSaveFirst := false ; initialisation
-      IfWinNotExist,%filename% - SciTE4AutoHotkey 
-      {
-         doSaveFirst := true
-         IfWinNotExist,%filename% * SciTE4AutoHotkey 
-            MsgBox,oops   NotExist %filename% * SciTE4AutoHotkey
-      }
-      return doSaveFirst
-   }
+   ;~  !"§$%6{66%6
+   Suspend,off
+   return
+}
+getRunPHP_link(phpFile , argv){
+   ;~ argv = --source1="%oSciTE_CurrentFile%"
+   path= %A_ScriptDir%\phpdesktop-msie-1.14-php-5.4.33
+   phpCgiExe = %path%\php\php-cgi.exe
+   ; E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php
+   script = %path%\www\SL5_preg_contentFinder\examples\AutoHotKey\%phpFile% 
+   oSciTE := GetSciTEInstance()
+   oSciTE_CurrentFile := oSciTE.CurrentFile
+   ; 
+   target := phpCgiExe . " " . script . " " . argv
+   return target
+}
+saveWait(fileAdress){
+   Suspend,on
+   Send,{blind}  ; 
+   Sleep,10
    
-   
-   setCaret2lastEditPosition()
+   Send,^s ; save script first ; 
+   FileGetTime, modiTime1, fileAdress ; Retrieves the modification time by default.
+   Loop,8
    {
-      Last_A_This:=A_ThisFunc . A_ThisLabel
+      Sleep,100
+      FileGetTime, modiTime2, fileAdress  ; Retrieves the modification time by default.
+      if(modiTime1 != modiTime2)
+         break
+   }
+   Send,{CtrlUp}{AltUp}
+   Suspend,off
+   Sleep,20
+   return true
+}
+isFileOpendInSciteUnsaved(filename){
+   SetTitleMatchMode,2 
+   doSaveFirst := false ; initialisation
+   IfWinNotExist,%filename% - SciTE4AutoHotkey 
+   {
+      doSaveFirst := true
+      IfWinNotExist,%filename% * SciTE4AutoHotkey 
+         MsgBox,oops   NotExist %filename% * SciTE4AutoHotkey
+   }
+   return doSaveFirst
+}
+
+
+setCaret2lastEditPosition()
+{
+   Last_A_This:=A_ThisFunc . A_ThisLabel
+   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+   Suspend,on
+   Send,{Blind}
+   ;~ Sleep,10
+   ;~ Send,{Blind}
+   If (!GetKeyState("z", "P") && !GetKeyState("y", "P")) {
+      ; do it only its not pressed
+      ;~ SetKeyDelay,0
+      Suspend,on
+      SetKeyDelay,40
+      ControlSend,,{CtrlDown}zy{CtrlUp},SciTE4AutoHotkey 
+      ControlSend,,{up 6}{Down 12}{up 6},SciTE4AutoHotkey 
+      Suspend,off
+   }
+   ;~ MsgBox,lh
+   Suspend,Off
+   send,{Blind}
+   return
+}
+
+GetSciTEInstance()
+{
+   Last_A_This:=A_ThisFunc . A_ThisLabel
+   if(false)
       ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-      Suspend,on
-      Send,{Blind}
-      ;~ Sleep,10
-      ;~ Send,{Blind}
-      If (!GetKeyState("z", "P") && !GetKeyState("y", "P")) {
-         ; do it only its not pressed
-         ;~ SetKeyDelay,0
-         Suspend,on
-         SetKeyDelay,40
-         ControlSend,,{CtrlDown}zy{CtrlUp},SciTE4AutoHotkey 
-         ControlSend,,{up 6}{Down 12}{up 6},SciTE4AutoHotkey 
-         Suspend,off
-      }
-      ;~ MsgBox,lh
-      Suspend,Off
-      send,{Blind}
-      return
-   }
-   
-   GetSciTEInstance()
+   ; lll(A_LineNumber, "SL5_AHK_Refactor_engine_v0.5.ahk",Last_A_This)
+   olderr := ComObjError()
+   ComObjError(false)
+   scite := ComObjActive("{D7334085-22FB-416E-B398-B5038A5A0784}")
+   ComObjError(olderr)
+   oSciTE := IsObject(scite) ? scite : ""
+   if !oSciTE
    {
-      Last_A_This:=A_ThisFunc . A_ThisLabel
-      if(false)
-         ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-      ; lll(A_LineNumber, "SL5_AHK_Refactor_engine_v0.5.ahk",Last_A_This)
-      olderr := ComObjError()
-      ComObjError(false)
-      scite := ComObjActive("{D7334085-22FB-416E-B398-B5038A5A0784}")
-      ComObjError(olderr)
-      oSciTE := IsObject(scite) ? scite : ""
-      if !oSciTE
-      {
       MsgBox, 16, % Last_A_This, Cannot find SciTE!
       ExitApp
    }

@@ -38,12 +38,19 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
         $old_open = '(' . $fArgs . '\s*[^{;\n]*)\{[\s\n]';
     }
     else {
-        $old_open = '^([^{;\n]*)\{[\s\n]';
+        # } else {
+        $old_open = '([^\n{;]*)\{[^\w%$`]'; # problem this searchs in comments
+        $old_open = '^([^{;]*?)\{[^\w%$`]'; #
+//        $old_open = '\{';
+        $old_open = '^([^{;\n]*)\{[\s\n]';# todo: problem. dont finds:  } else {
     }
-    $old_close = '^([^{};\n\r]*)\}[\s\n\r]';
+
+    $old_close = '^[ ]*\}?([^{};\n\r]*?)\}?[\s\n\r]';
+    $old_close = '^[ ]*\}?([^{};\n\r]*)\}';
+    $old_close = '(\n\s*)\}';
+//    $old_close = '^([^{};\n\r]*)\}[ ]*$';
+//    $old_close = '\}';
 //Send,{CtrlUp} {Blind}
-
-
 
 
     $new_open_default = '[ ';
@@ -54,8 +61,9 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
     $newline = "\r\n";
     $indentSize = 3;
 
-    $dirtyBugFix = ' a{b}c';
-    $file_content = trim(preg_replace('/^[ ]+/smi', '', $file_content)) . $dirtyBugFix;
+//    $dirtyBugFix = ' a{b}c';
+    $file_content = trim(preg_replace('/^[ ]+/smi', '', $file_content));
+//    $file_content .= $dirtyBugFix;
 
     $getIndentStr = function ($indent, $char, $indentSize) {
         $multiplier = $indentSize * $indent;
@@ -65,6 +73,16 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
     };
 
     $indentStr = $getIndentStr(1, $charSpace, $indentSize);
+
+    $file_content = preg_replace( '/^\s*\}\s*else(\s+if\s*\([^)]+\)\s*)?\s*\{+/smi', "} \nelse $1 {", $file_content); // dirty BugFix
+
+    $file_content = preg_replace(
+      '/(\s*\bif\s*\([^\n\r)]+\)\s*)[\n\r]+([^{\s])/smi', "$1\n".$indentStr."$2", $file_content); // dirty BugFix
+
+    $file_content = preg_replace(
+      '/(\s*\belse\s*)[\n\r]+([^{\s])/smi', "$1\n".$indentStr."$2", $file_content); // dirty BugFix
+
+
 //    $pattern = '([\r\n](If|#if)[a-z]+[ ]*[ ]*[^\n\r{]+)[ ]*[\r\n]+[ ]*(\w)';
     $pattern = '([\r\n](If|#if)([a-z]+[ ]*,|\()[ ]*[^\n\r{]+)[ ]*[\r\n]+[ ]*(\w)';
     $file_content = preg_replace('/' . $pattern . '/is', "$1" . $newline . $indentStr . "$4", $file_content);
@@ -86,13 +104,15 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
 //          if($cut['middle'] === false || $cut['behind'] === false) {
 //              return false;
 //          }
+//}   else if(RegExMatch(c, ":" )) {
+
 //          $charSpace = '.';
           $indentStr = $getIndentStr(1, $charSpace, $indentSize);
 
 
           if(!isset($posList0['begin_end'])) $posList0['begin_end'] = strlen($source1);
           $start = '' . substr($source1, $posList0['begin_begin'], $posList0['begin_end'] - $posList0['begin_begin']) . '';
-          $end = '' . substr($source1, $posList0['end_begin'], $posList0['end_end'] - $posList0['end_begin']) . '';
+          $end = '' . ltrim(substr($source1, $posList0['end_begin'], $posList0['end_end'] - $posList0['end_begin'])) . '';
 
           if(@$arguments['A_ThisLabel'] == "Alt & Up" || @$arguments['A_ThisLabel'] == "Alt & Down"
             || !@empty($arguments['renameSymbol']) && !empty($arguments['renameSymbol_To'])
@@ -102,9 +122,9 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
               if($strposMarker > 0) {
 
                   if(@$arguments['A_ThisLabel'] == "Alt & Up" || @$arguments['A_ThisLabel'] == "Alt & Down") {
-                      if(@$arguments['A_ThisLabel'] == "Alt & Down"){
+                      if(@$arguments['A_ThisLabel'] == "Alt & Down") {
 
-                          preg_match_all('/\n/', substr($cut['middle'], $strposMarker + strlen($markerXXXXstring) ), $matches);
+                          preg_match_all('/\n/', substr($cut['middle'], $strposMarker + strlen($markerXXXXstring)), $matches);
                           $command = 'Down';
                       }
                       else {
@@ -121,20 +141,21 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
                           die("!file_exists($fileAddress) 15-07-06_14-26");
                       }
                       $contents = file_get_contents($fileAddress);
-                      if(!$contents)
-                          die('!$contents 15-07-06_14-18 \n $contents=' . $contents. '$fileAddress=' . $fileAddress);
+                      if(!$contents) {
+                          die('!$contents 15-07-06_14-18 \n $contents=' . $contents . '$fileAddress=' . $fileAddress);
+                      }
                       $ahkContent =
-'
+                        '
 Suspend,on
 ; Send,^z
 ; Sleep,50
-Send,{'.$command.' '.$linesAboveMarker.'}
+Send,{' . $command . ' ' . $linesAboveMarker . '}
 Suspend,off
 ';
                       $contents = preg_replace('/<body>.*<\/body>/ism', "<body>\n" . $ahkContent . "\n;</body>", $contents);
 //                      $fileAddressSaved = realpath('../../../../../' . $fileAddress . '.ahk');
                       $fileAddressSaved = '../../../../../' . $fileAddress . '.ahk';
-                      echo $fileAddressSaved ;
+                      echo $fileAddressSaved;
                       file_put_contents($fileAddressSaved, $contents);
 
                   }
@@ -161,7 +182,8 @@ Suspend,off
           return $cut;
       });
 
-    $actual = substr($actual, 0, -strlen($dirtyBugFix));
+//    $actual = substr($actual, 0, -strlen($dirtyBugFix));
+    $actual = preg_replace('/([\n\r\s]*else(\s+if\s*\([^)]+\)\s*)?\s*\{+)/smi', "$1", $actual); // dirty BugFix
 
     return $actual;
 }
