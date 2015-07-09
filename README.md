@@ -1,4 +1,8 @@
 
+important note !! please download from https://github.com/sl5net/SL5_AHK_Refactor_engine/releases
+not from https://github.com/sl5net/SL5_AHK_Refactor_engine
+=====
+
 SL5_AHK_Refactor_engine
 =====
 
