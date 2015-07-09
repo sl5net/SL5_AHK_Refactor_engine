@@ -1,0 +1,3 @@
+[submodule "phpdesktop-msie-1.14-php-5.4.33/www/SL5_preg_contentFinder"]
+	path = phpdesktop-msie-1.14-php-5.4.33/www/SL5_preg_contentFinder
+	url = git://github.com/sl5net/SL5_preg_contentFinder
