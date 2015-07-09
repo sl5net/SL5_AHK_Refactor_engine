@@ -395,7 +395,7 @@ if(!doSelectLine)
    msg= choose delimiter you like for your selection`n or Esc for cancel this refactoring
    if(RegExMatch(c, "," )){
       defaultInput := ":"
-   }else                  if(RegExMatch(c, ":" ))                 {
+   }else                    if(RegExMatch(c, ":" ))                   {
       defaultInput := " "
    }else  {
       defaultInput := ","
@@ -418,7 +418,7 @@ if(doSelectLine){
    ; RegExMatch() returns the position
    if(RegExMatch(c, "," )){
       Clipboard := RegExReplace(c , "," , ":")
-   }else                  if(RegExMatch(c, ":" ))                 {
+   }else                    if(RegExMatch(c, ":" ))                   {
       Clipboard := RegExReplace(c , "`:" , ",")   ; this the beep ? [:]
       ToolTip3sec(A_LineNumber)
    }else  {
@@ -502,7 +502,7 @@ Surrounding_with_Quotes:
    if(RegExMatch(c,az_wd1)){
       ; " c " => c
       Clipboard := RegExReplace(c,"""","")   . " "
-   }else                  if(RegExMatch(c,az_wd2))                 {
+   }else                    if(RegExMatch(c,az_wd2))                   {
       ;~ Clipboard := RegExReplace(c,"%","""")   . " "  
       ; % => "
       Clipboard := RegExReplace(c,"%","""")   . " "
@@ -511,7 +511,7 @@ Surrounding_with_Quotes:
          if(RegExMatch(c,az_wd4)){
             ; { c } => c
             Clipboard := RegExReplace(c,"\{(.*)\}","""$1""")   . " "
-         }else                  if(RegExMatch(c,az_wd3))                 {
+         }else                    if(RegExMatch(c,az_wd3))                   {
             Clipboard := RegExReplace(c,"\((.*)\)","{$1}")   . " "  
             ; ( c ) => { c }
          }else  {
@@ -1084,6 +1084,7 @@ ctrl_alt_v(){
       ;~ MsgBox,%varFIRST1% = varFIRST1 (line:%A_LineNumber%) `n 
       ;~ return
    }
+   
    if(isValueProbablyNotString)
       defaultInput := ":="
    ;~ MsgBox,%varName% := varName `n 15-06-12_16-20
@@ -1249,6 +1250,7 @@ return  ; probably redundant. its more secure if we do that.
 ;~ subroutinen beispielsweise müsen ans Dateiende
 #Include functions_dateiende.inc.ahk
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 #Include UPDATEDSCRIPT_global.inc.ahk
 showUsageInfoBox(){
    if(true)
