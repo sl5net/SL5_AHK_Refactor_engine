@@ -10,7 +10,7 @@ lll(ln, scriptName, text="")
       do_createLog_notAppendLog:=true
       		if(scriptName != GLOBAL_lllog_only_this_scriptName)
       			return false
-   	}
+   }
    	
    
    ;~ logFileName=log\%A_ScriptName%.log.txt
@@ -50,7 +50,7 @@ lll(ln, scriptName, text="")
       		Clipboard="%A_ScriptName%" 
       		MsgBox, functions_global.inc.ahk `n ln=%ln% `n  scriptName = %scriptName% `n parameter FILE must not be empty `n `n you find this now inside your clipboard : %Clipboard% `n `n move to line %ln% and fix the bug. `n `n or let run the SL5_AHK_preparser.ahk
       		return -1
-   	}
+   }
    	;~ tipp: use notepadd++ , diverses> ohne rückfraen aktuallisieren
    	;~ tipp: use notepadd++ , diverses> nach aktuallisierung zum ende springen
    	msg:=""
@@ -76,8 +76,8 @@ lll(ln, scriptName, text="")
       		{
          ;~ would be true only if the file exists and is a directory
          		MsgBox,15-05-15_17-00 ops Who could we store logfiles ?
-      		}
-   	}
+      }
+   }
    	
    ;~if(StrLen(GLOBAL_lllog_only_this_scriptName)>0
    	if(do_createLog_notAppendLog)
@@ -92,8 +92,8 @@ lll(ln, scriptName, text="")
       		{
          ;~ MsgBox,%subStr_lll__strLen% %GLOBAL_lllog_only_this_scriptName% := GLOBAL_lllog_only_this_scriptName `n
          		lll := "GLOBAL_lllog_only_this_scriptName = " . GLOBAL_lllog_only_this_scriptName . "`n" . lll
-      		}
-   	}
+      }
+   }
    	
    	FileAppend, % lll, %logFileName%
    	;~ ToolTip,%logFileName% := logFileName `n
@@ -115,7 +115,7 @@ runCopyQ_Ctrl_Shift_v(){
       MsgBox,it not exist
       		run,%A_ScriptDir%\SL5_AHK_Refactor_engine\copyq-windows\copyq.exe
       		Sleep,2000
-   	}
+   }
    ; ^+v!; ^+v!; ^+v!; ^+v!; ^+v!; ^+v!; ^+v!; ^+vCopyQ ahk_class QWidget
    ; ^+v7!; ^+v!; ^+v!; ^+v!; ^+v!; ^+v\SL5_AHK_Refactor_engine\SL5_AHK_Refactor_engine\SL5_AHK_Refactor_engine
    Last_A_This:=A_ThisFunc . A_ThisLabel . " p"
@@ -145,7 +145,7 @@ runCopyQ_Ctrl_Shift_v(){
       		Sleep,100
       		IfWinActive,- CopyQ
       			break
-   	}
+   }
    		Send,{ShiftUp}{CtrlUp} 
    		Suspend,Off
    		;~ MsgBox, :) great CopyQ is active 
@@ -182,6 +182,10 @@ convert123To_NumPad123(t)
 }  
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 drawButtons(str , fontSize){
+   ;~ Schriftname: Keycaps
+   ;~ Version: Publisher's Paradise -- Media Graphics International Inc.
+   ;~ Keycaps Regular.ttf; 
+   
    ;~ Clipboard := A_ComputerName ; T540P-SL5NET
    ;~ MsgBox,%A_ComputerName% = A_ComputerName (line:%A_LineNumber%) `n 
    if("T540P-SL5NET" != A_ComputerName) ; 
@@ -279,9 +283,9 @@ drawButtons(str , fontSize){
 }
 
 ButtonsOffLabel:
-SetTimer,ButtonsOffLabel,Off
-;~ SplashImage, Off
-Progress, Off
+   SetTimer,ButtonsOffLabel,Off
+   ;~ SplashImage, Off
+   Progress, Off
 return
 
 ; 15-07-07_16-22 
