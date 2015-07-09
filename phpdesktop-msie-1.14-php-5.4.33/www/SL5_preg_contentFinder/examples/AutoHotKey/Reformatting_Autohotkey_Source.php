@@ -186,54 +186,25 @@ Suspend,off
     $actual = preg_replace('/(\})[\s\n\r]*(else(\s+if\s*\([^\n\r]+\)\s*)?\s*\{+)/smi', "$1$2", $actual); // dirty BugFix
 # ([^\n\r]+\)
 
-# indent labels
-    $i = 0;
-    $strlen = 0;
-    if(false) {
-        do {
-            $str = '^(\w[\w\d_]*:\s*((?!return).)*\n)([^\s][^n]*)(((?!return).)*return)';
-            $str = '^(\w[\w\d_]*:\s*\n((?!\nreturn).)*)(\n[^\s][^n]*\n)((((?!\nreturn).)*)\nreturn)';
-            $actual = preg_replace('/^' . $str . '/smi', "$1" . $indentStr . "$2$3", $actual);
-# ([^\n\r]+\)
-            $strlenOld = $strlen;
-            $strlen = strlen($actual);
-        }
-        while($strlen != $strlenOld);
-    }
-    else {
-//        $C = new SL5_preg_contentFinder($actual, '\n(\w[\w\d_]*:\s*\n', '\nreturn');
-//        $C->setSearchMode('dontTouchThis');
-//        $cut = [
-//          'before' => $C->getContent_Before(),
-//          'middle' => $C->getContent()
-//,'behind' => $C->getContent_Behind()
-//        ];
-//         var_export($cut);
-//        exit;
-
-    }
-    if(false) {
-        # todo: indent label content.
-        $strlen = 0;
-        $i = 0;
-        $actualStart = $actual;
-        $actual = '';
-        do {
-            $C = new SL5_preg_contentFinder($actualStart, '\n(\w[\w\d_]*:\s*\n', '\nreturn\b');
-            $C->setSearchMode('dontTouchThis');
-            $actualNew = $C->getContent();
-            if(is_null($actualNew)) {
-                break;
-            }
-
-            $actual .= $C->getContent_Before() . preg_replace('/\n/ism', "\n" . $indentStr, $actualNew) . "\nreturn";
-            $actualStart = $C->getContent_Behind();
-            $strlenOld = $strlen;
-            $strlen = strlen($actualStart);
-
-        }
-        while($strlen != $strlenOld || $i++ < 10);
-        $actual .= $C->getContent_Behind();
+//    $pattern = '/^(\w+:)(\R(?:\N*\R)*?)(return)$/mis';
+    $pattern = '/^(\w+:)(\h*\n)(?:.*\n)*?(return)/m';
+    $label = '^\w[\w\d_]*:';
+    $pattern = '/' . "($label)(\h*\R)((?:.*\n)*?)(return\b)" . '/im';
+    preg_match_all($pattern, $actual, $matches,PREG_OFFSET_CAPTURE);
+    $labelsAr = $matches[1];
+//    $contentAr = preg_replace('/\n/ism', "\n" . $indentStr, $matches[3]);
+    $contentAr = $matches[3];
+    $returnAr =  $matches[4];
+    $actualNew = '';
+    for($k = count($labelsAr) ; $k-- ; $k >=0 ) {
+        $new = $labelsAr[$k][0]
+          . "\n" . $indentStr
+          . rtrim( preg_replace('/\n/ism', "\n"
+            . $indentStr, $contentAr[$k][0]) )
+          . "\n" . ltrim($returnAr[$k][0]) ;
+        $actual = substr($actual,0,$labelsAr[$k][1])
+          . $new
+          . substr($actual,$returnAr[$k][1] + strlen($returnAr[$k][0]) ) ;
     }
 
     return $actual;
