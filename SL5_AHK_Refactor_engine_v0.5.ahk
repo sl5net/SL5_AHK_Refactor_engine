@@ -31,7 +31,7 @@ IfWinNotExist,liveHelpFileView.v1.2.ahk
    if(noliveHelpFileView == false)
       Run,liveHelpFileView.v1.2.ahk
 }
-IfWinNotExist,keys_SL5_AHK_Refactor_engine
+IfWinNotExist,keys_SL5_AHK_Refactor_engine.ahk
    run,keys_SL5_AHK_Refactor_engine.ahk
 ; Get SciTE object
 oSciTE := GetSciTEInstance()
