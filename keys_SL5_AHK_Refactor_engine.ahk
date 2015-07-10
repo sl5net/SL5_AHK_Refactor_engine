@@ -110,7 +110,7 @@ Alt_UP:
       if(!oSciTE)  
       {
          Send,^z{AltUp} ;  
-         return
+         return 
       }
       ; oSciTE_CurrentFile := oSciTE.CurrentFile
       ; To fetch only the bare filename from the above:
