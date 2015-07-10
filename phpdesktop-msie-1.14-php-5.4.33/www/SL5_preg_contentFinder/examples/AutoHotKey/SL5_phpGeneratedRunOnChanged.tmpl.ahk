@@ -6,6 +6,12 @@ isDevellopperMode=true ; enthällt auch update script.
 #Include init_global.init.inc.ahk
 SetTimer,UPDATEDSCRIPT,100 
 
+if(false){
+   ; testarea  
+   	; testarea
+   	; testarea
+}
+
 ; Body will generated automatically with php. Please dont change this files 
 ;<body>
 

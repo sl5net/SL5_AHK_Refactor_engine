@@ -44,7 +44,7 @@ Alt_UP:
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) ;
    ;~ drawButtons("aw" , 150)  ; x b = ctrsl a = alt j = shift q=f6 w = up y =down `` = reset, didnt found a backspace fontKey
    DetectHiddenWindows,on
-   sL5_phpGenerated = SL5_phpGeneratedRunOnChanged.ahk.ahk
+   sL5_phpGenerated = SL5_phpGeneratedRunOnChanged.ahk
    IfWinNotExist,%sL5_phpGenerated% 
    {
       if(fileexist(sL5_phpGenerated)) ; 
@@ -52,176 +52,177 @@ Alt_UP:
    }
    else
       ToolTip1sec(A_LineNumber . " " . A_ScriptName .  "`n `n  :( not exist " . sL5_phpGenerated)
-   ; C:\Users\SL5net\Downloads\SL5_AHK_Refactor_engine-0.5.5-alpha\SL5_AHK_Refactor_engine-0.5.5-alpha\phpdesktop-msie-1.14-php-5.4.33\php\php-cgi.exe C:\Users\SL5net\Downloads\SL5_AHK_Refactor_engine-0.5.5-alpha\SL5_AHK_Refactor_engine-0.5.5-alpha\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php --source1="C:\Users\SL5net\Downloads\SL5_AHK_Refactor_engine-0.5.5-alpha\SL5_AHK_Refactor_engine-0.5.5-alpha\keys_SL5_AHK_Refactor_engine.ahk" --A_ThisLabel="Alt & Up"
+   
    Send,{Blind}
    markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
-   Send,{Right} `; %markerXXXXstring%{space} 
+   Send,{End} `; %markerXXXXstring%{space}
    drawButtons("aw" , 150) ; w = up 
    ;Get the filename
    oSciTE := GetSciTEInstance()
    if(!oSciTE)  
    {
       Send,^z{AltUp}
+      return ;
+ }
+      oSciTE_CurrentFile := oSciTE.CurrentFile
+      ; To fetch only the bare filename from the above:
+      SplitPath, oSciTE_CurrentFile , filename
+      doSaveFirst := isFileOpendInSciteUnsaved(filename)
+      ;~ MsgBox,%filename% = filename (line:%A_LineNumber%) `n %doSaveFirst% = doSaveFirst (line:%A_LineNumber%) `n 
+      phpFile = Reformatting_Autohotkey_Source.php
+      argv = --source1="%oSciTE_CurrentFile%" --A_ThisLabel="%A_ThisLabel%"
+      runPHP_link := getRunPHP_link(phpFile , argv)
+      if(doSaveFirst)
+         saveWait(A_ScriptDir)
+      Suspend,on
+      Send,^z ; delte marker
+      run, % runPHP_link ,,Hide
+      if(!doSaveFirst)
+         Sleep,300
+      runPHP_link_runDebug = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
+      Clipboard:=runPHP_link_runDebug
+      Suspend,off
+      Send,{Blind}
+      return 
+      
+      
+      #IfWinActive SciTE4AutoHotkey 
+      Alt_Down:
+      Alt & Down::
+      Send,{AltUp}
+      Last_A_This:=A_ThisFunc . A_ThisLabel 
+      ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) ;
+      DetectHiddenWindows,on
+      sL5_phpGenerated = SL5_phpGeneratedRunOnChanged.ahk
+      IfWinNotExist,%sL5_phpGenerated% 
+      {
+         if(fileexist(sL5_phpGenerated)) ; 
+            run,%sL5_phpGenerated%
+         else
+            ToolTip1sec(A_LineNumber . " " . A_ScriptName .  "`n `n  :( not exist " . sL5_phpGenerated)
+      }
+      Send,{Blind}
+      markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
+      Send,{End} `; %markerXXXXstring%{space}
+      drawButtons("ay" , 150) 
+      ;  ;Get the filename
+      oSciTE := GetSciTEInstance()
+      if(!oSciTE)  
+      {
+         Send,^z{AltUp} ;  
+         return
+      }
+      ; oSciTE_CurrentFile := oSciTE.CurrentFile
+      ; To fetch only the bare filename from the above:
+      SplitPath, oSciTE_CurrentFile , filename
+      doSaveFirst := isFileOpendInSciteUnsaved(filename)
+      phpFile = Reformatting_Autohotkey_Source.php
+      argv = --source1="%oSciTE_CurrentFile%" --A_ThisLabel="%A_ThisLabel%"
+      runPHP_link := getRunPHP_link(phpFile , argv)
+      ;~ if(doSaveFirst)
+         saveWait(A_ScriptDir) ;
+      Suspend,on
+      Send,^z ; delte marker
+      run, % runPHP_link ,,Hide
+      ;~ if(!doSaveFirst)
+         Sleep,300
+      runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
+      Clipboard:=runPHP_link_runP
+      ; 
+      Suspend,off
+      Send,{Blind}
+      return 
+      
+      
+      
+      ;~ Rename, Shift+F6, Rename the selected file, class, field, method, etc.
+      #IfWinActive SciTE4AutoHotkey 
+      +f6::
+      
+      /*
+      it replaces names in namespace and sub namespaces.
+      it depends if your cursor is inside {
+         
+      } or outside {
+   }.
+   means it's different if you replace variable names inside function body or inside function signature. that gives you the ability to replace calling names also if you want. 
+   v1
+   funZ(v1){
+      v1
+   }
+   */
+   
+   Last_A_This:=A_ThisFunc . A_ThisLabel
+   a_LineInfo := A_LineNumber . " - " . A_ScriptName . " - " . Last_A_This
+   ToolTip1sec(a_LineInfo)
+   drawButtons("jq" , 150)  ; j = shift q=f6
+   
+   rename_Shift_F6 := "not fully implemented jet. 04.07.2015 11:57`n "
+   rename_Shift_F6 .= "Rename, Shift+F6, Rename field, method, file, class,  etc."
+   doSelectLine:=false
+   symbolName := copyLineOrWord2clipBoard(doSelectLine)
+   symbolName := RegExReplace(symbolName,"\W+","")
+   Send,{Blind}
+   markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
+   Send,{Right} `; %markerXXXXstring%{space}
+   ;~ MsgBox,%c% = c (line:%A_LineNumber%) `n %rename_Shift_F6% = rename_Shift_F6 (line:%A_LineNumber%) `n 
+   
+   inputH := 200
+   timeoutSec := ""
+   SetTitleMatchMode,3
+   msg=Rename %symbolName% ?
+   
+   SetTitleMatchMode,2
+   WinGetPos,x,y,w,h,SciTE4AutoHotkey
+   InputBox, symbolName , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName% 
+   if ErrorLevel = 1  
+   {
+      Send,^z
+  return
+   }
+   msg=New Name for %symbolName% ?
+   ; InputBox, OutputVar [, Title, Prompt, HIDE, Width, Height, X, Y, Font, Timeout, Default]
+   ;~ SetTitleMatchMode,2
+   ;~ WinGetPos,x,y,w,h,SciTE4AutoHotkey
+   ;~ InputBox, symbolName , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName% 
+   
+   SetTitleMatchMode,2
+   WinGetPos,x,y,w,h,SciTE4AutoHotkey
+   
+   
+   InputBox, symbolNameNew , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName%
+   WinSet, AlwaysOnTop, On, %msg%
+   if ErrorLevel = 1 
+   {
+      Send,^z
       return
    }
+   
+   
+   ;Get the filename
+   oSciTE := GetSciTEInstance()
    oSciTE_CurrentFile := oSciTE.CurrentFile
    ; To fetch only the bare filename from the above:
    SplitPath, oSciTE_CurrentFile , filename
    doSaveFirst := isFileOpendInSciteUnsaved(filename)
    phpFile = Reformatting_Autohotkey_Source.php
-   argv = --source1="%oSciTE_CurrentFile%" --A_ThisLabel="%A_ThisLabel%"
+   argv = --source1="%oSciTE_CurrentFile%"
+   
+   
+   argv = %argv% --renameSymbol="%symbolName%" --renameSymbol_To="%symbolNameNew%"
+   ;~ Clipboard=%argv%
    runPHP_link := getRunPHP_link(phpFile , argv)
+   
+   
    if(doSaveFirst)
       saveWait(A_ScriptDir)
-   Suspend,on
-   Send,^z ; delte marker
    run, % runPHP_link ,,Hide
    if(!doSaveFirst)
       Sleep,250
-   runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
+   secWait:=1
+   ;~ secWait:=""
+   MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved`n `n %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n ,%secWait%
    Suspend,off
-   Send,{Blind}
-return 
-
-
-#IfWinActive SciTE4AutoHotkey 
-Alt_Down:
-   Alt & Down::
-   Send,{AltUp}
-   Last_A_This:=A_ThisFunc . A_ThisLabel 
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) ;
-   DetectHiddenWindows,on
-   sL5_phpGenerated = SL5_phpGeneratedRunOnChanged.ahk.ahk
-   IfWinNotExist,%sL5_phpGenerated% 
-   {
-      if(fileexist(sL5_phpGenerated)) ; 
-         run,%sL5_phpGenerated%
-      else
-         ToolTip1sec(A_LineNumber . " " . A_ScriptName .  "`n `n  :( not exist " . sL5_phpGenerated)
-   }
-   Send,{Blind}
-   markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
-   Send,{Right} `; %markerXXXXstring%{space} 
-   drawButtons("ay" , 150) 
-   ;  ;Get the filename
-   oSciTE := GetSciTEInstance()
-   if(!oSciTE)  
-   {
-      Send,^z{AltUp}
-      return
-   }
-   ; oSciTE_CurrentFile := oSciTE.CurrentFile
-   ; To fetch only the bare filename from the above:
-   SplitPath, oSciTE_CurrentFile , filename
-   doSaveFirst := isFileOpendInSciteUnsaved(filename)
-   phpFile = Reformatting_Autohotkey_Source.php
-   argv = --source1="%oSciTE_CurrentFile%" --A_ThisLabel="%A_ThisLabel%"
-   runPHP_link := getRunPHP_link(phpFile , argv)
-   if(doSaveFirst)
-      saveWait(A_ScriptDir) ;
-   Suspend,on
-   Send,^z ; delte marker
-   run, % runPHP_link ,,Hide
-   if(!doSaveFirst)
-      Sleep,250
-   runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
-   Clipboard:=runPHP_link_runP
-   ; 
-   Suspend,off
-   Send,{Blind}
-return 
-
-
-
-;~ Rename, Shift+F6, Rename the selected file, class, field, method, etc.
-#IfWinActive SciTE4AutoHotkey 
-+f6::
-
-/*
-it replaces names in namespace and sub namespaces.
-it depends if your cursor is inside {
-   
-} or outside {
-   
-}.
-means it's different if you replace variable names inside function body or inside function signature. that gives you the ability to replace calling names also if you want. 
-v1
-funZ(v1){
-   v1
-}
-*/
-
-Last_A_This:=A_ThisFunc . A_ThisLabel
-a_LineInfo := A_LineNumber . " - " . A_ScriptName . " - " . Last_A_This
-ToolTip1sec(a_LineInfo)
-drawButtons("jq" , 150)  ; j = shift q=f6
-
-rename_Shift_F6 := "not fully implemented jet. 04.07.2015 11:57`n "
-rename_Shift_F6 .= "Rename, Shift+F6, Rename field, method, file, class,  etc."
-doSelectLine:=false
-symbolName := copyLineOrWord2clipBoard(doSelectLine)
-symbolName := RegExReplace(symbolName,"\W+","")
-Send,{Blind}
-markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
-Send,{Right} `; %markerXXXXstring%{space}
-;~ MsgBox,%c% = c (line:%A_LineNumber%) `n %rename_Shift_F6% = rename_Shift_F6 (line:%A_LineNumber%) `n 
-
-inputH := 200
-timeoutSec := ""
-SetTitleMatchMode,3
-msg=Rename %symbolName% ?
-
-SetTitleMatchMode,2
-WinGetPos,x,y,w,h,SciTE4AutoHotkey
-InputBox, symbolName , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName% 
-if ErrorLevel = 1  
-{
-   Send,^z
-   return
-}
-msg=New Name for %symbolName% ?
-; InputBox, OutputVar [, Title, Prompt, HIDE, Width, Height, X, Y, Font, Timeout, Default]
-;~ SetTitleMatchMode,2
-;~ WinGetPos,x,y,w,h,SciTE4AutoHotkey
-;~ InputBox, symbolName , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName% 
-
-SetTitleMatchMode,2
-WinGetPos,x,y,w,h,SciTE4AutoHotkey
-
-
-InputBox, symbolNameNew , %msg%,%msg% , , 200 , %inputH%  , % ( x + w / 2 - 50 ) , % ( y + h / 2 - 50 ) , , %timeoutSec%  , %symbolName%
-WinSet, AlwaysOnTop, On, %msg%
-if ErrorLevel = 1 
-{
-   Send,^z
-   return
-}
-
-
-;Get the filename
-oSciTE := GetSciTEInstance()
-oSciTE_CurrentFile := oSciTE.CurrentFile
-; To fetch only the bare filename from the above:
-SplitPath, oSciTE_CurrentFile , filename
-doSaveFirst := isFileOpendInSciteUnsaved(filename)
-phpFile = Reformatting_Autohotkey_Source.php
-argv = --source1="%oSciTE_CurrentFile%"
-
-
-argv = %argv% --renameSymbol="%symbolName%" --renameSymbol_To="%symbolNameNew%"
-;~ Clipboard=%argv%
-runPHP_link := getRunPHP_link(phpFile , argv)
-
-
-if(doSaveFirst)
-   saveWait(A_ScriptDir)
-run, % runPHP_link ,,Hide
-if(!doSaveFirst)
-   Sleep,250
-secWait:=1
-;~ secWait:=""
-MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved`n `n %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n ,%secWait%
-Suspend,off
 return 
 
 
@@ -432,7 +433,7 @@ if(!doSelectLine)
    msg= choose delimiter you like for your selection`n or Esc for cancel this refactoring
    if(RegExMatch(c, "," )){
       defaultInput := ":"
-   }else                     if(RegExMatch(c, ":" ))                    {
+   }else                                                               if(RegExMatch(c, ":" ))                                                              {
       defaultInput := " "
    }else  {
       defaultInput := ","
@@ -455,7 +456,7 @@ if(doSelectLine){
    ; RegExMatch() returns the position
    if(RegExMatch(c, "," )){
       Clipboard := RegExReplace(c , "," , ":")
-   }else                     if(RegExMatch(c, ":" ))                    {
+   }else                                                               if(RegExMatch(c, ":" ))                                                              {
       Clipboard := RegExReplace(c , "`:" , ",")   ; this the beep ? [:]
       ToolTip3sec(A_LineNumber)
    }else  {
@@ -539,7 +540,7 @@ Surrounding_with_Quotes:
    if(RegExMatch(c,az_wd1)){
       ; " c " => c
       Clipboard := RegExReplace(c,"""","")   . " "
-   }else                     if(RegExMatch(c,az_wd2))                    {
+   }else                                                               if(RegExMatch(c,az_wd2))                                                              {
       ;~ Clipboard := RegExReplace(c,"%","""")   . " "  
       ; % => "
       Clipboard := RegExReplace(c,"%","""")   . " "
@@ -548,7 +549,7 @@ Surrounding_with_Quotes:
          if(RegExMatch(c,az_wd4)){
             ; { c } => c
             Clipboard := RegExReplace(c,"\{(.*)\}","""$1""")   . " "
-         }else                     if(RegExMatch(c,az_wd3))                    {
+         }else                                                               if(RegExMatch(c,az_wd3))                                                              {
             Clipboard := RegExReplace(c,"\((.*)\)","{$1}")   . " "  
             ; ( c ) => { c }
          }else  {
@@ -1358,7 +1359,7 @@ isFileOpendInSciteUnsaved(filename){
       IfWinNotExist,%filename% * SciTE4AutoHotkey 
          MsgBox,oops   NotExist %filename% * SciTE4AutoHotkey
    }
-   ; xxxxxxxxxxxxxxx    return doSaveFirst
+   return doSaveFirst
 }
 
 

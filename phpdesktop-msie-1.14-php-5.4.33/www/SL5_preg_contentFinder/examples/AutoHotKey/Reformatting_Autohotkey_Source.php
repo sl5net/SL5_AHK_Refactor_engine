@@ -15,6 +15,11 @@ if(!isset($argv[1])) {
     $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" --renameSymbol="Mod" --renameSymbol_To="zzzzzzz"';
     $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" renameSymbol="zzzzzzz" renameSymbol_To="rrrrrrrrr"';
     $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" --A_ThisLabel="Alt & Down"';
+
+    $argv[1] = 'E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\phpdesktop-msie-1.14-php-5.4.33\php\php-cgi.exe E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php --source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\keys_SL5_AHK_Refactor_engine.ahk" --A_ThisLabel="Alt & Up"
+';
+
+
 }
 if(isset($argv)) {
     $arguments = arguments($argv);
@@ -124,9 +129,10 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
           if(@$arguments['A_ThisLabel'] == "Alt & Up" || @$arguments['A_ThisLabel'] == "Alt & Down"
             || !@empty($arguments['renameSymbol']) && !empty($arguments['renameSymbol_To'])
           ) {
-              $markerXXXXstring = "xxxxxxxx" . "xxxxxxxx ";
+              $markerXXXXstring = "xxxxxxxx" . "xxxxxxxx";
+//              $markerXXXXstring = "xxxxxxxxxxxxxxxx";
               $strposMarker = strpos($cut['middle'], $markerXXXXstring);
-              if($strposMarker > 0) {
+              if($strposMarker !== false) {
 
                   if(@$arguments['A_ThisLabel'] == "Alt & Up" || @$arguments['A_ThisLabel'] == "Alt & Down") {
                       if(@$arguments['A_ThisLabel'] == "Alt & Down") {
@@ -161,8 +167,8 @@ Suspend,off
 ';
                       $contents = preg_replace('/<body>.*<\/body>/ism', "<body>\n" . $ahkContent . "\n;</body>", $contents);
 //                      $fileAddressSaved = realpath('../../../../../' . $fileAddress . '.ahk');
-                      $fileAddressSaved = '../../../../../' . $fileAddress . '.ahk';
-                      echo $fileAddressSaved;
+                      $fileAddressSaved = '../../../../../' . preg_replace('/\..*$/','',$fileAddress) . '.ahk';
+                      echo nl2br("\n$fileAddressSaved=" . $fileAddressSaved);
                       file_put_contents($fileAddressSaved, $contents);
 
                   }
