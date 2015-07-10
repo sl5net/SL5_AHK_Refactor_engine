@@ -4,10 +4,17 @@ output_reformatted.ahk is generated from very compressed file input_compressed.a
 require("../../SL5_preg_contentFinder.php");
 # http://php.net/manual/de/features.commandline.php
 //parse_str(implode('&', array_slice($argv, 1)), $_GET);
+if(! file_exists('SL5_phpGeneratedRunOnChanged.tmpl.ahk'))
+    die('! SL5_phpGeneratedRunOnChanged.tmpl.ahk');
 if(!isset($argv[1])) {
-    $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\test.ahk" --renameSymbol="Mod" --renameSymbol_To="zzzzzzz"';
-    $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\test.ahk" renameSymbol="zzzzzzz" renameSymbol_To="rrrrrrrrr"';
-    $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\test.ahk" --A_ThisLabel="Alt & Down"';
+    $file = 'test.ahk';
+    $i = 0;
+
+    while(!file_exists($file) && $i++ < 6) $file = '..\\' . $file;
+    echo nl2br("\n$file=" . $file);
+    $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" --renameSymbol="Mod" --renameSymbol_To="zzzzzzz"';
+    $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" renameSymbol="zzzzzzz" renameSymbol_To="rrrrrrrrr"';
+    $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" --A_ThisLabel="Alt & Down"';
 }
 if(isset($argv)) {
     $arguments = arguments($argv);
@@ -135,7 +142,7 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
 
 //                      $fileAddress = realpath('../../SL5_phpGeneratedRunOnChanged.ahk');
 //                      $fileAddress = realpath('p.txt');
-                      $fileAddress = 'SL5_phpGeneratedRunOnChanged.ahk';
+                      $fileAddress = 'SL5_phpGeneratedRunOnChanged.tmpl.ahk';
                       $pathinfo = pathinfo($fileAddress);
                       if(!file_exists($fileAddress)) {
                           die("!file_exists($fileAddress) 15-07-06_14-26");

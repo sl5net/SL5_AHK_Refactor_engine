@@ -23,11 +23,11 @@ keyState_Numpad := GetKeyState("NumpadAdd","P")
 if (keyState_Numpad <> "")
 {
    isNumPadAvailable := true
-   ;	The variable will be empty (blank) if the state of the key could not be determined.
+   ; The variable will be empty (blank) if the state of the key could not be determined.
    ;~ MsgBox,%isNumPadAvailable% = isNumPadAvailable (line:%A_LineNumber%) `n
 }else  {
    isNumPadAvailable := false
-   ;	The variable will be empty (blank) if the state of the key could not be determined.
+   ; The variable will be empty (blank) if the state of the key could not be determined.
    MsgBox,,,%isNumPadAvailable% = isNumPadAvailable (line:%A_LineNumber%) `n,3
 }
 
@@ -40,12 +40,19 @@ if (keyState_Numpad <> "")
 Alt_UP:
    Alt & Up::
    Send,{AltUp}
-   Last_A_This:=A_ThisFunc . A_ThisLabel . "`n actually not implemented `n "
+   Last_A_This:=A_ThisFunc . A_ThisLabel 
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) ;
    ;~ drawButtons("aw" , 150)  ; x b = ctrsl a = alt j = shift q=f6 w = up y =down `` = reset, didnt found a backspace fontKey
    DetectHiddenWindows,on
-   IfWinNotExist,SL5_phpGeneratedRunOnChanged.ahk.ahk
-      run,SL5_phpGeneratedRunOnChanged.ahk.ahk
+   sL5_phpGenerated = SL5_phpGeneratedRunOnChanged.ahk.ahk
+   IfWinNotExist,%sL5_phpGenerated% 
+   {
+      if(fileexist(sL5_phpGenerated)) ; 
+         run,%sL5_phpGenerated%
+   }
+   else
+      ToolTip1sec(A_LineNumber . " " . A_ScriptName .  "`n `n  :( not exist " . sL5_phpGenerated)
+   ; C:\Users\SL5net\Downloads\SL5_AHK_Refactor_engine-0.5.5-alpha\SL5_AHK_Refactor_engine-0.5.5-alpha\phpdesktop-msie-1.14-php-5.4.33\php\php-cgi.exe C:\Users\SL5net\Downloads\SL5_AHK_Refactor_engine-0.5.5-alpha\SL5_AHK_Refactor_engine-0.5.5-alpha\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php --source1="C:\Users\SL5net\Downloads\SL5_AHK_Refactor_engine-0.5.5-alpha\SL5_AHK_Refactor_engine-0.5.5-alpha\keys_SL5_AHK_Refactor_engine.ahk" --A_ThisLabel="Alt & Up"
    Send,{Blind}
    markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
    Send,{Right} `; %markerXXXXstring%{space} 
@@ -81,16 +88,22 @@ return
 Alt_Down:
    Alt & Down::
    Send,{AltUp}
-   Last_A_This:=A_ThisFunc . A_ThisLabel . "`n actually not implemented `n "
+   Last_A_This:=A_ThisFunc . A_ThisLabel 
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) ;
    DetectHiddenWindows,on
-   IfWinNotExist,SL5_phpGeneratedRunOnChanged.ahk.ahk
-      run,SL5_phpGeneratedRunOnChanged.ahk.ahk
+   sL5_phpGenerated = SL5_phpGeneratedRunOnChanged.ahk.ahk
+   IfWinNotExist,%sL5_phpGenerated% 
+   {
+      if(fileexist(sL5_phpGenerated)) ; 
+         run,%sL5_phpGenerated%
+      else
+         ToolTip1sec(A_LineNumber . " " . A_ScriptName .  "`n `n  :( not exist " . sL5_phpGenerated)
+   }
    Send,{Blind}
    markerXXXXstring :="xxxxxxxx" . "xxxxxxxx"
    Send,{Right} `; %markerXXXXstring%{space} 
    drawButtons("ay" , 150) 
-   ;   ;Get the filename
+   ;  ;Get the filename
    oSciTE := GetSciTEInstance()
    if(!oSciTE)  
    {
@@ -112,6 +125,8 @@ Alt_Down:
    if(!doSaveFirst)
       Sleep,250
    runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
+   Clipboard:=runPHP_link_runP
+   ; 
    Suspend,off
    Send,{Blind}
 return 
@@ -222,7 +237,29 @@ Ctrl_Alt_L:
    Last_A_This:=A_ThisFunc . A_ThisLabel
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
    drawButtons("baL" , 150)  ; b = ctrsl a = alt j = shift q=f6
-   strg_alt_l()
+   
+   ;Get the filename
+   oSciTE := GetSciTEInstance()
+   oSciTE_CurrentFile := oSciTE.CurrentFile
+   ; To fetch only the bare filename from the above:
+   SplitPath, oSciTE_CurrentFile , filename
+   doSaveFirst := isFileOpendInSciteUnsaved(filename)
+   phpFile = Reformatting_Autohotkey_Source.php
+   argv = --source1="%oSciTE_CurrentFile%"
+   target := getRunPHP_link(phpFile , argv)
+   ;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
+   ;~ return
+   ;~ works ??
+   
+   
+   if(doSaveFirst)
+      saveWait(A_ScriptDir)
+   run, % target ,,Hide
+   if(!doSaveFirst)
+      Sleep,250
+   MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved,1
+   ;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
+   Suspend,off
 return 
 
 
@@ -395,7 +432,7 @@ if(!doSelectLine)
    msg= choose delimiter you like for your selection`n or Esc for cancel this refactoring
    if(RegExMatch(c, "," )){
       defaultInput := ":"
-   }else                    if(RegExMatch(c, ":" ))                   {
+   }else                     if(RegExMatch(c, ":" ))                    {
       defaultInput := " "
    }else  {
       defaultInput := ","
@@ -418,7 +455,7 @@ if(doSelectLine){
    ; RegExMatch() returns the position
    if(RegExMatch(c, "," )){
       Clipboard := RegExReplace(c , "," , ":")
-   }else                    if(RegExMatch(c, ":" ))                   {
+   }else                     if(RegExMatch(c, ":" ))                    {
       Clipboard := RegExReplace(c , "`:" , ",")   ; this the beep ? [:]
       ToolTip3sec(A_LineNumber)
    }else  {
@@ -502,7 +539,7 @@ Surrounding_with_Quotes:
    if(RegExMatch(c,az_wd1)){
       ; " c " => c
       Clipboard := RegExReplace(c,"""","")   . " "
-   }else                    if(RegExMatch(c,az_wd2))                   {
+   }else                     if(RegExMatch(c,az_wd2))                    {
       ;~ Clipboard := RegExReplace(c,"%","""")   . " "  
       ; % => "
       Clipboard := RegExReplace(c,"%","""")   . " "
@@ -511,7 +548,7 @@ Surrounding_with_Quotes:
          if(RegExMatch(c,az_wd4)){
             ; { c } => c
             Clipboard := RegExReplace(c,"\{(.*)\}","""$1""")   . " "
-         }else                    if(RegExMatch(c,az_wd3))                   {
+         }else                     if(RegExMatch(c,az_wd3))                    {
             Clipboard := RegExReplace(c,"\((.*)\)","{$1}")   . " "  
             ; ( c ) => { c }
          }else  {
@@ -568,13 +605,13 @@ Tab:
    Suspend,off
 return
 
-Circumflex:
-   #IfWinActive SciTE4AutoHotkey 
-   ;~ i dont know why but this days ^ key not work in scite. so try a dirty bugFix
-   ^::
-   Last_A_This:=A_ThisFunc . A_ThisLabel . not_implemented_jet
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-   If ( GetKeyState("shift", "P") || GetKeyState("alt", "P")  || GetKeyState("tab", "P") )
+
+#IfWinActive SciTE4AutoHotkey 
+;~ i dont know why but this days ^ key not work in scite. so try a dirty bugFix
+^::
+Last_A_This:=A_ThisFunc . A_ThisLabel . not_implemented_jet
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+If ( GetKeyState("shift", "P") || GetKeyState("alt", "P")  || GetKeyState("tab", "P") ) 
 return
 Suspend,on
 SendRaw,^
@@ -583,14 +620,12 @@ Suspend,off
 return
 ; ^ ui ^^^ ^{Space}^^^^press
 
-Alt_F7:
-   alt & f7::
-   not_implemented_jet := not implemented jet
-   ; todo create function for word selection
-   Last_A_This:=A_ThisFunc . A_ThisLabel . not_implemented_jet
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+alt & f7::
+not_implemented_jet := not implemented jet
+; todo create function for word selection
+Last_A_This:=A_ThisFunc . A_ThisLabel . not_implemented_jet
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
 return
-
 tillagoto_properties:
    ;~ TillaGoto tillagoto.properties s
    ;~ same as strg+b in jetbrains
@@ -598,11 +633,9 @@ tillagoto_properties:
    ;~ # caret is located. Similar to the middleclicking feature.
    ;~ tillagoto.hk.goto.def=+Enter
    ; this worked: open it with notepad, save it to desktop, copy it back, and click yes to do it as administrator.
-return
-
-
-
-Strg_B:
+   
+   
+   Strg_B:
    Ctrl_B:
    ^b::
    Last_A_This:=A_ThisFunc . A_ThisLabel 
@@ -618,17 +651,6 @@ Strg_B:
    ;~ SendEvent,{ShiftDown}{Enter}{ShiftUp} ; dont work
    ;~ Suspend,off
 return
-
-#IfWinActive SciTE4AutoHotkey 
-Strg_S:
-   Ctrl_S:
-   ^s::
-   Last_A_This:=A_ThisFunc . A_ThisLabel 
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-   strg_alt_l()
-   ;~ drawButtons("bS" , 150)  ; b = ctrsl a = alt j = shift q=f6
-return
-
 
 
 Ctrl_F:
@@ -732,6 +754,10 @@ Ctrl_V:
       return
    }
    
+   ; 
+   
+   
+   
    Ctrl_Shift_V:
    Strg_Shift_V:
    Last_A_This:=A_ThisFunc . A_ThisLabel
@@ -745,15 +771,15 @@ Ctrl_V:
    Suspend,off
    lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This)
 return
-
-
-
 getInputBoxOnTop( title, prompt, timeout, default)
 getInputBoxOnTop( title, prompt, timeout, default){
    MsgBox, not yet implemented 15-06-12_15-06
    ;~ InputBox, value , %title% , %prompt% , , width, height, x, y, font, %timeout% , %default% 
    return value
 }
+
+
+
 
 
 ;
@@ -804,75 +830,73 @@ return
 ;test
 
 
-t_deactivated:
-   ^t::
-   ;  if u want trigger ^z and you missed. its creates lots of confusion. and i nealy never use this funktion. so turn it off.
-   Last_A_This:=A_ThisFunc . A_ThisLabel
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+^t::
+;  if u want trigger ^z and you missed. its creates lots of confusion. and i nealy never use this funktion. so turn it off.
+Last_A_This:=A_ThisFunc . A_ThisLabel
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
 return
+; seems to delete many rows. seems dagerous for me
 
 
-Ctrl_R_replace_text_dialog:
-   ^r::
-   Last_A_This:=A_ThisFunc . A_ThisLabel
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-   drawButtons("bR" , 150)  ; b = ctrsl a = alt j = shift q=f6 w = up y =down
-   Suspend,on
-   Send,{Blind}
-   ControlSend,,^h,SciTE4AutoHotkey  ; thats replacement dialog
-   Suspend,Off
+
+^r::
+Last_A_This:=A_ThisFunc . A_ThisLabel
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+drawButtons("bR" , 150)  ; b = ctrsl a = alt j = shift q=f6 w = up y =down
+Suspend,on
+Send,{Blind}
+ControlSend,,^h,SciTE4AutoHotkey  ; thats replacement dialog
+Suspend,Off
 return
 
 
 ;~ BTW there is a great shortcut implemented in scite: SHIFT + %
 ;~ thats the standard editor for autohotkey. i want shortcats like i use it in phpstorm
-Ctrl_Y_deleteLine_moveDown:
-   Strg_Y:
-   ^y::
-   Last_A_This:=A_ThisFunc . A_ThisLabel
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-   drawButtons("bY" , 150)  ; b = ctrsl a = alt j = shift q=f6 w = up y =down
-   Suspend,on
+;~ StrgY:
+^y::
+Last_A_This:=A_ThisFunc . A_ThisLabel
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+drawButtons("bY" , 150)  ; b = ctrsl a = alt j = shift q=f6 w = up y =down
+Suspend,on
+Sleep,100
+Loop,15
+{
+   If ( !GetKeyState("Ctrl", "P") ) 
+   {
+      ;~ Suspend,off
+      ;~ return
+      break
+   }
+   Send,{CtrlUp} 
+   ; {Blind}
    Sleep,100
-   Loop,15
-   {
-      If ( !GetKeyState("Ctrl", "P") ) 
-      {
-         ;~ Suspend,off
-         ;~ return
-         break
-      }
-      Send,{CtrlUp} 
-      ; {Blind}
-      Sleep,100
-   }
-   If ( GetKeyState("Ctrl", "P") ) 
-   {
-      Suspend,off
-      return
-      ;~ break
-   }
-   ; do it only it
-   ;~ ControlSend,,{Home}{Shift}{End}{ShiftUp},SciTE4AutoHotkey 
-   ControlSend,,{Home}{ShiftDown}{End}{ShiftUp},SciTE4AutoHotkey 
-   ControlSend,,{Del}{BackSpace}{Right},SciTE4AutoHotkey 
-   Suspend,Off
-   lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This)
+}
+If ( GetKeyState("Ctrl", "P") ) 
+{
+   Suspend,off
+   return
+   ;~ break
+}
+; do it only it
+;~ ControlSend,,{Home}{Shift}{End}{ShiftUp},SciTE4AutoHotkey 
+ControlSend,,{Home}{ShiftDown}{End}{ShiftUp},SciTE4AutoHotkey 
+ControlSend,,{Del}{BackSpace}{Right},SciTE4AutoHotkey 
+Suspend,Off
+lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This)
 return
 
-Ctrl_BackSpace_synonym2_Ctrl_Shift_BackSpace:
-   ^BackSpace:: ; works but we dont need so many shortcuts n15-05-12_15-53
-   ;~ !BackSpace:: ; works but we dont need so many shortcuts n15-05-12_15-53
-   +BackSpace:: ; works 
-   Last_A_This:=A_ThisFunc . A_ThisLabel
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-   drawButtons("b`` " , 150)  ; x b = ctrsl a = alt j = shift q=f6 w = up y =down `` = reset, didnt found a backspace fontKey
-   setCaret2lastEditPosition() ;
-return
 
-;~ !	Alt
-;~ ^	Control
-;~ +	Shift
+^BackSpace:: ; works but we dont need so many shortcuts n15-05-12_15-53
+;~ !BackSpace:: ; works but we dont need so many shortcuts n15-05-12_15-53
++BackSpace:: ; works 
+Last_A_This:=A_ThisFunc . A_ThisLabel
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+drawButtons("b`` " , 150)  ; x b = ctrsl a = alt j = shift q=f6 w = up y =down `` = reset, didnt found a backspace fontKey
+setCaret2lastEditPosition() ; 
+return
+;~ ! Alt
+;~ ^ Control
+;~ + Shift
 
 Ctrl_Shift_BackSpace:
    +^BackSpace::
@@ -919,27 +943,24 @@ SetTitleMatchMode,2
 ;~ asdkf
 ;~ asfdzyzyzy
 
-NumpadAdd_send_plus:
-   ; for some unkonow reasons i need to do this :D
-   NumpadAdd::
-   ;~ MsgBox,asdftesttest++++++++
-   Suspend,on
-   ControlSendRaw,,+,SciTE4AutoHotkey 
-   Suspend,Off
+NumpadAdd::
+;~ MsgBox,asdftesttest++++++++
+Suspend,on
+ControlSendRaw,,+,SciTE4AutoHotkey 
+Suspend,Off
 return
 ;~ #IfWinActive SciTE4AutoHotkey 
 ; thats the standard editor for autohotkey. i want shortcats like i use it in phpstorm
 ; comment
 ; ctrl shift b
 
-NumpadDiv:
-   ^NumpadDiv::
-   Last_A_This:=A_ThisFunc . A_ThisLabel
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
-   ;Send,{CtrlDown}{ShiftDown}b{ShiftUp}{CtrlUp
-   Send,^q{Down}
-return
 
+^NumpadDiv::
+Last_A_This:=A_ThisFunc . A_ThisLabel
+ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+;Send,{CtrlDown}{ShiftDown}b{ShiftUp}{CtrlUp
+Send,^q{Down}
+return
 SetTitleMatchMode,2
 #IfWinActive, SciTE4AutoHotkey 
 ; eventually you need to push ; STRG+SHIFT+%/5  means 3 keys . dont know whey but its sometimes needet. so whey dont use it anytime
@@ -947,7 +968,7 @@ SetTitleMatchMode,2
 
 
 
-Ctrl_Shif_5_keyKeyNewline:
+Ctrl_Shif_5:
    Shift_5:
    ; %test% %test% := test `n %test% := test `n
    ^%::
@@ -1008,7 +1029,6 @@ copySelection2clipBoard(){
    } 
    return c
 } 
-
 copyLineOrWord2clipBoard(doSelectLine){
    Suspend,on
    if(doSelectLine){
@@ -1084,7 +1104,6 @@ ctrl_alt_v(){
       ;~ MsgBox,%varFIRST1% = varFIRST1 (line:%A_LineNumber%) `n 
       ;~ return
    }
-   
    if(isValueProbablyNotString)
       defaultInput := ":="
    ;~ MsgBox,%varName% := varName `n 15-06-12_16-20
@@ -1250,7 +1269,6 @@ return  ; probably redundant. its more secure if we do that.
 ;~ subroutinen beispielsweise müsen ans Dateiende
 #Include functions_dateiende.inc.ahk
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 #Include UPDATEDSCRIPT_global.inc.ahk
 showUsageInfoBox(){
    if(true)
@@ -1284,18 +1302,34 @@ tp41fn(isNumPadAvailable,ComputerName, key1, key2)
    Suspend,off
    return
 }
+
 getRunPHP_link(phpFile , argv){
    ;~ argv = --source1="%oSciTE_CurrentFile%"
    path= %A_ScriptDir%\phpdesktop-msie-1.14-php-5.4.33
+   if(!FileExist( path   )) 
+      MsgBox,:(  !FileExist  `n  %path% = path (line:%A_LineNumber%) `n    
    phpCgiExe = %path%\php\php-cgi.exe
+   if(!FileExist( phpCgiExe   ))     
+      MsgBox,:( %phpCgiExe% = phpCgiExe (line:%A_LineNumber%) `n   
    ; E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php
    script = %path%\www\SL5_preg_contentFinder\examples\AutoHotKey\%phpFile% 
    oSciTE := GetSciTEInstance()
    oSciTE_CurrentFile := oSciTE.CurrentFile
    ; 
+   if(!FileExist( oSciTE_CurrentFile   ))     
+      MsgBox,:( %oSciTE_CurrentFile% = oSciTE_CurrentFile (line:%A_LineNumber% 
+   
    target := phpCgiExe . " " . script . " " . argv
+   
+   Clipboard:=target
+   ;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
+   
    return target
-}
+}  
+
+
+
+
 saveWait(fileAdress){
    Suspend,on
    Send,{blind}  ; 
@@ -1324,7 +1358,7 @@ isFileOpendInSciteUnsaved(filename){
       IfWinNotExist,%filename% * SciTE4AutoHotkey 
          MsgBox,oops   NotExist %filename% * SciTE4AutoHotkey
    }
-   return doSaveFirst
+   ; xxxxxxxxxxxxxxx    return doSaveFirst
 }
 
 
@@ -1368,29 +1402,4 @@ GetSciTEInstance()
    }
    ; 
    return oSciTE
-}
-strg_alt_l(){
-   ;Get the filename
-   oSciTE := GetSciTEInstance()
-   oSciTE_CurrentFile := oSciTE.CurrentFile
-   ; To fetch only the bare filename from the above:
-   SplitPath, oSciTE_CurrentFile , filename
-   doSaveFirst := isFileOpendInSciteUnsaved(filename)
-   phpFile = Reformatting_Autohotkey_Source.php
-   argv = --source1="%oSciTE_CurrentFile%"
-   target := getRunPHP_link(phpFile , argv)
-   ;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
-   ;~ return
-   ;~ works ??
-   
-   
-   if(doSaveFirst)
-      saveWait(A_ScriptDir)
-   run, % target ,,Hide
-   if(!doSaveFirst)
-      Sleep,250
-   MsgBox,,SL5 Source Reformatting finished and saved,SL5 Source Reformatting finished `n  file saved `n  backup saved,1
-   ;~ MsgBox,%target% = target (line:%A_LineNumber%) `n 
-   Suspend,off
-   return
 }
