@@ -1,12 +1,19 @@
 # SL5_AHK_Refactor_engine
-SL5_AHK_Refactor_engine is a developer productivity engine for AHK developers using scite4ahk
+SL5_AHK_Refactor_engine is a developer productivity engine for AHK developers using scite4ahk using together with the editor scite4autohotkey.
 
+but you also could use a lite version online:
+the online converter for converting your autohotkey code into pretty indented source code is free and usable without registration.
+do you like it? please leave feedback
+http://sl5.it/SL5_preg_contentFinder/examples/AutoHotKey/converts_your_autohotkey_code_into_pretty_indented_source_code.php
+
+shortcut features:
+===
 <pre>
 
 /* SL5_AHK_Refactor_engine is free for personal and commercial use.
  */
 
-features:
+
 
 SHIFT + F6
 it replaces names in namespace and sub namespaces.
