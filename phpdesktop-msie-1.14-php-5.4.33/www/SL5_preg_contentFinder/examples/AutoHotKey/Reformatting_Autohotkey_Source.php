@@ -9,7 +9,7 @@ $isIncluded = ( $pathinfo_Script_Name && @$pathinfo__FILE__['basename'] == @$pat
 //parse_str(implode('&', array_slice($argv, 1)), $_GET);
 if(!$isIncluded) echo 'little autohotkey example';
 if(!$isIncluded && !file_exists('SL5_phpGeneratedRunOnChanged.tmpl.ahk')) {
-    die('! SL5_phpGeneratedRunOnChanged.tmpl.ahk');
+    #echo(':( NOT EXIST: SL5_phpGeneratedRunOnChanged.tmpl.ahk');
 }
 
 if(!$isIncluded && !isset($argv[1])) {
@@ -21,25 +21,25 @@ if(!$isIncluded && !isset($argv[1])) {
     }
     $realpath = realpath($file);
     if(!$realpath) {
-        die(__LINE__ . ':( NOT EXISTS ' . nl2br("\n\$file=" . $realpath . " = $file\n"));
+//        echo("\n".__LINE__ . ':( NOT EXISTS ' . nl2br("\n\$file=" . $realpath . " = $file\n"));
     }
     else {
         echo __LINE__ . ':' . nl2br("\n\$file=" . $realpath . " = $file\n");
-    }
-    $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" --renameSymbol="Mod" --renameSymbol_To="zzzzzzz"';
-    $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" renameSymbol="zzzzzzz" renameSymbol_To="rrrrrrrrr"';
-    $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" --A_ThisLabel="Alt & Down"';
 
-    $argv[1] = 'E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\phpdesktop-msie-1.14-php-5.4.33\php\php-cgi.exe E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php --source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\keys_SL5_AHK_Refactor_engine.ahk" --A_ThisLabel="Alt & Up"
+        $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" --renameSymbol="Mod" --renameSymbol_To="zzzzzzz"';
+        $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" renameSymbol="zzzzzzz" renameSymbol_To="rrrrrrrrr"';
+        $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" --A_ThisLabel="Alt & Down"';
+
+        $argv[1] = 'E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\phpdesktop-msie-1.14-php-5.4.33\php\php-cgi.exe E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php --source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\keys_SL5_AHK_Refactor_engine.ahk" --A_ThisLabel="Alt & Up"
 ';
-
+    }
 }
 if(isset($argv)) {
     $arguments = arguments($argv);
     $fileAddress = (isset($arguments['source1'])) ? $arguments['source1'] : '';
 //    $fileAddress = (isset($arguments['source1'])) ? $arguments['source1'] : '';
 }
-if(!$isIncluded) {
+if(!$isIncluded && isset($fileAddress) && file_exists($fileAddress)) {
     if(!isset($fileAddress) || !$fileAddress || empty($fileAddress)) {
 
         $fileAddress = 'input_compressed_2.ahk';
@@ -52,7 +52,7 @@ if(!$isIncluded) {
 
     }
 }
-if(!$isIncluded) {
+if(!$isIncluded && isset($fileAddress) && file_exists($fileAddress)) {
     $format = new DateTime();
     $timeStamp = $format->format('s'); // Y-m-d_H-s
     file_put_contents($fileAddress . '.backup' . $timeStamp . '.ahk', $file_content);
@@ -90,7 +90,9 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
     $newline = "\r\n";
     $indentSize = 3;
 
-    $file_content = trim(preg_replace('/^[ ]+/smi', '', $file_content));
+    $file_content = trim(preg_replace('/^\h+/ism', '', $file_content));
+    # horizontal whitespace character class \h. http://stackoverflow.com/questions/3469080/match-whitespace-but-not-newlines-perl
+    # Match whitespace but not newlines
 
     $getIndentStr = function ($indent, $char, $indentSize) {
         $multiplier = $indentSize * $indent;
