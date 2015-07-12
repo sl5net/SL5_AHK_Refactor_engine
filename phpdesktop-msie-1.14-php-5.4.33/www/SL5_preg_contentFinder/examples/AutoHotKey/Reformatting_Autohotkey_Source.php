@@ -2,8 +2,8 @@
 include_once("../../SL5_preg_contentFinder.php");
 
 $pathinfo__FILE__ = pathinfo(__FILE__);
-$pathinfo_Script_Name = (isset($_SERVER['SCRIPT_NAME'])) ? pathinfo($_SERVER['SCRIPT_NAME']) : '' ;
-$isIncluded = ( $pathinfo_Script_Name && @$pathinfo__FILE__['basename'] == @$pathinfo_Script_Name['basename']);
+$pathinfo_Script_Name = (isset($_SERVER['SCRIPT_NAME'])) ? pathinfo($_SERVER['SCRIPT_NAME']) : '';
+$isIncluded = ($pathinfo_Script_Name && @$pathinfo__FILE__['basename'] == @$pathinfo_Script_Name['basename']);
 
 # http://php.net/manual/de/features.commandline.php
 //parse_str(implode('&', array_slice($argv, 1)), $_GET);
@@ -106,8 +106,26 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
 
     $file_content = preg_replace('/^\s*\}\s*else(\s+if\s*\([^\n\r]+\)\s*)?\s*\{+/smi', "} \nelse $1 {", $file_content); // dirty BugFix .. need temporary newline that script later works correct
 
-    $file_content = preg_replace(
-      '/(\s*\bif\s*\([^\n\r)]+\)\s*)[\n\r]+([^{\s])/smi', "$1\n" . $newline . $indentStr . "$2", $file_content); // dirty BugFix
+//    $file_content = preg_replace('/(\s*\bif\s*\([^\n\r)]+\)\s*)[\n\r]+([^{\s])/smi', "$1\n" . $newline . $indentStr . "$2", $file_content); // dirty BugFix
+    $file_content = preg_replace_callback('/(\s*\bif\s*\([^\n\r)]+\)\s*)[\n\r]+([^{\s])/smi',
+      function ($m) use ($newline, $indentStr) {
+//          if(preg_match('/\n$/',$m[1]) ) {
+//              return '*' . $m[1] . '#' . $indentStr . $m[2];
+//          }
+//          if(strpos($m[2], "\n") !== false) {
+//              return ':' . $m[1] . '#' . $indentStr . $m[2];
+//          }
+          if(strpos($m[0], "\n") !== false) {
+              return '' . $m[1] . '' . $indentStr . $m[2];
+              return '\\' . $m[1] . '/' . $indentStr . $m[2];
+          }
+
+          return '-' . $m[1] . "_\n" . $newline . $indentStr . $m[2];
+//          return strtolower($treffer[0]);
+      }
+      ,
+      $file_content); // dirty BugFix
+
 
     $file_content = preg_replace(
       '/(\s*\belse\s*)[\n\r]+([^{\s])/smi', "$1\n" . $indentStr . "$2", $file_content); // dirty BugFix
@@ -126,6 +144,9 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
      *             $cut = call_user_func($func['open'], $cut, $deepCount + 1, $callsCount, $C->foundPos_list[0], $C->content);
 
      */
+
+//    return $file_content;
+
     $actual = $cf->getContent_user_func_recursive(
 
       function ($cut, $deepCount, $callsCount, $posList0, $source1) use ($arguments, $new_open_default, $new_close_default, $charSpace, $newline, $indentSize, $getIndentStr) {
@@ -202,9 +223,14 @@ Suspend,off
 
           }
 
+//          return $cut;
+
+          $cut['middle'] = implode("\n" . $indentStr, preg_split("/[\n\r]+/m",$cut['middle']));
 
           $cut['middle'] = '' . rtrim($start) . $n . $indentStr
-            . trim(preg_replace('/\n/', "\n" . $indentStr, $cut['middle']));
+            . trim($cut['middle']);
+//          $cut['middle'] = '' . rtrim($start) . $n . $indentStr
+//            . trim(preg_replace('/\n/', "\n" . $indentStr, $cut['middle']));
 //          $charSpace = '.';
           $indentStr = $getIndentStr(0, $charSpace, $indentSize);
           $cut['middle'] .= $n . $indentStr . $end . $cut['behind'];
