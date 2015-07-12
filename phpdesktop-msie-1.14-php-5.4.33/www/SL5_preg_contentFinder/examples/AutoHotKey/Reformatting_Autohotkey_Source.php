@@ -24,7 +24,7 @@ if(!$isIncluded && !isset($argv[1])) {
 //        echo("\n".__LINE__ . ':( NOT EXISTS ' . nl2br("\n\$file=" . $realpath . " = $file\n"));
     }
     else {
-        echo __LINE__ . ':' . nl2br("\n\$file=" . $realpath . " = $file\n");
+//        echo __LINE__ . ':' . nl2br("\n\$file=" . $realpath . " = $file\n");
 
         $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" --renameSymbol="Mod" --renameSymbol_To="zzzzzzz"';
         $argv[1] = '--source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine_gitHub\\' . $file . '" renameSymbol="zzzzzzz" renameSymbol_To="rrrrrrrrr"';
@@ -32,6 +32,7 @@ if(!$isIncluded && !isset($argv[1])) {
 
         $argv[1] = 'E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\phpdesktop-msie-1.14-php-5.4.33\php\php-cgi.exe E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\phpdesktop-msie-1.14-php-5.4.33\www\SL5_preg_contentFinder\examples\AutoHotKey\Reformatting_Autohotkey_Source.php --source1="E:\fre\private\HtmlDevelop\AutoHotKey\SL5_AHK_Refactor_engine\keys_SL5_AHK_Refactor_engine.ahk" --A_ThisLabel="Alt & Up"
 ';
+        unset($argv[1]);
     }
 }
 if(isset($argv)) {
