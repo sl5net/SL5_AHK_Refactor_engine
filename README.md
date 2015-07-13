@@ -12,6 +12,12 @@ Tested with Autohotkey Version 1.1.19.03(http://www.autohotkey.com/) <br>
 , Thanks to Czarek Tomczak for PHP Desktop (https://code.google.com/p/phpdesktop/, http://i.imgur.com/4uVvU8n.gif?1)
 <br>
 
+Planned features:
+-----
+
+The features listed here are planned for future versions of SL5_AHK_Refactor_engine and may change during the course of development.
+
+- online mode: refactoring source code online and online syntax highlighting (demo page: http://sl5.it/SL5_preg_contentFinder/examples/AutoHotKey/converts_your_autohotkey_code_into_pretty_indented_source_code.php )
 
 Usage
 -----
