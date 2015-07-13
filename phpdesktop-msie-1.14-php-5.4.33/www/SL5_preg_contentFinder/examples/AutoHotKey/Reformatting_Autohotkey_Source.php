@@ -243,20 +243,19 @@ Suspend,off
 # ([^\n\r]+\)
 
 //    $pattern = '/^(\w+:)(\R(?:\N*\R)*?)(return)$/mis';
-    $pattern = '/^(\w+:)(\h*\n)(?:.*\n)*?(return)/m';
-    $label = '^\w[\w\d_]*:';
+//    $pattern = '/^(\w+:)(\h*\n)(?:.*\n)*?(return)/m';
+    $label = '^[a-z][\w\d_]*:';
     $pattern = '/' . "($label)(\h*\R)((?:.*\n)*?)(return\b)" . '/im';
     preg_match_all($pattern, $actual, $matches, PREG_OFFSET_CAPTURE);
     $labelsAr = $matches[1];
 //    $contentAr = preg_replace('/\n/ism', "\n" . $indentStr, $matches[3]);
     $contentAr = $matches[3];
     $returnAr = $matches[4];
-    $actualNew = '';
     for($k = count($labelsAr); $k--; $k >= 0) {
         $new = $labelsAr[$k][0]
           . "\n" . $indentStr
           . rtrim(preg_replace('/\n/ism', "\n"
-            . $indentStr, $contentAr[$k][0]))
+            . "" . $indentStr, $contentAr[$k][0]))
           . "\n" . ltrim($returnAr[$k][0]);
         $actual = substr($actual, 0, $labelsAr[$k][1])
           . $new
