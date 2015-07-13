@@ -109,6 +109,9 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
 //    $file_content = preg_replace('/(\s*\bif\s*\([^\n\r)]+\)\s*)[\n\r]+([^{\s])/smi', "$1\n" . $newline . $indentStr . "$2", $file_content); // dirty BugFix
     $file_content = preg_replace_callback('/(\s*\bif\s*\([^\n\r)]+\)\s*)[\n\r]+([^{\s])/smi',
       function ($m) use ($newline, $indentStr) {
+          /* if ( next )
+              Check
+          */
 //          if(preg_match('/\n$/',$m[1]) ) {
 //              return '*' . $m[1] . '#' . $indentStr . $m[2];
 //          }
@@ -117,7 +120,7 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
 //          }
           if(strpos($m[0], "\n") !== false) {
               return '' . $m[1] . '' . $indentStr . $m[2];
-              return '\\' . $m[1] . '/' . $indentStr . $m[2];
+//              return '\\' . $m[1] . '/' . $indentStr . $m[2];
           }
 
           return '-' . $m[1] . "_\n" . $newline . $indentStr . $m[2];
@@ -132,8 +135,10 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
 
 
 //    $pattern = '([\r\n](If|#if)[a-z]+[ ]*[ ]*[^\n\r{]+)[ ]*[\r\n]+[ ]*(\w)';
+    # IfWinNotExist,%filename% * SciTE4AutoHotkey
+//    return $file_content;
     $pattern = '([\r\n](If|#if)([a-z]+[ ]*,|\()[ ]*[^\n\r{]+)[ ]*[\r\n]+[ ]*(\w)';
-    $file_content = preg_replace('/' . $pattern . '/is', "$1" . $newline . $indentStr . "$4", $file_content);
+    $file_content = '' . preg_replace('/' . $pattern . '/is', "$1" . $newline . '' . $indentStr . "$4", $file_content);
 
     $cf = new SL5_preg_contentFinder($file_content);
     $cf->setBeginEnd_RegEx($old_open, $old_close);
@@ -225,27 +230,36 @@ Suspend,off
 
 //          return $cut;
 
-          $cut['middle'] = implode("\n" . $indentStr, preg_split("/[\n\r]+/m",$cut['middle']));
+//          $cut['middle'] = preg_replace("/\r/", "\n" . $indentStr , $cut['middle']); // <Remember this is without \r means buggy for that
+          $cut['middle'] = implode("\n" . $indentStr, preg_split("/(\r\n|\n|\r)/m", $cut['middle']));
 
-          $cut['middle'] = '' . rtrim($start) . $n . $indentStr
-            . trim($cut['middle']);
+//          return $cut;
+
+          $cut['middle'] = '' . rtrim($start) . '' . $n .
+            $indentStr .  ''. trim($cut['middle']) . '';
+//          return $cut;
 //          $cut['middle'] = '' . rtrim($start) . $n . $indentStr
 //            . trim(preg_replace('/\n/', "\n" . $indentStr, $cut['middle']));
 //          $charSpace = '.';
-          $indentStr = $getIndentStr(0, $charSpace, $indentSize);
-          $cut['middle'] .= $n . $indentStr . $end . $cut['behind'];
+//          $indentStr = $getIndentStr(0, $charSpace, $indentSize);
+          $cut['middle'] .= $n . '' . $end . ''. $cut['behind'] . '';
+//          die('<pre>'.implode('',$cut).$end.'</pre>');
 
+//          echo '<hr>' . '<pre>';
+//          echo implode('', $cut);
+//          echo $end . '</pre>';
 
           return $cut;
       });
-
+//return $actual;
     $actual = preg_replace('/(\})[\s\n\r]*(else(\s+if\s*\([^\n\r]+\)\s*)?\s*\{+)/smi', "$1$2", $actual); // dirty BugFix
 # ([^\n\r]+\)
 
 //    $pattern = '/^(\w+:)(\R(?:\N*\R)*?)(return)$/mis';
 //    $pattern = '/^(\w+:)(\h*\n)(?:.*\n)*?(return)/m';
     $label = '^[a-z][\w\d_]*:';
-    $pattern = '/' . "($label)(\h*\R)((?:.*\n)*?)(return\b)" . '/im';
+    $hotkey = '^.+::\h*';
+    $pattern = '/' . "($label|$hotkey)(\h*\R)((?:.*\n)*?)(return\b)" . '/im';
     preg_match_all($pattern, $actual, $matches, PREG_OFFSET_CAPTURE);
     $labelsAr = $matches[1];
 //    $contentAr = preg_replace('/\n/ism', "\n" . $indentStr, $matches[3]);
