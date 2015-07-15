@@ -87,9 +87,10 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
     $new_close_default = ']';
     $new_open_default = '{ ';
     $new_close_default = '}';
-    $charSpace = " ";
-    $newline = "\r\n";
-    $indentSize = 3;
+//    $arguments = array('charSpace' => $charSpace, 'newline' => $newline,'indentSize'=>$indentSize)
+    $charSpace = (isset($arguments['charSpace'])) ? $arguments['charSpace'] : " ";
+    $newline = (isset($arguments['newline'])) ? $arguments['newline'] : "\r\n";
+    $indentSize = (isset($arguments['indentSize'])) ? $arguments['indentSize'] :! 3;
 
     $file_content = trim(preg_replace('/^\h+/ism', '', $file_content));
     # horizontal whitespace character class \h. http://stackoverflow.com/questions/3469080/match-whitespace-but-not-newlines-perl
@@ -236,13 +237,13 @@ Suspend,off
 //          return $cut;
 
           $cut['middle'] = '' . rtrim($start) . '' . $n .
-            $indentStr .  ''. trim($cut['middle']) . '';
+            $indentStr . '' . trim($cut['middle']) . '';
 //          return $cut;
 //          $cut['middle'] = '' . rtrim($start) . $n . $indentStr
 //            . trim(preg_replace('/\n/', "\n" . $indentStr, $cut['middle']));
 //          $charSpace = '.';
 //          $indentStr = $getIndentStr(0, $charSpace, $indentSize);
-          $cut['middle'] .= $n . '' . $end . ''. $cut['behind'] . '';
+          $cut['middle'] .= $n . '' . $end . '' . $cut['behind'] . '';
 //          die('<pre>'.implode('',$cut).$end.'</pre>');
 
 //          echo '<hr>' . '<pre>';
