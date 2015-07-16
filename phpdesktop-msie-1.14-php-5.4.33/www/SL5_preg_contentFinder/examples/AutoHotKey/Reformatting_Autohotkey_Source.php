@@ -3,11 +3,13 @@ include_once("../../SL5_preg_contentFinder.php");
 
 $pathinfo__FILE__ = pathinfo(__FILE__);
 $pathinfo_Script_Name = (isset($_SERVER['SCRIPT_NAME'])) ? pathinfo($_SERVER['SCRIPT_NAME']) : '';
-$isIncluded = ($pathinfo_Script_Name && @$pathinfo__FILE__['basename'] == @$pathinfo_Script_Name['basename']);
+$isIncluded = ((isset($argv[0]) && !empty($argv[0]))
+  || ($pathinfo_Script_Name && @$pathinfo__FILE__['basename'] == @$pathinfo_Script_Name['basename']));
 
 # http://php.net/manual/de/features.commandline.php
 //parse_str(implode('&', array_slice($argv, 1)), $_GET);
-if(!$isIncluded) echo 'little autohotkey example';
+//if(!$isIncluded) echo 'little autohotkey example. $argv[0]=' . @$argv[0];
+//echo '' . @$argv[0];
 if(!$isIncluded && !file_exists('SL5_phpGeneratedRunOnChanged.tmpl.ahk')) {
     #echo(':( NOT EXIST: SL5_phpGeneratedRunOnChanged.tmpl.ahk');
 }
@@ -90,7 +92,9 @@ function reformat_AutoHotKey($file_content, $arguments = null) {
 //    $arguments = array('charSpace' => $charSpace, 'newline' => $newline,'indentSize'=>$indentSize)
     $charSpace = (isset($arguments['charSpace'])) ? $arguments['charSpace'] : " ";
     $newline = (isset($arguments['newline'])) ? $arguments['newline'] : "\r\n";
-    $indentSize = (isset($arguments['indentSize'])) ? $arguments['indentSize'] :! 3;
+    $indentSize = (isset($arguments['indentSize'])) ? $arguments['indentSize'] : 3;
+
+
 
     $file_content = trim(preg_replace('/^\h+/ism', '', $file_content));
     # horizontal whitespace character class \h. http://stackoverflow.com/questions/3469080/match-whitespace-but-not-newlines-perl
