@@ -129,7 +129,6 @@ int f(int x, int y, int z) {
     $new_close_default = ']';
     $new_open_default = '{ ';
     $new_close_default = '}';
-//    $arguments = array('charSpace' => $charSpace, 'newline' => $newline,'indentSize'=>$indentSize)
     $charSpace = (isset($arguments['charSpace'])) ? $arguments['charSpace'] : " ";
     $newline = (isset($arguments['newline'])) ? $arguments['newline'] : "\r\n";
     $indentSize = (isset($arguments['indentSize'])) ? $arguments['indentSize'] : 3;
@@ -149,13 +148,21 @@ int f(int x, int y, int z) {
     $indentStr = $getIndentStr(1, $charSpace, $indentSize);
 
 //    $indentStyle SL5net_small_v0.1
-    if(strpos($arguments['indentStyle'],'SL5net_small') !== false )
-        $arguments['indentStyle'] = 'SL5net_small';
+    $conf['noNewlineAtEnd'] = false;
+    $conf['noNewlineAt_Start_beta']=false;
+    if(strpos($arguments['indentStyle'],'SL5net_small+_NotRecommended') !== false )
+    {
+        $conf['noNewlineAtEnd'] = true;
+        $conf['noNewlineAt_Start_beta']=true;
+    }else {
+        if(strpos($arguments['indentStyle'], 'SL5net_small') !== false) {
+            $arguments['indentStyle'] = 'SL5net_small';
+        }
 
-    $conf['noNewlineAtEnd'] = ($arguments['indentStyle'] == 'SL5net_small') ? true : false;
-    $conf['noNewlineAt_Start_beta'] = ($arguments['indentStyle'] == 'SL5net_small_v0.2') ? true : false;
-    $conf['noNewlineAtStart'] = false;
-
+        $conf['noNewlineAtEnd'] = ($arguments['indentStyle'] == 'SL5net_small') ? true : false;
+        $conf['noNewlineAt_Start_beta'] = ($arguments['indentStyle'] == 'SL5net_small_v0.2') ? true : false;
+        $conf['noNewlineAtStart'] = false;
+    }
     if($conf['noNewlineAt_Start_beta'] || $conf['noNewlineAtStart']) {
         # todo: thats not performing. thats a global replace.
         $preg = '(\bif\s*\([^\n\r)]+\))\R';
@@ -315,7 +322,7 @@ Suspend,off
 
 //          $cut['middle'] = preg_replace("/\r/", "\n" . $indentStr , $cut['middle']); // <Remember this is without \r means buggy for 
           if($conf['noNewlineAtEnd']) {
-              $doNoNewlineAtEnd = preg_match("/\W\}\R*$/ms", $cut['middle'], $m);
+              $doNoNewlineAtEnd = preg_match("/\W[}\s]*\}\R*$/ms", $cut['middle'], $m);
               if($doNoNewlineAtEnd) {
 //               $cut['middle'] = implode($indentStr, preg_split("/(\r\n|\n|\r)/m", $cut['middle']));
                   $cut['middle'] = rtrim($cut['middle']) . '';
@@ -323,7 +330,8 @@ Suspend,off
               }
 //              $doNoNewlineAtEnd = preg_match("/}\s*}\s*$/m", $cut['middle'], $m);
           }
-          $cut['middle'] = implode($newline . '' . $indentStr, preg_split("/(\r\n|\n|\r)/m", $cut['middle']));
+//          $cut['middle'] = implode($newline . '' . $indentStr, preg_split("/(\r\n|\n|\r)/m", $cut['middle']));
+          $cut['middle'] = implode($newline . '' . $indentStr, preg_split("/(\R)/m", $cut['middle']));
 
 //          return $cut;
 

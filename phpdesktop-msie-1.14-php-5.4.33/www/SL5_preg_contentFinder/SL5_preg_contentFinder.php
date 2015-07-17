@@ -84,12 +84,12 @@ class SL5_preg_contentFinder {
 
     /**
      * @param $content string e.g. source of your file
-     * @param null $regEx_begin
+     * @param null $regEx_begin_mixed (could be a array
      * @param null $regEx_end
      */
-    function __construct($content, $regEx_begin = null, $regEx_end = null) {
+    function __construct($content, $regEx_begin_mixed = null, $regEx_end = null) {
         $this->content = $content;
-        $this->setBeginEnd_RegEx($regEx_begin, $regEx_end);
+        $this->setBeginEnd_RegEx($regEx_begin_mixed, $regEx_end);
         self::$lastObject = $this;
     }
 
@@ -290,9 +290,9 @@ class SL5_preg_contentFinder {
 //                      'content' => $contentFunc,
 //                      'close' => $closeFunc];
 //        else // old style
-            $functions = array('open' => $openFunc,
-                          'content' => $contentFunc,
-                          'close' => $closeFunc);
+        $functions = array('open' => $openFunc,
+                           'content' => $contentFunc,
+                           'close' => $closeFunc);
 
 //        $content = ['before' => $before, 'middle' => $this->content, 'behind' => $behind];
         $content = array('before' => $before, 'middle' => $this->content, 'behind' => $behind); // old style
@@ -300,7 +300,7 @@ class SL5_preg_contentFinder {
         $callsCount = 0;
         $return = $this->getContent_user_func_recursivePRIV(
           $content,
-          $functions, $callsCount );
+          $functions, $callsCount);
 
         return $return;
     }
@@ -371,14 +371,14 @@ class SL5_preg_contentFinder {
 
                 $cut = call_user_func($func['open'], $cut, 0, $callsCount, $C->foundPos_list[0], $C->content);
 
-                $returnA = $cut['before'] . $cut['middle'] . $cut['behind'];
-                $returnB = $content['before'] . $content['middle'];
                 if($content['before'] == "" && $cut['before'] != "" && $cut['middle'] !== false && $cut['behind'] == "") {
 //                    $cut = call_user_func($func['open'], $cut, $deepCount + 1, $callsCount, $C->foundPos_list[0], $C->content);
-                    $return = $returnA;
+                    $returnA = $cut['before'] . $cut['middle'] . $cut['behind'];
+                    $return = &$returnA;
                 }
                 else {
-                    $return = $returnB;
+                    $returnB = $content['before'] . $content['middle'];
+                    $return = &$returnB;
                 }
 
                 return $return;
