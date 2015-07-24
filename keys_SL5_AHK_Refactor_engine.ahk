@@ -79,7 +79,7 @@ Alt_UP:
    if(!doSaveFirst)
       Sleep,300
    runPHP_link_runDebug = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
-   Clipboard:=runPHP_link_runDebug
+   ;~ Clipboard:=runPHP_link_runDebug
    Suspend,off
    Send,{Blind}
 return 
@@ -140,7 +140,7 @@ Alt_Down:
    
       Sleep,300
    runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
-   Clipboard:=runPHP_link_runP
+   ;~ Clipboard:=runPHP_link_runP
    ; 
    Suspend,off
    Send,{Blind}
