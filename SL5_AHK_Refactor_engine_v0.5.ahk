@@ -14,6 +14,11 @@ GLOBAL_lllog_only_this_scriptName := "SL5_AHK_Refactor_engine_v0.5.ahk"
 Last_A_This=cheeers :)
 lll(A_LineNumber, "SL5_AHK_Refactor_engine_v0.5.ahk",Last_A_This)
 SetTitleMatchMode,2
+
+ToolTip,WinWait SciTE4AutoHotkey
+WinWait,- SciTE4AutoHotkey
+ToolTip,
+
 DetectHiddenWindows,on
 noliveHelpFileView:=false
 IfWinNotExist,liveHelpFileView.v1.2.ahk
@@ -158,6 +163,7 @@ Gui, Font, s%iControlFontSize% c%cControlFG%, %fControlFont%
 Gui, Color, %cGUIBG%, %cControlBG%
 Gui, Margin, %iMargin%, %iMargin%
 Gui, Add, Edit, h20 w%iGUIWidth% vtxtSearch gtxtSearch_Event hwndhtxtsearch
+; Gui, Add, Edit, h20 w%iGUIWidth% vtxtSearch gtxtSearch_Event hwndhtxtsearch
 sortOpt := bSortEntries ? "Sort" : ""
 Gui, Add, ListBox, %sortOpt% wp vlblList glblList_Event hwndhlblList +HScroll +256 ;LBS_NOINTEGRALHEIGHT
 hGui := WinExist()
