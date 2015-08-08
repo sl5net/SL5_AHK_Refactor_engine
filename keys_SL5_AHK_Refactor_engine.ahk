@@ -1242,6 +1242,8 @@ ctrl_alt_v(){
       return
    Send,{end}{ShiftDown}{Left %strLen_walk_left%}{ShiftUp}
    Send,{Blind}
+   Send,{Blind}
+   Send,{CtrlUp}
    ;~ Send,{home}{Right %strLen_varName%}
    ;~ Sleep,20
    ;~ asdfs
