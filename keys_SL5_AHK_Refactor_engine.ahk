@@ -31,6 +31,8 @@ if (keyState_Numpad <> "")
    MsgBox,,,%isNumPadAvailable% = isNumPadAvailable (line:%A_LineNumber%) `n,3
 }
 
+SetStoreCapslockMode, off
+
 #IfWinActive SciTE4AutoHotkey 
 ; Refactoring Engine
 
@@ -119,25 +121,12 @@ Alt_Down:
    argv = --source1="%oSciTE_CurrentFile%" --A_ThisLabel="%A_ThisLabel%" --indentStyle="SL5net_small_v0.1"
    runPHP_link := getRunPHP_link(phpFile , argv)
    ;~ if(doSaveFirst)
-   
-   
-   
-   
-   
-   
-   
       saveWait(A_ScriptDir) ;
    Suspend,on
    Send,^z ; delte marker
    run, % runPHP_link ,,Hide
    ;~ if(!doSaveFirst)
-   
-   
-   
-   
-   
-   
-   
+
       Sleep,300
    runPHP_link_runP = %runPHP_link% = runPHP_link (line:%A_LineNumber%) `n
    ;~ Clipboard:=runPHP_link_runP
