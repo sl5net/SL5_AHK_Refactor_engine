@@ -1,7 +1,7 @@
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 ;~ please use this ! as first line in every script before all includes! :)
 isDevellopperMode=true ; enthällt auch update script.
-; useful REGex:
+; useful REGex:g
 ;        ^[^\n\r:]*::            find hotkeys
 ;         ^((?!::).)*$\n              find every line is not a hotkey
 ;        ^[^;:\n]+:[ ]*$       find labels (you could export search results with jetbrains products and clean it with ^\s*.*\)\s* )
@@ -392,6 +392,7 @@ alt & c::
       ; lets better make an normal copy then? 
       Suspend,on
       send,^c{Blind}
+      send,{CtrlUp}
       Suspend,off
       return
    }
@@ -730,7 +731,9 @@ Ctrl_Enter:
       strLen_add += 1
    Send,%add%{left %strLen_add%}  
    if(debug65)
-      lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This . " " . %codeLine%)
+      lll(A_LineNumber, "keys_SL5_AHK_Refactor_engine.ahk",Last_A_This . " " . %codeLine%)  
+   send,{Blind}
+   send,{CtrlUp}
    Suspend,off
 return
 
