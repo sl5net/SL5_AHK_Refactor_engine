@@ -803,7 +803,10 @@ Ctrl_Shift_up:
    drawButtons("bjw" , 150)  ; b = ctrsl a = alt j = shift q=f6 w = up
    Suspend,on
    send,^t{up}
+   Send,{blind}
+   Send,{CtrlUp}
    Suspend,off
+   
 return
 
 
