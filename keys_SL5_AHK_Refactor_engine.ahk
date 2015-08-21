@@ -1,11 +1,13 @@
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 ;~ please use this ! as first line in every script before all includes! :)
 isDevellopperMode=true ; enthällt auch update script.
-; useful REGex:g
+; useful REGex:
 ;        ^[^\n\r:]*::            find hotkeys
 ;         ^((?!::).)*$\n              find every line is not a hotkey
 ;        ^[^;:\n]+:[ ]*$       find labels (you could export search results with jetbrains products and clean it with ^\s*.*\)\s* )
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+;~ SetTimer,visualizeCtrlKey,1000
 
 #Include init_global.init.inc.ahk
 #InstallKeybdHook
@@ -232,10 +234,12 @@ return
 
 Ctrl_Alt_L:
    Strg_Alt_L:
+   ;~ ^ & l::
    Ctrl & l::
    if( !GetKeyState("alt", "P") ){
       return
    }
+   
    Last_A_This:=A_ThisFunc . A_ThisLabel
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
    drawButtons("baL" , 150)  ; b = ctrsl a = alt j = shift q=f6
@@ -268,6 +272,7 @@ return
 ExtractMethod:
    Ctrl_Alt_M:
    Strg_Alt_M:
+   ;~ ^ & m::
    Ctrl & m::
    Last_A_This:=A_ThisFunc . A_ThisLabel
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
@@ -500,12 +505,12 @@ return
 
 
 
-
-
 Surrounding_with_Quotes:
    Ctrl_J:
    Strg_J:
+   ;~ ^ & q::
    Ctrl & q::
+   ;~ ^ & j::
    Ctrl & j::
    Last_A_This:=A_ThisFunc . A_ThisLabel
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
@@ -668,11 +673,36 @@ return
 
 
 
+test = %test%
+lklkj = %lklkj% 
+sadfsdf = %sadfsdf%
+wer = %wer%
+werwer = %werwer%
+
+asdfsf = %asdfsf%
+werer = %werer%
+oiuoiu = %oiuoiu%
+asdf = %asdf%
+owiereoiur = %owiereoiur%
+werwer = %werwer%
+
+
+ ; xxxxxxxxxxxxxxxx 
+
+
+
+ ; xxxxxxxxxxxxxxxx 
+
+
+
+ ; xxxxxxxxxxxxxxxx 
+ 
+ ; 
 Ctrl_Enter:
-   ^ & enter::
-   Ctrl & Enter::
+   ;~ ^ & enter::
+   Ctrl & Enter:: ; seems makes less errors if this is turned off. otherwise Ctrl sometimes hangs
    Last_A_This:=A_ThisFunc . A_ThisLabel . " p"
-   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) 
    drawButtons("be" , 150)  ; b = ctrsl a = alt j = shift q=f6
    ;  ; Send,{Blind}
    Send,{End}{ShiftDown}{Home}
@@ -743,6 +773,7 @@ Ctrl_V:
    Ctrl_Alt_V:
    Str_Alt_V:
    Strg_Alt_V:
+   ;~ ^ & v::
    Ctrl & v::
    Last_A_This:=A_ThisFunc . A_ThisLabel . not_implemented_jet
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
@@ -987,7 +1018,7 @@ Ctrl_Shif_5:
       leftSteps:=StrLen(c) + StrLen(cAdd) + 7
       ;~ %kk% = kk `n ttt%ttt% = ttt `n  , %cAdd% = cAdd "(line:3845)" `n % 
       ; %h% = h %cAdd% `n , %cAdd% = cAdd "(line:´)" `n % 
-      m := RegExReplace(c,"i)\b([a-z]+[\w\d_]*)\b",", %$1% = $1 " . cAdd . " ``n ") ; %key%= value
+      m := RegExReplace(c,"i)\b([a-z]+[\w\d_]*)\b",", '%$1%' = $1 " . cAdd . " ``n ") ; %key%= value
       ;%Clipboard% = Clipboard `n   ff
       ;~ MsgBox,%c% %m%
       ;~ return
@@ -1396,3 +1427,13 @@ GetSciTEInstance()
    ; 
    return oSciTE
 }
+
+visualizeCtrlKey:
+   if( GetKeyState("Ctrl", "P") ){
+   Last_A_This:=A_ThisFunc . A_ThisLabel . "`n" . " isNumPadAvailable = '" . isNumPadAvailable . "'"
+   ToolTip4sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+   drawButtons("b" , 150)  ; b = ctrsl a = alt j = shift q=f6
+   
+   }
+return   ; 
+
