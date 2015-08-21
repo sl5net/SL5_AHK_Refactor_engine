@@ -8,6 +8,9 @@ isDevellopperMode=true ; enthällt auch update script.
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 ;~ SetTimer,visualizeCtrlKey,1000
+;~ SetTimer, checkCapsLock ,1000
+SetTimer, visualizeCapsLock , 2000
+
 
 #Include init_global.init.inc.ahk
 #InstallKeybdHook
@@ -1436,4 +1439,34 @@ visualizeCtrlKey:
    
    }
 return   ; 
+
+;~ CapsLock::Shift ; id you want use CapsLock delete the rest of this document
+~Shift::
+if( GetKeyState("CapsLock", "T") ){
+   Suspend,on
+   Send,{CapsLock}
+   Suspend,off
+}
+return
+
+visualizeCapsLock: ; @
+; helps that you not forget to switch it off. if you dont like it
+   if( GetKeyState("CapsLock", "T") ){
+      Last_A_This:=A_ThisFunc . A_ThisLabel . "`n" . " isNumPadAvailable = '" . isNumPadAvailable . "'"
+      ToolTip4sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+      drawButtons("@" , 150)  ; b = ctrsl a = alt j = shift q=f6
+   ; kkkKKKKKKKkk lll(A_LineNumber, __DIR____FILE__,Last_A_Thisll uuuuuuuuUuuuuUUUUUuuuuu)
+   }
+
+
+;~ checkCapsLock: ; @
+   ;~ if( GetKeyState("CapsLock", "T") ){
+      ;~ Send,{CapsLock}
+      ;~ Last_A_This:=A_ThisFunc . A_ThisLabel . "`n" . " isNumPadAvailable = '" . isNumPadAvailable . "'"
+      ;~ ToolTip4sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+      ;~ drawButtons("@" , 150)  ; b = ctrsl a = alt j = shift q=f6
+   ; kkkKKKKKKKkk lll(A_LineNumber, __DIR____FILE__,Last_A_Thisll uuuuuuuuUuuuuUUUUUuuuuu)
+   ;~ }
+;~ return   ; 
+
 

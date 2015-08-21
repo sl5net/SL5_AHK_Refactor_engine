@@ -102,6 +102,7 @@ lll(ln, scriptName, text="")
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 SetTitleMatchMode,2
+DetectHiddenWindows,on
 IfWinNotExist,CopyQ
 {
    copyQ_is_not_running=  CopyQ is not running. its recomandet to use CopyQ
@@ -185,8 +186,9 @@ convert123To_NumPad123(t)
    StringReplace, t, t, 0 , {numpad0}, All 
    return t
 }  
+;~ drawButtons()
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-drawButtons(str , fontSize){
+drawButtons(str="" , fontSize=150){
    ;~ Schriftname: Keycaps
    ;~ Version: Publisher's Paradise -- Media Graphics International Inc.
    ;~ Keycaps Regular.ttf; 
@@ -247,7 +249,16 @@ drawButtons(str , fontSize){
    m := (72 - 36) / (R72-R36) 
    R0 :=  72 - m * R72
    RFS  := Round(  (fontSize - R0) / m )
-   Progress, ZX0 ZH60 m2  fs%fontSize% zh0 CTFFFFFF CW000000, %str% ,, Shortcut , Keycaps Regular
+   
+      if(!str)
+   {
+   ;~ Progress, ZW-1 ZX0 ZH600 m2 b fs36 zh0 CTFF0000 CW0000FF,   L=l M=m N=n  O=o P=p Q=q R=r S=s T=t U=u V=v W=w  X=x Y=y Z=z   , , , Keycaps Regular
+   Progress, ZW-1 ZX0 ZH600 m2 b fs24 zh0 CTFF0000 CW0000FF,  \u232B x <  ÄÖÜ äöü <= x /  = ~ `` ´ ³ ° _ - : . `; `, ' " 1 $ 2 & 3 ( 4 ) 5 { 6 } 7 µ  8 ß 9 ? 0 \ 1 ( 2 ] 3 [ 4 ² 5 @ 6 | 7 `% 8 * 9 + 0 ü ö ä # * ~  a b c d e f g h  i j k  Q  < > , , , Keycaps Regular      
+
+   MsgBox,'%str%' = str (line:%A_LineNumber%) `n 
+   } 
+   else
+         Progress, ZX0 ZH60 m2  fs%fontSize% zh0 CTFFFFFF CW000000, %str% ,, Shortcut , Keycaps Regular
    SetTitleMatchMode,2
    CoordMode, Pixel , Screen
    CoordMode, Caret , Screen
