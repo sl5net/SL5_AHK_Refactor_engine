@@ -7,7 +7,7 @@ isDevellopperMode=true ; enthällt auch update script.
 ;        ^[^;:\n]+:[ ]*$       find labels (you could export search results with jetbrains products and clean it with ^\s*.*\)\s* )
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-;~ SetTimer,visualizeCtrlKey,1000
+SetTimer,visualizeCtrlKey,1000
 ;~ SetTimer, checkCapsLock ,1000
 SetTimer, visualizeCapsLock , 2000
 
@@ -48,6 +48,15 @@ Alt_UP:
    Send,{AltUp}
    Last_A_This:=A_ThisFunc . A_ThisLabel 
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) ;
+   
+      MsgBox, 260, jump?, jump to top?, 3  
+   IfMsgBox Yes
+   jump  :=true ; 
+   else
+      jump :=false
+   if(!jump)
+      return
+
    ;~ drawButtons("aw" , 150)  ; x b = ctrsl a = alt j = shift q=f6 w = up y =down `` = reset, didnt found a backspace fontKey
    DetectHiddenWindows,on
    sL5_phpGenerated = SL5_phpGeneratedRunOnChanged.ahk
@@ -98,6 +107,15 @@ Alt_Down:
    Send,{AltUp}
    Last_A_This:=A_ThisFunc . A_ThisLabel 
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) ;
+   
+      MsgBox, 260, jump?, jump to Bottom?, 3  
+   IfMsgBox Yes
+   jump  :=true ; 
+   else
+      jump :=false
+   if(!jump)
+      return
+
    DetectHiddenWindows,on
    sL5_phpGenerated = SL5_phpGeneratedRunOnChanged.ahk
    IfWinNotExist,%sL5_phpGenerated% 
