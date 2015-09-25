@@ -788,8 +788,6 @@ Ctrl_Enter:
    Suspend,off
 return
 
-
-
 Ctrl_V:
    Ctrl_Alt_V:
    Str_Alt_V:
@@ -798,6 +796,10 @@ Ctrl_V:
    Ctrl & v::
    Last_A_This:=A_ThisFunc . A_ThisLabel . not_implemented_jet
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+   
+
+ ; 
+   
    ;~ ju_hu = ju hu lkjllkjllkjlstrg alt v strg alt v strg alt v strg alt v strg alt v 
    ; its writes a variable = expression ; input is the complete line. so pls use for each variable a exclusive line
    If (GetKeyState("Alt", "p"))
@@ -860,6 +862,7 @@ Ctrl_Shift_up:
    send,^t{up}
    Send,{blind}
    Send,{CtrlUp}
+   Reload ; thats workaround. otherwise sometimes Ctrl is hanging
    Suspend,off
    
 return
@@ -881,6 +884,8 @@ Ctrl_Shift_down:
    Suspend,off
    Last_A_This:=A_ThisFunc . A_ThisLabel
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This)
+      Reload ; thats workaround. otherwise sometimes Ctrl is hanging
+
 return
 ;test
 
@@ -1445,8 +1450,8 @@ GetSciTEInstance()
       MsgBox, 16, % Last_A_This, Cannot find SciTE!
       ExitApp
    }
-   ; 
    return oSciTE
+   ; 
 }
 
 visualizeCtrlKey:

@@ -44,7 +44,8 @@ if !oSciTE
 {
 
    ;~ MsgBox, 16, SL5_AHK_Refactor_engine, Cannot find SciTE! `n (line:%A_LineNumber%) `n,3  
-   ToolTip, SL5_AHK_Refactor_engine Cannot find SciTE! `n (line:%A_LineNumber%) `n,3  
+msgCantFind_AHK_Refactor_eng = SL5_AHK_Refactor_engine Cannot find SciTE! `n (line:%A_LineNumber%) `n,3
+   ToolTip2sec(msgCantFind_AHK_Refactor_eng) ; 
    ;~ MsgBox,\n
    ;~ return
 }

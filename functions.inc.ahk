@@ -266,7 +266,7 @@ drawButtons(str="" , fontSize=150){
    
    ; top of scite window
    WinMove, Shortcut, , % x , % y - 70 , % WFS + 50, % HFS + 100
-   
+   WinSet, Transparent, 123, Shortcut ; 255 max
    ; bottom of scite window
    ;~ WinMove, Shortcut, , % x , % (y + w - HFS - byFS - 350) , % WFS + 50, % HFS + 100
    
