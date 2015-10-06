@@ -41,7 +41,18 @@ SetStoreCapslockMode, off
 #IfWinActive SciTE4AutoHotkey 
 ; Refactoring Engine
 
-#IfWinActive SciTE4AutoHotkey 
+;~ #IfWinActive SciTE4AutoHotkey 
+
+
+#Include,class/hotstrings.class.ahk
+Hotstrings.Register("[\(,]\s*\w+\s*\K=", Func("assign"))  ;  f(a=  -> f(a:=
+assign() {
+   ; thanks to lexikos http://ahkscript.org/boards/viewtopic.php?f=6&t=7864&p=53980#p53980
+   Last_A_This:=A_ThisFunc . A_ThisLabel 
+   ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) ;
+    SendLevel 1
+    Send, :=
+}
 
 Alt_UP:
    Alt & Up::
