@@ -44,10 +44,11 @@ SetStoreCapslockMode, off
 ;~ #IfWinActive SciTE4AutoHotkey 
 
 
-#Include,class/hotstrings.class.ahk
+#Include,class/hotstrings.class.ahk ; thanks to polyethene  http://www.autohotkey.com/board/topic/15015-regex-powered-dynamic-hotstrings/
+
 Hotstrings.Register("[\(,]\s*\w+\s*\K=", Func("assign"))  ;  f(a=  -> f(a:=
 assign() {
-   ; thanks to lexikos http://ahkscript.org/boards/viewtopic.php?f=6&t=7864&p=53980#p53980
+   ; thanks to http://www.autohotkey.com/board/topic/15015-regex-powered-dynamic-hotstrings/page-14
    Last_A_This:=A_ThisFunc . A_ThisLabel 
    ToolTip1sec(A_LineNumber . " " . A_ScriptName . " " . Last_A_This) ;
     SendLevel 1
