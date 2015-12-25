@@ -6,10 +6,11 @@ SL5_AHK_Refactor_engine is free for personal and commercial use.
 
 <br>
 Tested with Autohotkey Version 1.1.19.03(http://www.autohotkey.com/) <br>
-, SciTE4AutoHotkey 3.0.06.01 (portable Version recommended for easier TillaGoto configuration) (http://fincs.ahk4.net/scite4ahk/)<br>
+, SciTE4AutoHotkey 3.0.06.01 (portable Version recommended for easier TillaGoto configuration) (http://fincs.ahk4.net/scite4ahk/ , https://github.com/fincs/SciTE4AutoHotkey )<br>
 , Thanks to TheGood for TillaGoto (thread:  http://www.autohotkey.com/forum/viewtopic.php?t=41575<br>
 , Thanks to Autohotkey community (http://www.autohotkey.com/board/)<br>
-, Thanks to Czarek Tomczak for PHP Desktop (https://code.google.com/p/phpdesktop/, http://i.imgur.com/4uVvU8n.gif?1)
+, Thanks to Czarek Tomczak for PHP Desktop (https://github.com/cztomczak/phpdesktop, https://code.google.com/p/phpdesktop/ , http://i.imgur.com/4uVvU8n.gif?1)
+
 <br>
 
 Planned features:
